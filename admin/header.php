@@ -31,7 +31,7 @@
 <body class="hold-transition sidebar-mini layout-fixed">
   <div class="wrapper">
     <!-- Preloader -->
-    <div class="preloader flex-column justify-content-center align-items-center">
+    <div style="background-color: #222d32" class="preloader flex-column justify-content-center align-items-center">
       <img class="animation__shake" src="../assets/logo.png" alt="AdminLTELogo" height="200" width="200">
     </div>
 

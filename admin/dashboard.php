@@ -7,7 +7,7 @@ if (!check_login()) {
 }
 
 // Cek role
-if ($_SESSION['user']['role'] !== 'master' && $_SESSION['user']['role'] !== 'admin') {
+if ($_SESSION['user']['role'] !== 'master' && $_SESSION['user']['role'] !== 'user') {
     header("Location: dashboard.php"); // atau halaman lain yang sesuai
     exit();
 }

@@ -111,7 +111,7 @@ session_start();
                 </form>
 
                 <p class="mt-3 text-center">
-                    Sudah punya akun? <a href="index.php">Login</a>
+                    Sudah punya akun? <a href="login.php">Login</a>
                 </p>
             </div>
         </div>

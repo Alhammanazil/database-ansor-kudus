@@ -38,12 +38,18 @@ if ($result->num_rows === 1) {
                 case 'user':
                     header("Location: ../admin/dashboard.php");
                     break;
-                case 'foto':
-                    header("Location: ../foto/index.php");
+                case 'admin kecamatan':
+                    header("Location: ../admin/dashboard.php");
+                    break;
+                case 'admin desa':
+                    header("Location: ../admin/dashboard.php");
+                    break;
+                case 'user':
+                    header("Location: ../admin/dashboard.php");
                     break;
                 default:
                     $_SESSION['error'] = "Role tidak dikenali.";
-                    header("Location: ../index.php");
+                    header("Location: ../login.php");
                     break;
             }
             exit();
@@ -57,5 +63,5 @@ if ($result->num_rows === 1) {
     $_SESSION['error'] = "Username tidak ditemukan.";
 }
 
-header("Location: ../index.php");
+header("Location: ../login.php");
 exit();

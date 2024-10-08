@@ -16,8 +16,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         // Cek apakah eksekusi berhasil
         if ($stmt->execute()) {
-            // Jika berhasil, arahkan ke index.php dengan pesan sukses
-            header("Location: ../index.php?message=" . urlencode("Pendaftaran berhasil! Hubungi admin untuk persetujuan akses."));
+            // Jika berhasil, arahkan ke login.php dengan pesan sukses
+            header("Location: ../login.php?message=" . urlencode("Pendaftaran berhasil! Hubungi admin untuk persetujuan akses."));
         } else {
             // Jika gagal karena alasan lain, simpan pesan error ke session
             throw new Exception("Pendaftaran gagal! Silakan coba lagi.");
@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             $error_message = "Terjadi kesalahan: " . $e->getMessage();
         }
-        header("Location: ../index.php?error=" . urlencode($error_message));
+        header("Location: ../login.php?error=" . urlencode($error_message));
     }
 
     // Tutup statement
