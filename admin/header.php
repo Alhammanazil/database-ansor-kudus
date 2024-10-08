@@ -92,6 +92,15 @@
                 <p>Dashboard</p>
               </a>
             </li>
+
+            <!-- Form Daftar -->
+            <li class="nav-item">
+              <a href="form.php" class="nav-link">
+                <i class="nav-icon fas fa-user-plus"></i>
+                <p>Form Pendaftaran</p>
+              </a>
+            </li>
+
             <!-- Data Pribadi -->
             <li class="nav-item">
               <a href="data-pribadi.php" class="nav-link">
@@ -99,6 +108,7 @@
                 <p>Data Pribadi</p>
               </a>
             </li>
+
             <!-- Data Pendaftar -->
             <li class="nav-item">
               <a href="data-ansor.php" class="nav-link">
@@ -106,6 +116,7 @@
                 <p>Data Anggota</p>
               </a>
             </li>
+
             <!-- Manajemen Akun -->
             <li class="nav-item">
               <a href="pengaturan.php" class="nav-link">
@@ -113,6 +124,7 @@
                 <p>Manajemen Akun</p>
               </a>
             </li>
+
             <!-- Logout -->
             <li class="nav-item">
               <a href="#" id="logout-link" class="nav-link">

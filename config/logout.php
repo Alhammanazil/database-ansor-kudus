@@ -6,5 +6,5 @@ session_destroy();
 // Hapus cookie
 setcookie("user_login", "", time() - 3600, "/");
 
-header("Location: ../index.php");
+header("Location: ../login.php");
 exit();

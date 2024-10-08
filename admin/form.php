@@ -2,7 +2,7 @@
 require '../config/config.php';
 
 if (!check_login()) {
-    header("Location: ../index.php");
+    header("Location: ../login.php");
     exit();
 }
 
@@ -21,12 +21,12 @@ require_once 'header.php';
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Data Pribadi</h1>
+                        <h1>Form Pendaftaran</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Admin</a></li>
-                            <li class="breadcrumb-item active">Data Pribadi</li>
+                            <li class="breadcrumb-item active">Form Pendaftaran</li>
                         </ol>
                     </div>
                 </div>

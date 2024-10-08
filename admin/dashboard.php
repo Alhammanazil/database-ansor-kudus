@@ -2,7 +2,7 @@
 require '../config/config.php';
 
 if (!check_login()) {
-    header("Location: ../index.php");
+    header("Location: ../login.php");
     exit();
 }
 
