@@ -1,76 +1,48 @@
-<?php
-// Menentukan halaman aktif
-$current_page = basename($_SERVER['PHP_SELF']);
-$user_role = $_SESSION['user']['role'] ?? null;
-?>
-
 </div>
+</section>
 </div>
-</div>
+<!-- /.content-wrapper -->
 
-<nav class="navbar navbar-expand navbar-light navbar-bottom">
-  <div class="container-fluid">
-    <ul class="navbar-nav mx-auto">
-      <!-- Home -->
-      <li class="nav-item">
-        <a class="nav-link <?= ($current_page == 'dashboard.php') ? 'active' : ''; ?>" href="dashboard.php">
-          <i class="fas fa-home text-center d-block"></i>
-          <span>Home</span>
-        </a>
-      </li>
-
-      <!-- Pengaturan (Hanya untuk master) -->
-      <li class="nav-item">
-        <a class="nav-link <?= ($current_page == 'pengaturan.php') ? 'active' : ''; ?>" href="pengaturan.php">
-          <i class="fas fa-cogs text-center d-block"></i>
-          <span>Setting</span>
-        </a>
-      </li>
-
-      <!-- Logout (Tampil untuk semua role) -->
-      <li class="nav-item">
-        <a class="nav-link" href="#" id="logout-link">
-          <i class="fas fa-sign-out-alt text-center d-block"></i>
-          <span>Logout</span>
-        </a>
-      </li>
-    </ul>
+<footer class="main-footer">
+  <strong>Copyright &copy;</strong> Website Ansor Kudus
+  <div class="float-right d-none d-sm-inline-block">
+    <b>Versi</b> 1.0
   </div>
-</nav>
+</footer>
 
+<!-- Control Sidebar -->
+<aside class="control-sidebar control-sidebar-dark">
+  <!-- Control sidebar content goes here -->
+</aside>
+<!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
 
-<!-- jQuery Library -->
-<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
+<!-- jQuery -->
+<script src="../assets/adminlte/plugins/jquery/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="../assets/adminlte/plugins/jquery-ui/jquery-ui.min.js"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+  $.widget.bridge('uibutton', $.ui.button)
+</script>
+<!-- Bootstrap 4 -->
+<script src="../assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/fixedcolumns/3.3.0/js/dataTables.fixedColumns.min.js"></script>
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.4/dist/sweetalert2.all.min.js"></script>
-
-<!-- DataTables JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.datatables.net/2.1.2/js/dataTables.js"></script>
-<script src="https://cdn.datatables.net/2.1.2/js/dataTables.bootstrap5.js"></script>
-
-<!-- Include DataTables JS -->
-<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
-<!-- Include FixedColumns JS -->
-<script src="https://cdn.datatables.net/fixedcolumns/3.3.0/js/dataTables.fixedColumns.min.js"></script>
-
-<!-- Tambahan untuk modal -->
-<!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script> -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-
-<!-- Font Awesome JS -->
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
+<!-- AdminLTE App -->
+<script src="../assets/adminlte/dist/js/adminlte.js"></script>
 <!-- JsBarcode -->
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
 
 <!-- Halaman Dashboard -->
 <script>
-  $('#foto').DataTable({
+  $('#data-desa').DataTable({
     fixedColumns: true
   });
 </script>
@@ -170,6 +142,21 @@ $user_role = $_SESSION['user']['role'] ?? null;
 
 <!-- Akhir Halaman Dashboard -->
 
+<!-- Halaman Data Pribadi -->
+<script>
+  $('#data-pribadi').DataTable({
+    fixedColumns: true
+  });
+</script>
+<!-- Akhir Halaman Data Pribadi -->
+
+<!-- Halaman Data Anggota -->
+<script>
+  $('#data-ansor').DataTable({
+    fixedColumns: true
+  });
+</script>
+<!-- Akhir Halaman Data Anggota -->
 
 <!-- Halaman Pengaturan -->
 <script>
@@ -258,6 +245,35 @@ $user_role = $_SESSION['user']['role'] ?? null;
   });
 </script>
 <!-- Akhir Halaman Pengaturan -->
+
+<!-- Halaman Foto -->
+
+<script>
+  $(document).ready(function() {
+    // Inisialisasi Select2
+    $('#no_peserta').select2().on('select2:select', function(e) {
+      const noPeserta = $(this).val();
+      if (noPeserta) {
+        fetch(`get_nama_peserta.php?no_peserta=${noPeserta}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              document.getElementById('nama_lengkap').value = data.nama_lengkap;
+            } else {
+              alert(data.message);
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching participant name:', error);
+          });
+      } else {
+        document.getElementById('nama_lengkap').value = '';
+      }
+    });
+  });
+</script>
+
+<!-- Akhir Halaman Foto -->
 
 <!-- Logout -->
 <script>

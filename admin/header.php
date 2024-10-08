@@ -4,109 +4,126 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Khitan Umum YM3SK</title>
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <title>Admin Ansor Kudus</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="../assets/ansor.png" type="image/x-icon">
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" href="../assets/adminlte/plugins/fontawesome-free/css/all.min.css">
+  <!-- Select2 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="../assets/adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../assets/adminlte/dist/css/adminlte.min.css">
   <!-- DataTables -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap5.css">
-
-  <!-- Include DataTables CSS -->
-  <link href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" rel="stylesheet">
-  <!-- Include FixedColumns CSS -->
-  <link href="https://cdn.datatables.net/fixedcolumns/3.3.0/css/fixedColumns.dataTables.min.css" rel="stylesheet">
-
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/3.3.0/css/fixedColumns.dataTables.min.css">
   <!-- SweetAlert2 -->
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.4/dist/sweetalert2.min.css" rel="stylesheet">
-
-  <link rel="icon" href="../assets/icon.png" type="image/x-icon">
-  <style>
-    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: "Poppins", sans-serif;
-    }
-
-    body {
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-    }
-
-    .container-fluid {
-      flex: 1;
-    }
-
-    .navbar-bottom {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background-color: #f8f9fa;
-      border-top: 1px solid #ddd;
-      padding: 10px;
-      margin-top: 100px;
-    }
-
-    .navbar-bottom .nav-item .nav-link {
-      color: #000;
-    }
-
-    .navbar-bottom .nav-item .nav-link:hover {
-      color: #007bff;
-    }
-
-    .navbar-bottom .nav-item .nav-link i {
-      display: block;
-      font-size: 18px;
-    }
-
-    .navbar-bottom .nav-link.active i {
-      color: #007bff;
-    }
-
-    .icon-small {
-      font-size: 0.9rem;
-      padding: 1px;
-    }
-
-    .back-button {
-      background-color: #3C5B6F;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-      border-radius: 5px;
-    }
-
-    .back-button:hover {
-      background-color: #373A40;
-      color: #F8F4E1;
-    }
-
-    .modal-header {
-    z-index: 1051; /* Pastikan berada di atas elemen lain */
-  }
-  
-  #cardCanvas {
-    max-width: 100%;
-    max-height: calc(100vh - 200px); /* Pastikan canvas tidak meluap */
-    z-index: 1049; /* Di bawah header modal */
-  }
-
-  </style>
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 </head>
 
-<body>
+<body class="hold-transition sidebar-mini layout-fixed">
+  <div class="wrapper">
+    <!-- Preloader -->
+    <div class="preloader flex-column justify-content-center align-items-center">
+      <img class="animation__shake" src="../assets/logo.png" alt="AdminLTELogo" height="200" width="200">
+    </div>
 
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-12 mb-5">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+      <!-- Left navbar links -->
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+      </ul>
+
+      <!-- Right navbar links -->
+      <ul class="navbar-nav ml-auto">
+        <!-- Notifications Dropdown Menu -->
+        <li class="nav-item">
+          <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+            <i class="fas fa-expand-arrows-alt"></i>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <!-- /.navbar -->
+
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+      <!-- Brand Logo -->
+      <a href="index3.html" class="brand-link">
+        <img src="../assets/ansor.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">Ansor Kudus</span>
+      </a>
+
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+          <div class="image">
+            <img src="../assets/photo.jpg" class="img-circle elevation-2" alt="img">
+          </div>
+          <div class="info">
+            <a href="#" class="d-block">
+              <?php
+              if (isset($_SESSION['user'])) {
+                echo $_SESSION['user']['nama_lengkap'];
+              }
+              ?>
+            </a>
+          </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <!-- Dashboard -->
+            <li class="nav-item">
+              <a href="dashboard.php" class="nav-link">
+                <i class="nav-icon fas fa-home"></i>
+                <p>Dashboard</p>
+              </a>
+            </li>
+            <!-- Data Pribadi -->
+            <li class="nav-item">
+              <a href="data-pribadi.php" class="nav-link">
+                <i class="nav-icon fas fa-user"></i>
+                <p>Data Pribadi</p>
+              </a>
+            </li>
+            <!-- Data Pendaftar -->
+            <li class="nav-item">
+              <a href="data-ansor.php" class="nav-link">
+                <i class="nav-icon fas fa-users"></i>
+                <p>Data Anggota</p>
+              </a>
+            </li>
+            <!-- Manajemen Akun -->
+            <li class="nav-item">
+              <a href="pengaturan.php" class="nav-link">
+                <i class="nav-icon fas fa-user-cog"></i>
+                <p>Manajemen Akun</p>
+              </a>
+            </li>
+            <!-- Logout -->
+            <li class="nav-item">
+              <a href="#" id="logout-link" class="nav-link">
+                <i class="nav-icon fas fa-sign-out-alt"></i>
+                <p>Logout</p>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+      </div>
+      <!-- /.sidebar -->
+    </aside>
+    <!-- /.sidebar -->

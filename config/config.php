@@ -1,36 +1,22 @@
 <?php
 // Koneksi ke database 'foto'
-$servername_foto = "localhost";
-$username_foto = "root";
-$password_foto = "";
-$dbname_foto = "foto";
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "data_ansor";
 
 // Membuat koneksi
-$conn_foto = mysqli_connect($servername_foto, $username_foto, $password_foto, $dbname_foto);
+$conn = mysqli_connect($servername, $username, $password, $dbname);
 
 // Cek koneksi
-if (!$conn_foto) {
-  die("Connection failed: " . mysqli_connect_error());
-}
-
-// Koneksi ke database 'khitanumum'
-$servername_ku = "localhost";
-$username_ku = "root";
-$password_ku = "";
-$dbname_ku = "khitanumum";
-
-// Membuat koneksi kedua
-$conn_ku = mysqli_connect($servername_ku, $username_ku, $password_ku, $dbname_ku);
-
-// Cek koneksi kedua
-if (!$conn_ku) {
-  die("Connection failed: " . mysqli_connect_error());
+if (!$conn) {
+  die("Koneksi gagal: " . mysqli_connect_error());
 }
 
 // Fungsi login untuk database 'foto'
 function check_login()
 {
-  global $conn_foto;
+  global $conn;
 
   session_start();
 
@@ -42,10 +28,10 @@ function check_login()
   // Cek apakah user sudah login dengan cookie
   if (isset($_COOKIE['user_login'])) {
     list($username, $password) = explode(':', base64_decode($_COOKIE['user_login']));
-    $username = mysqli_real_escape_string($conn_foto, $username);
-    $password = mysqli_real_escape_string($conn_foto, $password);
+    $username = mysqli_real_escape_string($conn, $username);
+    $password = mysqli_real_escape_string($conn, $password);
 
-    $stmt = $conn_foto->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();

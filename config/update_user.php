@@ -19,11 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($type === 'role') {
         // Update role user
-        $stmt = $conn_foto->prepare("UPDATE users SET role = ? WHERE id = ?");
+        $stmt = $conn->prepare("UPDATE users SET role = ? WHERE id = ?");
         $stmt->bind_param("si", $value, $userId);
     } elseif ($type === 'akses') {
         // Update akses user
-        $stmt = $conn_foto->prepare("UPDATE users SET akses = ? WHERE id = ?");
+        $stmt = $conn->prepare("UPDATE users SET akses = ? WHERE id = ?");
         $stmt->bind_param("ii", $value, $userId);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Invalid request']);
@@ -37,6 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $stmt->close();
-    $conn_foto->close();
+    $conn->close();
 }
 ?>

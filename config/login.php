@@ -8,7 +8,7 @@ $password = $_POST['password'];
 $rememberMe = isset($_POST['rememberMe']);
 
 // Cek apakah username dan password benar
-$stmt = $conn_foto->prepare("SELECT * FROM users WHERE username = ?");
+$stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();

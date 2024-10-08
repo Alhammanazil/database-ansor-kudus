@@ -12,123 +12,374 @@ if ($_SESSION['user']['role'] !== 'master' && $_SESSION['user']['role'] !== 'adm
     exit();
 }
 
-// Ambil data foto dari database
-$stmt = $conn_foto->prepare("SELECT id, no_peserta, nama_operator, file FROM foto ORDER BY created DESC");
-$stmt->execute();
-$result = $stmt->get_result();
-$fotos = $result->fetch_all(MYSQLI_ASSOC);
+// Data dummy untuk kecamatan di Kudus, dengan maksimal pendaftar 100
+$kecamatans = [
+    ['kecamatan' => 'Kudus Kota', 'total_pendaftar' => 20],
+    ['kecamatan' => 'Jati', 'total_pendaftar' => 15],
+    ['kecamatan' => 'Bae', 'total_pendaftar' => 12],
+    ['kecamatan' => 'Undaan', 'total_pendaftar' => 10],
+    ['kecamatan' => 'Mejobo', 'total_pendaftar' => 14],
+    ['kecamatan' => 'Jekulo', 'total_pendaftar' => 10],
+    ['kecamatan' => 'Dawe', 'total_pendaftar' => 8],
+    ['kecamatan' => 'Gebog', 'total_pendaftar' => 6],
+    ['kecamatan' => 'Kaliwungu', 'total_pendaftar' => 5]
+];
+
+// Data Kecamatan dan Desa di Kudus
+$kecamatanDesaData = [
+    'Kaliwungu' => [
+        'Bakalan Krapyak',
+        'Banget',
+        'Blimbing Kidul',
+        'Gamong',
+        'Garung Kidul',
+        'Garung Lor',
+        'Kalirejo',
+        'Karangampel',
+        'Kedungdowo',
+        'Mijen',
+        'Papringan',
+        'Prambatan Kidul',
+        'Prambatan Lor',
+        'Setrokalangan',
+        'Sidorekso'
+    ],
+    'Kota' => [
+        'Barongan',
+        'Burikan',
+        'Damaran',
+        'Demaan',
+        'Demangan',
+        'Glantengan',
+        'Janggalan',
+        'Kajosari',
+        'Kaliputu',
+        'Kauman',
+        'Kesambi',
+        'Kerjasari',
+        'Kramat',
+        'Krandon',
+        'Langgardalem',
+        'Mlatinorowito',
+        'Mlatinorowito',
+        'Nganguk',
+        'Panji',
+        'Purwosari',
+        'Rendeng',
+        'Singocandi',
+        'Sunggingan',
+        'Wergu Kulon',
+        'Wergu Wetan'
+    ],
+    'Jati' => [
+        'Getas Pejaten',
+        'Jati Kulon',
+        'Jati Wetan',
+        'Jepang Pakis',
+        'Jetis Kapuan',
+        'Loram Kulon',
+        'Loram Wetan',
+        'Megawon',
+        'Ngembal Kulon',
+        'Pasuruhan Kidul',
+        'Pasuruhan Lor',
+        'Piso',
+        'Tanjungkarang',
+        'Tumpangkrasak'
+    ],
+    'Undaan' => [
+        'Berugenjang',
+        'Glagahwaru',
+        'Kalirejo',
+        'Karangrowo',
+        'Kutuk',
+        'Lambangan',
+        'Larikrejo',
+        'Medini',
+        'Ngemplak',
+        'Sambung',
+        'Terasan',
+        'Undaan Kidul',
+        'Undaan Lor',
+        'Undaan Tengah',
+        'Wates',
+        'Wonosoco'
+    ],
+    'Mejobo' => [
+        'Golantepus',
+        'Gulang',
+        'Hadipolo',
+        'Japah',
+        'Jojo',
+        'Kesambi',
+        'Krikil',
+        'Mejobo',
+        'Payaman',
+        'Temulus',
+        'Tenggeles'
+    ],
+    'Jekulo' => [
+        'Bulung Kulon',
+        'Bulungcangkring',
+        'Gondoharum',
+        'Hadipolo',
+        'Honggosoco',
+        'Jekulo',
+        'Kaliwungu',
+        'Pladen',
+        'Sadang',
+        'Sidomulyo',
+        'Tanjungrejo',
+        'Terban'
+    ],
+    'Bae' => [
+        'Bacin',
+        'Bae',
+        'Besito',
+        'Gondangmanis',
+        'Gemulung',
+        'Ngembalrejo',
+        'Panjunan',
+        'Pedawang',
+        'Peganjaran',
+        'Purworejo'
+    ],
+    'Gebog' => [
+        'Besito',
+        'Getassrabi',
+        'Gondosari',
+        'Gribig',
+        'Jurang',
+        'Karangmalang',
+        'Kedungsari',
+        'Klumpit',
+        'Menawan',
+        'Padurenan',
+        'Rahtawu'
+    ],
+    'Dawe' => [
+        'Cendono',
+        'Colo',
+        'Cranggang',
+        'Dukuhwaringin',
+        'Glagahkulon',
+        'Japan',
+        'Kajar',
+        'Kandangmas',
+        'Krusen',
+        'Lau',
+        'Margorejo',
+        'Piji',
+        'Puyoh',
+        'Rejosari',
+        'Samirejo',
+        'Socokangsi',
+        'Tergo',
+        'Ternadi'
+    ]
+];
 
 require_once 'header.php';
 ?>
 
-<!-- HTML untuk tampilan tabel -->
-<div class="row justify-content-center bg-dark">
-    <div class="col-ml text-center text-white my-2">
-        <h3>DASHBOARD FOTO PESERTA</h3>
-        <h5>Khitan Umum 1446 H / 2024 TU</h5>
-    </div>
-</div>
-
-<div class="container">
-    <div class="row justify-content-center align-middle">
-        <div class="col">
-            <a href="foto.php" class="btn btn-success my-4">+ Foto Peserta</a>
-            <div class="table-responsive mb-5">
-                <table id="foto" class="table table-striped table-bordered table-hover table-responsive" style="width:100%">
-                    <thead class="table-dark">
-                        <tr>
-                            <th class="text-center align-middle">No</th>
-                            <th class="text-center align-middle">Nomor Peserta</th>
-                            <th class="text-center align-middle">Preview Foto</th>
-                            <th class="text-center align-middle">Operator</th>
-                            <th class="text-center align-middle">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $no = 1;
-                        foreach ($fotos as $foto) :
-                            // Path file gambar
-                            $imagePath = "../foto/" . $foto['file'];
-                            // Path placeholder jika file tidak ditemukan
-                            $placeholderPath = "../assets/foto_tidak_tersedia.jpg";
-                            // Gunakan path gambar atau placeholder jika file tidak ada
-                            $displayImage = file_exists($imagePath) ? $imagePath : $placeholderPath;
-                        ?>
-                            <tr>
-                                <td class="text-center align-middle"><?= $no; ?></td>
-                                <td class="text-center align-middle"><?= $foto['no_peserta']; ?></td>
-                                <td class="text-center align-middle">
-                                    <a href="#" data-toggle="modal" data-target="#fotoModal<?= $foto['id']; ?>">
-                                        <i class="fas fa-image fa-lg"></i>
-                                    </a>
-                                </td>
-                                <td class="text-center align-middle"><?= $foto['nama_operator']; ?></td>
-                                <td class="text-center align-middle">
-                                    <!-- Preview -->
-                                    <!-- <a href="javascript:void(0);" class="btn btn-secondary"
-                                        onclick="generatePreview('<?= $foto['no_peserta']; ?>', '<?= $foto['nama_operator']; ?>', '<?= $displayImage; ?>')">
-                                        <i class="fa-solid fa-square-poll-horizontal"></i>
-                                    </a> -->
-
-                                    <?php if ($_SESSION['user']['role'] === 'master'): ?>
-                                        <!-- Edit -->
-                                        <a href="edit_foto.php?id=<?= $foto['id']; ?>" class="btn btn-warning">
-                                            <i class="fas fa-edit icon-small"></i>
-                                        </a>
-
-                                        <!-- Hapus -->
-                                        <a href="javascript:void(0);" class="btn btn-danger"
-                                            onclick="confirmDelete('<?= $foto['id']; ?>')">
-                                            <i class="fas fa-trash-alt icon-small"></i>
-                                        </a>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
-
-                            <!-- Modal untuk menampilkan gambar -->
-                            <div class="modal fade" id="fotoModal<?= $foto['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="fotoModalLabel<?= $foto['id']; ?>" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="fotoModalLabel<?= $foto['id']; ?>">Preview Foto</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body text-center">
-                                            <img src="<?= $displayImage; ?>" alt="Foto" class="img-fluid">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Modal untuk pratinjau kartu peserta -->
-                            <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-lg" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="previewModalLabel">Pratinjau Kartu Peserta</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body text-center">
-                                            <canvas id="cardCanvas"></canvas>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        <?php
-                            $no++;
-                        endforeach;
-                        ?>
-                    </tbody>
-                </table>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Dashboard</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="dashboard.php">Admin</a></li>
+                        <li class="breadcrumb-item active">Dashboard</li>
+                    </ol>
+                </div>
             </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Dashboard Card -->
+            <div class="row">
+                <div class="col-lg-3 col-6">
+                    <!-- kotak kecil -->
+                    <div class="small-box bg-success">
+                        <div class="inner">
+                            <h3>100</h3>
+                            <p>Total Pendaftar</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-android-contacts"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">Info Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-6">
+                    <!-- kotak kecil -->
+                    <div class="small-box bg-primary">
+                        <div class="inner">
+                            <h3>9</h3>
+                            <p>Total Kecamatan</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-android-pin"></i>
+                            <!-- Alternatif:
+            <i class="ion ion-map"></i>
+            -->
+                        </div>
+                        <a href="#" class="small-box-footer">Info Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-6">
+                    <!-- kotak kecil -->
+                    <div class="small-box bg-primary">
+                        <div class="inner">
+                            <h3>123</h3>
+                            <p>Total Desa</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-home"></i>
+                            <!-- Alternatif:
+            <i class="ion ion-location"></i>
+            -->
+                        </div>
+                        <a href="#" class="small-box-footer">Info Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-6">
+                    <!-- kotak kecil -->
+                    <div class="small-box bg-dark">
+                        <div class="inner">
+                            <h3>65</h3>
+                            <p>Total Pendaftar [Kecamatan/Desa]</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-ios-home"></i>
+                            <!-- Alternatif:
+            <i class="ion ion-person"></i>
+            -->
+                        </div>
+                        <a href="#" class="small-box-footer">Info Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+            </div>
+            <!-- /.row -->
+            <!-- Dashboard Card -->
+
+            <!-- Tabel Data Kecamatan & Desa -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row my-3">
+                        <div class="col-sm-6">
+                            <h1>Data Kecamatan & Desa</h1>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+
+                <!-- TABEL PENDAFTAR KECAMATAN -->
+                <div class="card">
+                    <div class="card-header border-transparent">
+                        <h3 class="card-title"><b>9 Kecamatan</b></h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-toggle="collapse" data-target="#kecamatanCollapse" aria-expanded="false">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div id="kecamatanCollapse" class="collapse">
+                        <div class="card-body p-0">
+                            <div class="table-responsive table-bordered table-hover">
+                                <table id="data-kecamatan" class="table m-3">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Kecamatan</th>
+                                            <th>Total Pendaftar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $no = 1; // Inisialisasi nomor
+                                        foreach ($kecamatans as $kecamatan): ?>
+                                            <tr>
+                                                <td><?php echo $no++; ?></td>
+                                                <td><?php echo htmlspecialchars($kecamatan['kecamatan']); ?></td>
+                                                <td><?php echo htmlspecialchars($kecamatan['total_pendaftar']); ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+
+                <!-- TABEL PENDAFTAR DESA -->
+                <div class="card">
+                    <div class="card-header border-transparent">
+                        <h3 class="card-title"><b>123 Desa</b></h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-toggle="collapse" data-target="#desaCollapse" aria-expanded="false">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- /.card-header -->
+                    <div id="desaCollapse" class="collapse">
+                        <div class="card-body p-0">
+                            <div class="table-responsive table-bordered table-hover">
+                                <table id="data-desa" class="table m-2">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Kecamatan</th>
+                                            <th>Desa / Kelurahan</th>
+                                            <th>Total Pendaftar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $no = 1; // Inisialisasi nomor
+                                        foreach ($kecamatanDesaData as $kecamatan => $desas): ?>
+                                            <?php $rowspan = count($desas); ?>
+                                            <tr>
+                                                <td rowspan="<?php echo $rowspan; ?>"><?php echo $no++; ?></td>
+                                                <td rowspan="<?php echo $rowspan; ?>"><?php echo htmlspecialchars($kecamatan); ?></td>
+                                                <td>1. <?php echo htmlspecialchars($desas[0]); ?></td>
+                                            </tr>
+                                            <?php for ($i = 1; $i < $rowspan; $i++): ?>
+                                                <tr>
+                                                    <td><?php echo ($i + 1) . ". " . htmlspecialchars($desas[$i]); ?></td>
+                                                </tr>
+                                            <?php endfor; ?>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.row -->
+            </section>
         </div>
-    </div>
 </div>
 
 <?php

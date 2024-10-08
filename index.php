@@ -1,169 +1,220 @@
-<?php
-session_start();
-?>
-
-<!DOCTYPE html>
-<html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Khitan Umum YM3SK</title>
 
     <!-- Favicon -->
-    <link rel="icon" href="assets/icon.png" type="image/x-icon">
+    <link rel="icon" href="assets/ansor.png" type="image/x-icon">
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-    <!-- boxicon -->
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
-    <style>
-        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Poppins", sans-serif;
-        }
-
-        body {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #5B99C2;
-        }
-
-        .container {
-            max-width: 370px;
-            width: 100%;
-        }
-
-        .card {
-            border-radius: 8px;
-            background-color: #fff;
-        }
-
-        header {
-            font-size: 22px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .form-label {
-            font-weight: 500;
-        }
-
-        .input-group-text {
-            cursor: pointer;
-        }
-
-        .invalid-feedback {
-            display: none;
-        }
-
-        .is-invalid+.invalid-feedback {
-            display: block;
-        }
-    </style>
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="assets/adminlte/plugins/fontawesome-free/css/all.min.css">
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- Theme style (AdminLTE) -->
+    <link rel="stylesheet" href="assets/adminlte/dist/css/adminlte.min.css">
+    <!-- SweetAlert2 -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.4/dist/sweetalert2.min.css" rel="stylesheet">
 </head>
 
-<body>
-    <div class="container mt-5">
-        <div class="card p-4">
-            <header class="mb-4 text-center">Login</header>
+<?php
+require 'config/config.php';
 
-            <!-- Alert untuk pesan sukses/error -->
-            <?php
-            if (isset($_GET['message'])) {
-                echo "<div class='alert alert-success'>" . htmlspecialchars($_GET['message']) . "</div>";
-            }
+if (!check_login()) {
+    header("Location: index.php");
+    exit();
+}
 
-            if (isset($_GET['error'])) {
-                echo "<div class='alert alert-danger'>" . htmlspecialchars($_GET['error']) . "</div>";
-            }
-            ?>
+// Cek role pengguna
+if ($_SESSION['user']['role'] !== 'master' && $_SESSION['user']['role'] !== 'admin') {
+    header("Location: dashboard.php");
+    exit();
+}
+?>
 
-
-            <!-- Tampilkan pesan sukses atau error -->
-            <?php if (isset($_SESSION['error'])) : ?>
-                <div class="alert alert-danger"><?= $_SESSION['error']; ?></div>
-                <?php unset($_SESSION['error']); ?>
-            <?php endif; ?>
-            <form action="config/login.php" method="POST" class="needs-validation" novalidate>
-
-                <!-- Username -->
-                <div class="mb-3">
-                    <label for="username" class="form-label">Username</label>
-                    <input type="text" id="username" name="username" class="form-control" placeholder="Masukkan username" required>
-                    <div class="invalid-feedback">Masukkan username.</div>
+<div class="content-wrapper">
+    <div class="container-fluid">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Data Pribadi</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Admin</a></li>
+                            <li class="breadcrumb-item active">Data Pribadi</li>
+                        </ol>
+                    </div>
                 </div>
+            </div>
+        </section>
 
-                <!-- Password -->
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <div class="input-group">
-                        <input type="password" id="password" name="password" class="form-control password" placeholder="Masukkan password" required>
-                        <span class="input-group-text" onclick="togglePasswordVisibility('password', this)">
-                            <i class="bx bx-hide"></i>
-                        </span>
-                        <div class="invalid-feedback">Password harus diisi minimal 8 karakter.</div>
+        <!-- Form with step-by-step collapsible cards -->
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+
+                <!-- Kartu Data Diri -->
+                <div class="card card-outline card-primary mt-4">
+                    <div class="card-header">
+                        <h3 class="card-title">Data Diri</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-toggle="collapse" data-target="#dataDiri" aria-expanded="true">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="dataDiri" class="collapse show">
+                        <div class="card-body">
+                            <form id="formDataDiri">
+                                <div class="form-group">
+                                    <label for="nama">Nama</label>
+                                    <input type="text" class="form-control" id="nama" placeholder="Masukkan Nama">
+                                </div>
+                                <div class="form-group">
+                                    <label for="tglLahir">Tanggal Lahir</label>
+                                    <input type="date" class="form-control" id="tglLahir">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email" placeholder="Masukkan Email">
+                                </div>
+                                <button type="button" class="btn btn-primary" onclick="nextStep('dataDiri', 'dataAlamat')">Lanjut</button>
+                                <!-- Tombol Kembali tidak diperlukan di sini karena ini langkah pertama -->
+                            </form>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Checkbox Remember Me -->
-                <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe">
-                    <label class="form-check-label" for="rememberMe">Ingat Saya</label>
+                <!-- Kartu Data Alamat -->
+                <div class="card card-outline card-primary mt-4">
+                    <div class="card-header">
+                        <h3 class="card-title">Data Alamat</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-toggle="collapse" data-target="#dataAlamat" aria-expanded="false">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="dataAlamat" class="collapse">
+                        <div class="card-body">
+                            <form id="formDataAlamat">
+                                <div class="form-group">
+                                    <label for="alamat">Alamat</label>
+                                    <input type="text" class="form-control" id="alamat" placeholder="Masukkan Alamat">
+                                </div>
+                                <div class="form-group">
+                                    <label for="kodePos">Kode Pos</label>
+                                    <input type="text" class="form-control" id="kodePos" placeholder="Masukkan Kode Pos">
+                                </div>
+                                <button type="button" class="btn btn-primary" onclick="nextStep('dataAlamat', 'dataPekerjaan')">Lanjut</button>
+                                <button type="button" class="btn btn-secondary" onclick="nextStep('dataAlamat', 'dataDiri')">Kembali</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Button -->
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-primary">Login</button>
-                    <!-- Belum punya akun? Daftar -->
-                    <p class="text-center mt-3">Belum punya akun? <a href="register.php">Daftar</a></p>
+                <!-- Kartu Data Pekerjaan -->
+                <div class="card card-outline card-primary mt-4">
+                    <div class="card-header">
+                        <h3 class="card-title">Data Pekerjaan</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-toggle="collapse" data-target="#dataPekerjaan" aria-expanded="false">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="dataPekerjaan" class="collapse">
+                        <div class="card-body">
+                            <form id="formDataPekerjaan">
+                                <div class="form-group">
+                                    <label for="pekerjaan">Pekerjaan</label>
+                                    <input type="text" class="form-control" id="pekerjaan" placeholder="Masukkan Pekerjaan">
+                                </div>
+                                <div class="form-group">
+                                    <label for="perusahaan">Perusahaan</label>
+                                    <input type="text" class="form-control" id="perusahaan" placeholder="Masukkan Perusahaan">
+                                </div>
+                                <button type="button" class="btn btn-primary" onclick="nextStep('dataPekerjaan', 'dataPendidikan')">Lanjut</button>
+                                <button type="button" class="btn btn-secondary" onclick="nextStep('dataPekerjaan', 'dataAlamat')">Kembali</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-            </form>
+
+                <!-- Kartu Data Pendidikan -->
+                <div class="card card-outline card-primary mt-4">
+                    <div class="card-header">
+                        <h3 class="card-title">Data Pendidikan</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-toggle="collapse" data-target="#dataPendidikan" aria-expanded="false">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="dataPendidikan" class="collapse">
+                        <div class="card-body">
+                            <form id="formDataPendidikan">
+                                <div class="form-group">
+                                    <label for="pendidikan">Pendidikan</label>
+                                    <input type="text" class="form-control" id="pendidikan" placeholder="Masukkan Pendidikan">
+                                </div>
+                                <button type="button" class="btn btn-primary" onclick="nextStep('dataPendidikan', 'dataPelatihan')">Lanjut</button>
+                                <button type="button" class="btn btn-secondary" onclick="nextStep('dataPendidikan', 'dataPekerjaan')">Kembali</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kartu Riwayat Pelatihan -->
+                <div class="card card-outline card-primary mt-4">
+                    <div class="card-header">
+                        <h3 class="card-title">Riwayat Pelatihan</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-toggle="collapse" data-target="#dataPelatihan" aria-expanded="false">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="dataPelatihan" class="collapse">
+                        <div class="card-body">
+                            <form id="formDataPelatihan">
+                                <div class="form-group">
+                                    <label for="pelatihan">Pelatihan</label>
+                                    <input type="text" class="form-control" id="pelatihan" placeholder="Masukkan Riwayat Pelatihan">
+                                </div>
+                                <button type="button" class="btn btn-success" onclick="submitForm()">Selesai</button>
+                                <button type="button" class="btn btn-secondary" onclick="nextStep('dataPelatihan', 'dataPendidikan')">Kembali</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
         </div>
     </div>
+</div>
 
-    <script>
-        // Validasi form
-        (() => {
-            'use strict'
+<!-- jQuery -->
+<script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.4/dist/sweetalert2.all.min.js"></script>
+<!-- AdminLTE App -->
+<script src="assets/adminlte/dist/js/adminlte.min.js"></script>
 
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            const forms = document.querySelectorAll('.needs-validation')
+<script>
+    function nextStep(currentStep, nextStep) {
+        $('#' + currentStep).collapse('hide');
+        $('#' + nextStep).collapse('show');
+    }
 
-            // Loop over them and prevent submission
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-
-                    form.classList.add('was-validated')
-                }, false)
-            })
-        })();
-
-        // Fungsi untuk menampilkan/menyembunyikan password
-        function togglePasswordVisibility(id, icon) {
-            const input = document.getElementById(id);
-            if (input.type === "password") {
-                input.type = "text";
-                icon.querySelector('i').classList.replace('bx-hide', 'bx-show');
-            } else {
-                input.type = "password";
-                icon.querySelector('i').classList.replace('bx-show', 'bx-hide');
-            }
-        }
-    </script>
-</body>
-
-</html>
+    function submitForm() {
+        alert("Form berhasil dikirim!");
+    }
+</script>

@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // SQL untuk memasukkan data ke tabel users
     $sql = "INSERT INTO users (nama_lengkap, username, password, akses, role) VALUES (?, ?, ?, 0, 'user')";
-    $stmt = $conn_foto->prepare($sql);
+    $stmt = $conn->prepare($sql);
     $stmt->bind_param("sss", $nama_lengkap, $username, $password);
 
     try {
