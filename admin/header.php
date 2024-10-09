@@ -56,6 +56,10 @@
     </nav>
     <!-- /.navbar -->
 
+    <?php
+    $current_page = basename($_SERVER['PHP_SELF']); // Mendapatkan nama file yang sedang diakses
+    ?>
+
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
@@ -87,7 +91,7 @@
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <!-- Dashboard -->
             <li class="nav-item">
-              <a href="dashboard.php" class="nav-link">
+              <a href="dashboard.php" class="nav-link <?php echo ($current_page == 'dashboard.php') ? 'active' : ''; ?>">
                 <i class="nav-icon fas fa-home"></i>
                 <p>Dashboard</p>
               </a>
@@ -95,7 +99,7 @@
 
             <!-- Form Daftar -->
             <li class="nav-item">
-              <a href="form.php" class="nav-link">
+              <a href="form.php" class="nav-link <?php echo ($current_page == 'form.php') ? 'active' : ''; ?>">
                 <i class="nav-icon fas fa-user-plus"></i>
                 <p>Form Pendaftaran</p>
               </a>
@@ -103,7 +107,7 @@
 
             <!-- Data Pribadi -->
             <li class="nav-item">
-              <a href="data-pribadi.php" class="nav-link">
+              <a href="data-pribadi.php" class="nav-link <?php echo ($current_page == 'data-pribadi.php') ? 'active' : ''; ?>">
                 <i class="nav-icon fas fa-user"></i>
                 <p>Data Pribadi</p>
               </a>
@@ -111,7 +115,7 @@
 
             <!-- Data Pendaftar -->
             <li class="nav-item">
-              <a href="data-ansor.php" class="nav-link">
+              <a href="data-ansor.php" class="nav-link <?php echo ($current_page == 'data-ansor.php') ? 'active' : ''; ?>">
                 <i class="nav-icon fas fa-users"></i>
                 <p>Data Anggota</p>
               </a>
@@ -119,7 +123,7 @@
 
             <!-- Manajemen Akun -->
             <li class="nav-item">
-              <a href="pengaturan.php" class="nav-link">
+              <a href="pengaturan.php" class="nav-link <?php echo ($current_page == 'pengaturan.php') ? 'active' : ''; ?>">
                 <i class="nav-icon fas fa-user-cog"></i>
                 <p>Manajemen Akun</p>
               </a>
@@ -135,6 +139,7 @@
           </ul>
         </nav>
         <!-- /.sidebar-menu -->
+
       </div>
       <!-- /.sidebar -->
     </aside>
