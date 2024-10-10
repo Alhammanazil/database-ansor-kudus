@@ -1,5 +1,33 @@
 <?php
 session_start();
+
+// Cek apakah user sudah login
+if (isset($_SESSION['user'])) {
+    // Redirect berdasarkan role
+    switch ($_SESSION['user']['role']) {
+        case 'master':
+            header("Location: master/dashboard.php");
+            break;
+
+        case 'admin kecamatan':
+            header("Location: admin_kecamatan/dashboard.php");
+            break;
+
+        case 'admin desa':
+            header("Location: admin_desa/dashboard.php");
+            break;
+
+        case 'user':
+            header("Location: user/data-pribadi.php");
+            break;
+
+        default:
+            $_SESSION['error'] = "Role tidak dikenali.";
+            header("Location: login.php");
+            break;
+    }
+    exit();
+}
 ?>
 
 <!DOCTYPE html>

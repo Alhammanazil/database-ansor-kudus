@@ -31,22 +31,25 @@ if ($result->num_rows === 1) {
                 setcookie($cookie_name, $cookie_value, $cookie_time, "/");
             }
 
+
             // Redirect berdasarkan role
             switch ($user['role']) {
                 case 'master':
-                case 'admin':
-                case 'user':
-                    header("Location: ../admin/dashboard.php");
+                    header("Location: ../master/dashboard.php");
                     break;
+
                 case 'admin kecamatan':
-                    header("Location: ../admin/dashboard.php");
+                    header("Location: ../admin_kecamatan/dashboard.php");
                     break;
+
                 case 'admin desa':
-                    header("Location: ../admin/dashboard.php");
+                    header("Location: ../admin_desa/dashboard.php");
                     break;
+
                 case 'user':
-                    header("Location: ../admin/dashboard.php");
+                    header("Location: ../user/data-pribadi.php");
                     break;
+
                 default:
                     $_SESSION['error'] = "Role tidak dikenali.";
                     header("Location: ../login.php");

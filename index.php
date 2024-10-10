@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="assets/adminlte/plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="assets/adminlte/dist/css/adminlte.min.css">
+    <!-- SweetAlert2 -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.4/dist/sweetalert2.min.css" rel="stylesheet">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -262,6 +264,8 @@
     <script src="assets/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="assets/adminlte/dist/js/adminlte.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.4/dist/sweetalert2.all.min.js"></script>
 
     <script>
         function nextStep(currentStep, nextStep) {
@@ -270,7 +274,23 @@
         }
 
         function submitForm() {
-            alert("Form berhasil dikirim!");
+            Swal.fire({
+                title: 'Submit Formulir?',
+                text: 'Pastikan semua data yang anda masukkan benar',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Form Berhasil Dikirim',
+                        text: 'Terima kasih telah mengisi form pendaftaran',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
         }
     </script>
 </body>
