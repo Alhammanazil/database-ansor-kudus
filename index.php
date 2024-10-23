@@ -96,34 +96,39 @@
                     <!-- Form with step-by-step collapsible cards -->
                     <div class="row">
                         <div class="col-md-12 col-sm-12">
+                            <form id="formPendaftaran" novalidate>
 
-                            <!-- Step 1: Data Anggota -->
-                            <div class="card card-outline card-primary mt-4">
-                                <div class="card-header" data-toggle="collapse" data-target="#dataAnggota">
-                                    <h5>1. Data Anggota</h5>
-                                </div>
-                                <div id="dataAnggota" class="collapse show">
-                                    <div class="card-body">
-                                        <form id="formAnggota">
+                                <!-- Step 1: Data Anggota -->
+                                <div class="card card-outline card-primary mt-4">
+                                    <div class="card-header" data-toggle="collapse" data-target="#dataAnggota">
+                                        <h5>1. Data Anggota</h5>
+                                    </div>
+                                    <div id="dataAnggota" class="collapse show">
+                                        <div class="card-body">
                                             <div class="form-group">
                                                 <label>Alamat Email</label>
                                                 <input type="email" class="form-control" placeholder="Masukkan Alamat Email" required>
+                                                <div class="invalid-feedback">Harap masukkan email yang valid.</div>
                                             </div>
                                             <div class="form-group">
                                                 <label>Nama Lengkap</label>
                                                 <input type="text" class="form-control" placeholder="Masukkan Nama Lengkap" required>
+                                                <div class="invalid-feedback">Harap masukkan Nama Lengkap.</div>
                                             </div>
                                             <div class="form-group">
                                                 <label>No. KTP / NIK</label>
                                                 <input type="text" class="form-control" placeholder="Masukkan No. KTP / NIK" required>
+                                                <div class="invalid-feedback">Harap masukkan No. KTP / NIK.</div>
                                             </div>
                                             <div class="form-group">
                                                 <label>Tempat Lahir</label>
                                                 <input type="text" class="form-control" placeholder="Masukkan Tempat Lahir" required>
+                                                <div class="invalid-feedback">Harap masukkan Tempat Lahir.</div>
                                             </div>
                                             <div class="form-group">
                                                 <label>Tanggal Lahir</label>
                                                 <input type="date" class="form-control" required>
+                                                <div class="invalid-feedback">Harap masukkan Tanggal Lahir.</div>
                                             </div>
                                             <div class="form-group">
                                                 <label>Golongan Darah</label>
@@ -134,22 +139,27 @@
                                                     <option>AB</option>
                                                     <option>O</option>
                                                 </select>
+                                                <div class="invalid-feedback">Harap pilih Golongan Darah.</div>
                                             </div>
                                             <div class="form-group">
                                                 <label>Tinggi Badan (cm)</label>
                                                 <input type="number" class="form-control" placeholder="Masukkan Tinggi Badan" required>
+                                                <div class="invalid-feedback">Harap masukkan Tinggi Badan.</div>
                                             </div>
                                             <div class="form-group">
                                                 <label>Berat Badan (kg)</label>
                                                 <input type="number" class="form-control" placeholder="Masukkan Berat Badan" required>
+                                                <div class="invalid-feedback">Harap masukkan Berat Badan.</div>
                                             </div>
                                             <div class="form-group">
                                                 <label>Nama Ayah Kandung</label>
                                                 <input type="text" class="form-control" placeholder="Masukkan Nama Ayah Kandung" required>
+                                                <div class="invalid-feedback">Harap masukkan Nama Ayah Kandung.</div>
                                             </div>
                                             <div class="form-group">
                                                 <label>Nama Ibu Kandung</label>
                                                 <input type="text" class="form-control" placeholder="Masukkan Nama Ibu Kandung" required>
+                                                <div class="invalid-feedback">Harap masukkan Nama Ibu Kandung.</div>
                                             </div>
                                             <div class="form-group">
                                                 <label>Status Pernikahan</label>
@@ -159,6 +169,7 @@
                                                     <option>Menikah</option>
                                                     <option>Cerai</option>
                                                 </select>
+                                                <div class="invalid-feedback">Harap pilih Status Pernikahan.</div>
                                             </div>
                                             <div class="form-group">
                                                 <label>Kepemilikan NPWP</label>
@@ -166,8 +177,8 @@
                                                     <label class="btn btn-outline-primary">
                                                         <input type="radio" name="npwp" value="Sudah Memiliki" required> Sudah Memiliki
                                                     </label>
-                                                    <label class="btn btn-outline-secondary">
-                                                        <input type="radio" name="npwp" value="Belum Memiliki" required> Belum Memiliki
+                                                    <label class="btn btn-outline-secondary active">
+                                                        <input type="radio" name="npwp" value="Belum Memiliki" required checked> Belum Memiliki
                                                     </label>
                                                 </div>
                                             </div>
@@ -177,25 +188,23 @@
                                                     <label class="btn btn-outline-primary">
                                                         <input type="radio" name="bpjs" value="Sudah Memiliki" required> Sudah Memiliki
                                                     </label>
-                                                    <label class="btn btn-outline-secondary">
-                                                        <input type="radio" name="bpjs" value="Belum Memiliki" required> Belum Memiliki
+                                                    <label class="btn btn-outline-secondary active">
+                                                        <input type="radio" name="bpjs" value="Belum Memiliki" required checked> Belum Memiliki
                                                     </label>
                                                 </div>
                                             </div>
                                             <button type="button" class="btn btn-primary" onclick="nextStep('dataAnggota', 'dataAlamat')">Lanjut</button>
-                                        </form>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Step 2: Alamat dan Media Sosial -->
-                            <div class="card card-outline card-primary mt-4">
-                                <div class="card-header" data-toggle="collapse" data-target="#dataAlamat">
-                                    <h5>2. Alamat dan Media Sosial</h5>
-                                </div>
-                                <div id="dataAlamat" class="collapse">
-                                    <div class="card-body">
-                                        <form id="formAlamat">
+                                <!-- Step 2: Alamat dan Media Sosial -->
+                                <div class="card card-outline card-primary mt-4">
+                                    <div class="card-header" data-toggle="collapse" data-target="#dataAlamat">
+                                        <h5>2. Alamat dan Media Sosial</h5>
+                                    </div>
+                                    <div id="dataAlamat" class="collapse">
+                                        <div class="card-body">
                                             <div class="form-group">
                                                 <label>Kecamatan</label>
                                                 <input type="text" class="form-control" placeholder="Masukkan Kecamatan" required>
@@ -275,19 +284,17 @@
 
                                             <button type="button" class="btn btn-secondary" onclick="prevStep('dataAlamat', 'dataAnggota')">Kembali</button>
                                             <button type="button" class="btn btn-primary" onclick="nextStep('dataAlamat', 'dataPekerjaan')">Lanjut</button>
-                                        </form>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Step 3: Pekerjaan -->
-                            <div class="card card-outline card-primary mt-4">
-                                <div class="card-header" data-toggle="collapse" data-target="#dataPekerjaan">
-                                    <h5>3. Data Pekerjaan</h5>
-                                </div>
-                                <div id="dataPekerjaan" class="collapse">
-                                    <div class="card-body">
-                                        <form id="formPekerjaan">
+                                <!-- Step 3: Pekerjaan -->
+                                <div class="card card-outline card-primary mt-4">
+                                    <div class="card-header" data-toggle="collapse" data-target="#dataPekerjaan">
+                                        <h5>3. Data Pekerjaan</h5>
+                                    </div>
+                                    <div id="dataPekerjaan" class="collapse">
+                                        <div class="card-body">
                                             <div class="form-group">
                                                 <label for="jenisPekerjaan">Jenis Pekerjaan</label>
                                                 <select class="form-control" id="jenisPekerjaan" onchange="toggleJobFields()">
@@ -343,19 +350,17 @@
 
                                             <button type="button" class="btn btn-secondary" onclick="prevStep('dataPekerjaan', 'dataAlamat')">Kembali</button>
                                             <button type="button" class="btn btn-primary" onclick="nextStep('dataPekerjaan', 'dataPendidikan')">Lanjut</button>
-                                        </form>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Step 4: Riwayat Pendidikan dan Organisasi -->
-                            <div class="card card-outline card-primary mt-4">
-                                <div class="card-header" data-toggle="collapse" data-target="#dataPendidikan">
-                                    <h5>4. Riwayat Pendidikan dan Organisasi</h5>
-                                </div>
-                                <div id="dataPendidikan" class="collapse">
-                                    <div class="card-body">
-                                        <form id="formPendidikan">
+                                <!-- Step 4: Riwayat Pendidikan dan Organisasi -->
+                                <div class="card card-outline card-primary mt-4">
+                                    <div class="card-header" data-toggle="collapse" data-target="#dataPendidikan">
+                                        <h5>4. Riwayat Pendidikan dan Organisasi</h5>
+                                    </div>
+                                    <div id="dataPendidikan" class="collapse">
+                                        <div class="card-body">
                                             <!-- Pendidikan Terakhir -->
                                             <div class="form-group">
                                                 <label for="pendidikanTerakhir">Pendidikan Terakhir</label>
@@ -445,20 +450,17 @@
 
                                             <button type="button" class="btn btn-secondary" onclick="prevStep('dataPendidikan', 'dataPekerjaan')">Kembali</button>
                                             <button type="button" class="btn btn-primary" onclick="nextStep('dataPendidikan', 'dataKepengurusan')">Lanjut</button>
-                                        </form>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Step 5: Riwayat Kepengurusan di Ansor -->
-                            <div class="card card-outline card-primary mt-4">
-                                <div class="card-header" data-toggle="collapse" data-target="#dataKepengurusan">
-                                    <h5>5. Riwayat Kepengurusan di Ansor</h5>
-                                </div>
-                                <div id="dataKepengurusan" class="collapse">
-                                    <div class="card-body">
-                                        <form id="formKepengurusan">
-
+                                <!-- Step 5: Riwayat Kepengurusan di Ansor -->
+                                <div class="card card-outline card-primary mt-4">
+                                    <div class="card-header" data-toggle="collapse" data-target="#dataKepengurusan">
+                                        <h5>5. Riwayat Kepengurusan di Ansor</h5>
+                                    </div>
+                                    <div id="dataKepengurusan" class="collapse">
+                                        <div class="card-body">
                                             <!-- Tingkat Pimpinan Ranting -->
                                             <h6>A. Tingkat Pimpinan Ranting</h6>
                                             <div class="form-group">
@@ -511,35 +513,38 @@
                                             </div>
 
                                             <button type="button" class="btn btn-secondary" onclick="prevStep('dataKepengurusan', 'dataPendidikan')">Kembali</button>
-                                            <button type="button" class="btn btn-primary" onclick="nextStep('dataKepengurusan', 'dataPelatihan')">Lanjut</button>
-                                        </form>
+                                            <!-- submit button -->
+                                            <button type="submit" class="btn btn-success">Selesai</button>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-
+                            </form>
                         </div>
                     </div>
-                    <!-- /.row -->
-                </div><!-- /.container-fluid -->
+                </div>
+
             </div>
-            <!-- /.content -->
         </div>
-        <!-- /.content-wrapper -->
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
 
 
-        <!-- Main Footer -->
-        <footer class="main-footer">
-            <!-- To the right -->
-            <div class="float-right d-none d-sm-inline">
-                Versi 1.0
-            </div>
-            <!-- Default to the left -->
-            <strong>Copyright &copy; 2024 Ansor Kudus</strong>
-        </footer>
+    <!-- Main Footer -->
+    <footer class="main-footer">
+        <!-- To the right -->
+        <div class="float-right d-none d-sm-inline">
+            Versi 1.0
+        </div>
+        <!-- Default to the left -->
+        <strong>Copyright &copy; 2024 Ansor Kudus</strong>
+    </footer>
     </div>
     <!-- ./wrapper -->
 
-    <!-- REQUIRED SCRIPTS -->
+    <!--  REQUIRED SCRIPTS -->
     <!-- jQuery -->
     <script src="assets/adminlte/plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
@@ -572,25 +577,62 @@
             }
         }
 
-        function submitForm() {
-            Swal.fire({
-                title: 'Submit Formulir?',
-                text: 'Pastikan semua data yang anda masukkan benar',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Ya',
-                cancelButtonText: 'Tidak'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        title: 'Form Berhasil Dikirim',
-                        text: 'Terima kasih telah mengisi form pendaftaran',
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    });
-                }
+        document.addEventListener('DOMContentLoaded', function() {
+            const forms = document.querySelectorAll('form'); // Pilih semua form
+
+            forms.forEach((form) => {
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault(); // Hentikan submit jika ada kesalahan
+                        event.stopPropagation();
+
+                        // Tambahkan kelas Bootstrap untuk menunjukkan error
+                        form.classList.add('was-validated');
+
+                        // Scroll ke elemen pertama yang invalid
+                        const firstInvalidField = form.querySelector(':invalid');
+                        if (firstInvalidField) {
+                            firstInvalidField.focus();
+                            firstInvalidField.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'center'
+                            });
+                        }
+
+                        // Tampilkan SweetAlert jika ada error
+                        Swal.fire({
+                            title: 'Data belum lengkap!',
+                            text: 'Pastikan semua data telah terisi dengan benar!',
+                            icon: 'error',
+                            confirmButtonText: 'OK',
+                        });
+
+                    } else {
+                        // Jika validasi lolos, jalankan submit form dan SweetAlert konfirmasi
+                        event.preventDefault(); // Mencegah submit asli
+                        Swal.fire({
+                            title: 'Submit Formulir?',
+                            text: 'Pastikan semua data yang anda masukkan benar',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Ya',
+                            cancelButtonText: 'Tidak',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                Swal.fire({
+                                    title: 'Form Berhasil Dikirim',
+                                    text: 'Terima kasih telah mengisi form pendaftaran',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK',
+                                }).then(() => {
+                                    form.submit(); // Kirim form setelah konfirmasi
+                                });
+                            }
+                        });
+                    }
+                }, false);
             });
-        }
+        });
     </script>
 </body>
 
