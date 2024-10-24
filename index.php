@@ -207,19 +207,36 @@
                                         <div class="card-body">
                                             <div class="form-group">
                                                 <label>Kecamatan</label>
-                                                <input type="text" class="form-control" placeholder="Masukkan Kecamatan" required>
+                                                <select class="form-control" id="kecamatan" required onchange="showDesa(this.value)">
+                                                    <option value="">Pilih Kecamatan</option>
+                                                    <option value="kecamatan1">Kecamatan 1</option>
+                                                    <option value="kecamatan2">Kecamatan 2</option>
+                                                </select>
+                                                <div class="invalid-feedback">Harap pilih Kecamatan.</div>
                                             </div>
+                                            <!-- Desa -->
+                                            <div id="desaFields" style="display: none;">
+                                                <div class="form-group">
+                                                    <label>Desa</label>
+                                                    <input type="text" class="form-control" placeholder="Masukkan Desa" required>
+                                                    <div class="invalid-feedback">Harap masukkan Desa.</div>
+                                                </div>
+                                            </div>
+
                                             <div class="form-group">
                                                 <label>RT</label>
                                                 <input type="number" class="form-control" placeholder="Masukkan RT" required>
+                                                <div class="invalid-feedback">Harap masukkan RT.</div>
                                             </div>
                                             <div class="form-group">
                                                 <label>RW</label>
                                                 <input type="number" class="form-control" placeholder="Masukkan RW" required>
+                                                <div class="invalid-feedback">Harap masukkan RW.</div>
                                             </div>
                                             <div class="form-group">
                                                 <label>No. Telp / WA</label>
                                                 <input type="text" class="form-control" placeholder="Masukkan No. Telp / WA" required>
+                                                <div class="invalid-feedback">Harap masukkan No. Telp / WA.</div>
                                             </div>
 
                                             <div class="form-group">
@@ -228,8 +245,8 @@
                                                     <label class="btn btn-outline-primary">
                                                         <input type="radio" name="facebook" value="Punya" required> Punya
                                                     </label>
-                                                    <label class="btn btn-outline-secondary">
-                                                        <input type="radio" name="facebook" value="Tidak" required> Tidak
+                                                    <label class="btn btn-outline-secondary active">
+                                                        <input type="radio" name="facebook" value="Tidak" required checked> Tidak
                                                     </label>
                                                 </div>
                                             </div>
@@ -240,8 +257,8 @@
                                                     <label class="btn btn-outline-primary">
                                                         <input type="radio" name="instagram" value="Punya" required> Punya
                                                     </label>
-                                                    <label class="btn btn-outline-secondary">
-                                                        <input type="radio" name="instagram" value="Tidak" required> Tidak
+                                                    <label class="btn btn-outline-secondary active">
+                                                        <input type="radio" name="instagram" value="Tidak" required checked> Tidak
                                                     </label>
                                                 </div>
                                             </div>
@@ -252,8 +269,8 @@
                                                     <label class="btn btn-outline-primary">
                                                         <input type="radio" name="tiktok" value="Punya" required> Punya
                                                     </label>
-                                                    <label class="btn btn-outline-secondary">
-                                                        <input type="radio" name="tiktok" value="Tidak" required> Tidak
+                                                    <label class="btn btn-outline-secondary active">
+                                                        <input type="radio" name="tiktok" value="Tidak" required checked> Tidak
                                                     </label>
                                                 </div>
                                             </div>
@@ -264,8 +281,8 @@
                                                     <label class="btn btn-outline-primary">
                                                         <input type="radio" name="youtube" value="Punya" required> Punya
                                                     </label>
-                                                    <label class="btn btn-outline-secondary">
-                                                        <input type="radio" name="youtube" value="Tidak" required> Tidak
+                                                    <label class="btn btn-outline-secondary active">
+                                                        <input type="radio" name="youtube" value="Tidak" required checked> Tidak
                                                     </label>
                                                 </div>
                                             </div>
@@ -276,8 +293,8 @@
                                                     <label class="btn btn-outline-primary">
                                                         <input type="radio" name="twitter" value="Punya" required> Punya
                                                     </label>
-                                                    <label class="btn btn-outline-secondary">
-                                                        <input type="radio" name="twitter" value="Tidak" required> Tidak
+                                                    <label class="btn btn-outline-secondary active">
+                                                        <input type="radio" name="twitter" value="Tidak" required checked> Tidak
                                                     </label>
                                                 </div>
                                             </div>
@@ -297,12 +314,14 @@
                                         <div class="card-body">
                                             <div class="form-group">
                                                 <label for="jenisPekerjaan">Jenis Pekerjaan</label>
-                                                <select class="form-control" id="jenisPekerjaan" onchange="toggleJobFields()">
+                                                <select class="form-control" id="jenisPekerjaan" onchange="toggleJobFields()" required>
+                                                    <option value="" disabled selected>Pilih Jenis Pekerjaan</option>
                                                     <option value="tidak_bekerja">Tidak Bekerja</option>
                                                     <option value="pedagang">Pedagang</option>
                                                     <option value="pegawai">Pegawai</option>
                                                     <option value="lainnya">Lainnya</option>
                                                 </select>
+                                                <div class="invalid-feedback">Harap pilih Jenis Pekerjaan.</div>
                                             </div>
 
                                             <!-- Fields tambahan yang akan disembunyikan jika tidak bekerja -->
@@ -373,24 +392,26 @@
                                                     <option value="sarjana">Sarjana</option>
                                                     <option value="lainnya">Lainnya</option>
                                                 </select>
+                                                <div class="invalid-feedback">Harap pilih Pendidikan Terakhir.</div>
                                             </div>
 
                                             <!-- Nama Lembaga Pendidikan -->
                                             <div class="form-group">
                                                 <label for="lembagaPendidikan">Nama Lembaga Pendidikan Terakhir</label>
                                                 <input type="text" class="form-control" id="lembagaPendidikan" placeholder="Masukkan Nama Lembaga" required>
+                                                <div class="invalid-feedback">Harap masukkan Nama Lembaga Pendidikan Terakhir.</div>
                                             </div>
 
                                             <!-- Nama Pesantren -->
                                             <div class="form-group">
                                                 <label for="namaPesantren">Nama Pesantren</label>
-                                                <input type="text" class="form-control" id="namaPesantren" placeholder="Masukkan Nama Pesantren">
+                                                <input type="text" class="form-control" id="namaPesantren" placeholder="Masukkan Nama Pesantren" required>
                                             </div>
 
                                             <!-- Nama Madrasah Diniyah -->
                                             <div class="form-group">
                                                 <label for="madrasahDiniyah">Nama Madrasah Diniyah</label>
-                                                <input type="text" class="form-control" id="madrasahDiniyah" placeholder="Masukkan Nama Madrasah">
+                                                <input type="text" class="form-control" id="madrasahDiniyah" placeholder="Masukkan Nama Madrasah" required>
                                             </div>
 
                                             <!-- Riwayat Organisasi -->
@@ -439,13 +460,14 @@
 
                                             <div class="form-group">
                                                 <label for="afiliasiPartai">Afiliasi Partai Politik Saat Ini</label>
-                                                <select id="afiliasiPartai" class="form-control">
+                                                <select id="afiliasiPartai" class="form-control" required>
                                                     <option value="" disabled selected>Pilih Afiliasi</option>
                                                     <option value="tidak_berafiliasi">Tidak Berafiliasi</option>
                                                     <option value="partai_a">Partai A</option>
                                                     <option value="partai_b">Partai B</option>
                                                     <option value="partai_c">Partai C</option>
                                                 </select>
+                                                <div class="invalid-feedback">Harap pilih Afiliasi Partai Politik Saat Ini.</div>
                                             </div>
 
                                             <button type="button" class="btn btn-secondary" onclick="prevStep('dataPendidikan', 'dataPekerjaan')">Kembali</button>
@@ -465,7 +487,7 @@
                                             <h6>A. Tingkat Pimpinan Ranting</h6>
                                             <div class="form-group">
                                                 <label for="namaKecamatanRanting">Nama Kecamatan</label>
-                                                <select id="namaKecamatanRanting" class="form-control" required>
+                                                <select id="namaKecamatanRanting" class="form-control">
                                                     <option value="" disabled selected>Pilih Kecamatan</option>
                                                     <option value="kecamatan1">Kecamatan 1</option>
                                                     <option value="kecamatan2">Kecamatan 2</option>
@@ -473,7 +495,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="jabatanRanting">Jabatan Tertinggi di Ranting</label>
-                                                <input type="text" class="form-control" id="jabatanRanting" placeholder="Masukkan Jabatan di Ranting" required>
+                                                <input type="text" class="form-control" id="jabatanRanting" placeholder="Masukkan Jabatan di Ranting">
                                             </div>
                                             <div class="form-group">
                                                 <label for="masaRanting">Masa Khidmat di Ranting</label>
@@ -485,7 +507,7 @@
                                             <h6>B. Tingkat Pimpinan Anak Cabang (PAC)</h6>
                                             <div class="form-group">
                                                 <label for="kecamatanPAC">Kecamatan (PAC)</label>
-                                                <select id="kecamatanPAC" class="form-control" required>
+                                                <select id="kecamatanPAC" class="form-control">
                                                     <option value="" disabled selected>Pilih Kecamatan</option>
                                                     <option value="kecamatan1">Kecamatan 1</option>
                                                     <option value="kecamatan2">Kecamatan 2</option>
@@ -493,7 +515,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="jabatanPAC">Jabatan Tertinggi di PAC</label>
-                                                <input type="text" class="form-control" id="jabatanPAC" placeholder="Masukkan Jabatan di PAC" required>
+                                                <input type="text" class="form-control" id="jabatanPAC" placeholder="Masukkan Jabatan di PAC">
                                             </div>
                                             <div class="form-group">
                                                 <label for="masaPAC">Masa Khidmat di PAC</label>
@@ -505,7 +527,7 @@
                                             <h6>C. Tingkat Pimpinan Cabang (PC)</h6>
                                             <div class="form-group">
                                                 <label for="jabatanPC">Jabatan Tertinggi di PC</label>
-                                                <input type="text" class="form-control" id="jabatanPC" placeholder="Masukkan Jabatan di PC" required>
+                                                <input type="text" class="form-control" id="jabatanPC" placeholder="Masukkan Jabatan di PC">
                                             </div>
                                             <div class="form-group">
                                                 <label for="masaPC">Masa Khidmat di PC</label>
@@ -513,18 +535,107 @@
                                             </div>
 
                                             <button type="button" class="btn btn-secondary" onclick="prevStep('dataKepengurusan', 'dataPendidikan')">Kembali</button>
-                                            <!-- submit button -->
-                                            <button type="submit" class="btn btn-success">Selesai</button>
+                                            <button type="button" class="btn btn-primary" onclick="nextStep('dataKepengurusan', 'dataPelatihanKaderisasi')">Lanjut</button>
                                         </div>
                                     </div>
+                                </div>
+
+                                <!-- Step 6: Riwayat Pelatihan Kaderisasi -->
+                                <div class="card card-outline card-primary mt-4">
+                                    <div class="card-header" data-toggle="collapse" data-target="#dataPelatihanKaderisasi">
+                                        <h5>6. Riwayat Pelatihan Kaderisasi</h5>
+                                    </div>
+                                    <div id="dataPelatihanKaderisasi" class="collapse">
+                                        <div class="card-body">
+                                            <!-- PKD -->
+                                            <div class="form-group">
+                                                <label for="pkd">PKD</label>
+                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                    <label class="btn btn-outline-primary" onclick="toggleUploadField('pkd', true)">
+                                                        <input type="radio" name="pkd" value="belum" required> Belum
+                                                    </label>
+                                                    <label class="btn btn-outline-primary" onclick="toggleUploadField('pkd', false)">
+                                                        <input type="radio" name="pkd" value="lulus" required> Lulus
+                                                    </label>
+                                                </div>
+                                                <div id="pkdUpload" class="mt-2" style="display: none;">
+                                                    <label for="pkdCertificate" class="form-label">Upload Sertifikat PKD</label>
+                                                    <div class="input-group mb-3">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" id="pkdCertificate" accept="image/*,application/pdf">
+                                                            <label class="custom-file-label" for="pkdCertificate">Pilih File</label>
+                                                        </div>
+                                                        <div class="invalid-feedback">Harap upload sertifikat PKD jika memilih Lulus.</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Dirosah Ula -->
+                                            <div class="form-group">
+                                                <label for="dirosahUla">Dirosah Ula</label>
+                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                    <label class="btn btn-outline-primary" onclick="toggleUploadField('dirosahUla', true)">
+                                                        <input type="radio" name="dirosahUla" value="belum" required> Belum
+                                                    </label>
+                                                    <label class="btn btn-outline-primary" onclick="toggleUploadField('dirosahUla', false)">
+                                                        <input type="radio" name="dirosahUla" value="lulus" required> Lulus
+                                                    </label>
+                                                </div>
+                                                <div id="dirosahUlaUpload" class="mt-2" style="display: none;">
+                                                    <label for="dirosahUlaCertificate" class="form-label">Upload Sertifikat Dirosah Ula</label>
+                                                    <div class="input-group mb-3">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" id="dirosahUlaCertificate" accept="image/*,application/pdf">
+                                                            <label class="custom-file-label" for="dirosahUlaCertificate">Pilih File</label>
+                                                        </div>
+                                                        <div class="invalid-feedback">Harap upload sertifikat Dirosah Ula jika memilih Lulus.</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Diklatsar -->
+                                            <div class="form-group">
+                                                <label for="diklatsar">Diklatsar</label>
+                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                    <label class="btn btn-outline-primary" onclick="toggleUploadField('diklatsar', true)">
+                                                        <input type="radio" name="diklatsar" value="belum" required> Belum
+                                                    </label>
+                                                    <label class="btn btn-outline-primary" onclick="toggleUploadField('diklatsar', false)">
+                                                        <input type="radio" name="diklatsar" value="lulus" required> Lulus
+                                                    </label>
+                                                </div>
+                                                <div id="diklatsarUpload" class="mt-2" style="display: none;">
+                                                    <label for="diklatsarCertificate" class="form-label">Upload Sertifikat Diklatsar</label>
+                                                    <div class="input-group mb-3">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" id="diklatsarCertificate" accept="image/*,application/pdf">
+                                                            <label class="custom-file-label" for="diklatsarCertificate">Pilih File</label>
+                                                        </div>
+                                                        <div class="invalid-feedback">Harap upload sertifikat Diklatsar jika memilih Lulus.</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <button type="button" class="btn btn-secondary" onclick="prevStep('dataPelatihanKaderisasi', 'dataKepengurusan')">Kembali</button>
+                                            <button type="submit" class="btn btn-success" onclick="validateForm()">Selesai</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                             </form>
                         </div>
                     </div>
                 </div>
 
+                </form>
             </div>
         </div>
-        <!-- /.row -->
+    </div>
+
+    </div>
+    </div>
+    <!-- /.row -->
     </div><!-- /.container-fluid -->
     </div>
     <!-- /.content -->
@@ -553,6 +664,9 @@
     <script src="assets/adminlte/dist/js/adminlte.min.js"></script>
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.4/dist/sweetalert2.all.min.js"></script>
+    <!-- bs-custom-file-input -->
+    <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
+
 
     <script>
         function nextStep(current, next) {
@@ -563,6 +677,15 @@
         function prevStep(current, prev) {
             $('#' + current).collapse('hide');
             $('#' + prev).collapse('show');
+        }
+
+        // Field Alamat
+        function showDesa(kecamatan) {
+            if (kecamatan != "") {
+                document.getElementById("desaFields").style.display = "block";
+            } else {
+                document.getElementById("desaFields").style.display = "none";
+            }
         }
 
         // Field Pekerjaan
@@ -577,8 +700,43 @@
             }
         }
 
+        // Field Riwayat Pelatihan Kaderisasi
+        function toggleUploadField(field, isHidden) {
+            const uploadField = document.getElementById(`${field}Upload`);
+            const uploadInput = document.getElementById(`${field}Certificate`);
+
+            if (isHidden) {
+                uploadField.style.display = 'none';
+                uploadInput.removeAttribute('required');
+                uploadInput.classList.remove('is-invalid');
+            } else {
+                uploadField.style.display = 'block';
+                uploadInput.setAttribute('required', 'required');
+            }
+        }
+
+        function validateForm() {
+            const inputs = ['pkd', 'dirosahUla', 'diklatsar'];
+
+            inputs.forEach(input => {
+                const uploadInput = document.getElementById(`${input}Certificate`);
+                const radioValue = document.querySelector(`input[name="${input}"]:checked`).value;
+
+                if (radioValue === 'lulus' && !uploadInput.value) {
+                    uploadInput.classList.add('is-invalid');
+                } else {
+                    uploadInput.classList.remove('is-invalid');
+                }
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
-            const forms = document.querySelectorAll('form'); // Pilih semua form
+            bsCustomFileInput.init();
+        });
+
+        // Validasi form
+        document.addEventListener('DOMContentLoaded', function() {
+            const forms = document.querySelectorAll('form');
 
             forms.forEach((form) => {
                 form.addEventListener('submit', function(event) {
@@ -603,7 +761,7 @@
                         Swal.fire({
                             title: 'Data belum lengkap!',
                             text: 'Pastikan semua data telah terisi dengan benar!',
-                            icon: 'error',
+                            icon: 'warning',
                             confirmButtonText: 'OK',
                         });
 
