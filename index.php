@@ -18,6 +18,8 @@
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.4/dist/sweetalert2.min.css" rel="stylesheet">
     <!-- Select2 -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- icheck -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/icheck-bootstrap/3.0.1/icheck-bootstrap.min.css" integrity="sha512-8vq2g5nHE062j3xor4XxPeZiPjmRDh6wlufQlfC6pdQ/9urJkU07NM0tEREeymP++NczacJ/Q59ul+/K2eYvcg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <style>
@@ -582,88 +584,219 @@
                                     </div>
                                     <div id="dataPelatihanKaderisasi" class="collapse">
                                         <div class="card-body">
-                                            <!-- PKD -->
+
+                                            <!-- A. Pendidikan Kader -->
+                                            <h6>A. Pendidikan Kader</h6>
                                             <div class="form-group">
-                                                <label for="pkd">PKD</label>
-                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                    <label class="btn btn-outline-primary" onclick="toggleUploadField('pkd', true)">
-                                                        <input type="radio" name="pkd" value="belum" required> Belum
-                                                    </label>
-                                                    <label class="btn btn-outline-primary" onclick="toggleUploadField('pkd', false)">
-                                                        <input type="radio" name="pkd" value="lulus" required> Lulus
-                                                    </label>
+                                                <div class="icheck-primary d-inline">
+                                                    <input type="radio" id="pkd" name="pendidikanKader" value="PKD" onchange="toggleUpload('pkdUpload', 'pendidikanKader')">
+                                                    <label for="pkd">PKD</label>
                                                 </div>
-                                                <div id="pkdUpload" class="mt-2" style="display: none;">
-                                                    <label for="pkdCertificate" class="form-label">Upload Sertifikat PKD</label>
-                                                    <div class="input-group mb-3">
+                                                <div class="icheck-primary d-inline">
+                                                    <input type="radio" id="pkl" name="pendidikanKader" value="PKL" onchange="toggleUpload('pklUpload', 'pendidikanKader')">
+                                                    <label for="pkl">PKL</label>
+                                                </div>
+                                                <div class="icheck-primary d-inline">
+                                                    <input type="radio" id="pkn" name="pendidikanKader" value="PKN" onchange="toggleUpload('pknUpload', 'pendidikanKader')">
+                                                    <label for="pkn">PKN</label>
+                                                </div>
+                                            </div>
+
+                                            <div id="pkdUpload" class="upload-section pendidikanKader" style="display: none;">
+                                                <div class="form-group">
+                                                    <label>Upload Sertifikat PKD</label>
+                                                    <div class="input-group">
                                                         <div class="custom-file">
                                                             <input type="file" class="custom-file-input" id="pkdCertificate" accept="image/*,application/pdf">
-                                                            <label class="custom-file-label" for="pkdCertificate">Pilih File</label>
+                                                            <label class="custom-file-label" for="pkdCertificate">Pilih file</label>
                                                         </div>
-                                                        <div class="invalid-feedback">Harap upload sertifikat PKD jika memilih Lulus.</div>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <!-- Dirosah Ula -->
-                                            <div class="form-group">
-                                                <label for="dirosahUla">Dirosah Ula</label>
-                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                    <label class="btn btn-outline-primary" onclick="toggleUploadField('dirosahUla', true)">
-                                                        <input type="radio" name="dirosahUla" value="belum" required> Belum
-                                                    </label>
-                                                    <label class="btn btn-outline-primary" onclick="toggleUploadField('dirosahUla', false)">
-                                                        <input type="radio" name="dirosahUla" value="lulus" required> Lulus
-                                                    </label>
+                                            <div id="pklUpload" class="upload-section pendidikanKader" style="display: none;">
+                                                <div class="form-group">
+                                                    <label>Upload Sertifikat PKL</label>
+                                                    <div class="input-group">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" id="pklCertificate" accept="image/*,application/pdf">
+                                                            <label class="custom-file-label" for="pklCertificate">Pilih file</label>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div id="dirosahUlaUpload" class="mt-2" style="display: none;">
-                                                    <label for="dirosahUlaCertificate" class="form-label">Upload Sertifikat Dirosah Ula</label>
-                                                    <div class="input-group mb-3">
+                                            </div>
+
+                                            <div id="pknUpload" class="upload-section pendidikanKader" style="display: none;">
+                                                <div class="form-group">
+                                                    <label>Upload Sertifikat PKN</label>
+                                                    <div class="input-group">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" id="pknCertificate" accept="image/*,application/pdf">
+                                                            <label class="custom-file-label" for="pknCertificate">Pilih file</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br>
+
+                                            <!-- B. Latihan Instruktur -->
+                                            <h6>B. Latihan Instruktur</h6>
+                                            <div class="form-group">
+                                                <div class="icheck-primary d-inline">
+                                                    <input type="radio" id="li1" name="instruktur" value="LI I" onchange="toggleUpload('li1Upload', 'instruktur')">
+                                                    <label for="li1">LI I</label>
+                                                </div>
+                                                <div class="icheck-primary d-inline">
+                                                    <input type="radio" id="li2" name="instruktur" value="LI II" onchange="toggleUpload('li2Upload', 'instruktur')">
+                                                    <label for="li2">LI II</label>
+                                                </div>
+                                                <div class="icheck-primary d-inline">
+                                                    <input type="radio" id="li3" name="instruktur" value="LI III" onchange="toggleUpload('li3Upload', 'instruktur')">
+                                                    <label for="li3">LI III</label>
+                                                </div>
+                                            </div>
+
+                                            <div id="li1Upload" class="upload-section instruktur" style="display: none;">
+                                                <div class="form-group">
+                                                    <label>Upload Sertifikat LI I</label>
+                                                    <div class="input-group">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" id="li1Certificate" accept="image/*,application/pdf">
+                                                            <label class="custom-file-label" for="li1Certificate">Pilih file</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="li2Upload" class="upload-section instruktur" style="display: none;">
+                                                <div class="form-group">
+                                                    <label>Upload Sertifikat LI II</label>
+                                                    <div class="input-group">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" id="li2Certificate" accept="image/*,application/pdf">
+                                                            <label class="custom-file-label" for="li2Certificate">Pilih file</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div id="li3Upload" class="upload-section instruktur" style="display: none;">
+                                                <div class="form-group">
+                                                    <label>Upload Sertifikat LI III</label>
+                                                    <div class="input-group">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" id="li3Certificate" accept="image/*,application/pdf">
+                                                            <label class="custom-file-label" for="li3Certificate">Pilih file</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br>
+
+                                            <!-- C. Dirosah -->
+                                            <h6>C. Dirosah</h6>
+                                            <div class="form-group">
+                                                <div class="icheck-primary d-inline">
+                                                    <input type="radio" id="dirosahUla" name="dirosah" value="Dirosah Ula" onchange="toggleUpload('dirosahUlaUpload', 'dirosah')">
+                                                    <label for="dirosahUla">Dirosah Ula</label>
+                                                </div>
+                                                <div class="icheck-primary d-inline">
+                                                    <input type="radio" id="dirosahWustho" name="dirosah" value="Dirosah Wustho" onchange="toggleUpload('dirosahWusthoUpload', 'dirosah')">
+                                                    <label for="dirosahWustho">Dirosah Wustho</label>
+                                                </div>
+                                                <div class="icheck-primary d-inline">
+                                                    <input type="radio" id="dirosahUlya" name="dirosah" value="Dirosah Ulya" onchange="toggleUpload('dirosahUlyaUpload', 'dirosah')">
+                                                    <label for="dirosahUlya">Dirosah Ulya</label>
+                                                </div>
+                                            </div>
+
+                                            <div id="dirosahUlaUpload" class="upload-section dirosah" style="display: none;">
+                                                <div class="form-group">
+                                                    <label>Upload Sertifikat Dirosah Ula</label>
+                                                    <div class="input-group">
                                                         <div class="custom-file">
                                                             <input type="file" class="custom-file-input" id="dirosahUlaCertificate" accept="image/*,application/pdf">
-                                                            <label class="custom-file-label" for="dirosahUlaCertificate">Pilih File</label>
+                                                            <label class="custom-file-label" for="dirosahUlaCertificate">Pilih file</label>
                                                         </div>
-                                                        <div class="invalid-feedback">Harap upload sertifikat Dirosah Ula jika memilih Lulus.</div>
                                                     </div>
                                                 </div>
                                             </div>
+                                            <br>
 
-                                            <!-- Diklatsar -->
+                                            <!-- D. Pendidikan & Latihan -->
+                                            <h6>D. Pendidikan & Latihan</h6>
                                             <div class="form-group">
-                                                <label for="diklatsar">Diklatsar</label>
-                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                    <label class="btn btn-outline-primary" onclick="toggleUploadField('diklatsar', true)">
-                                                        <input type="radio" name="diklatsar" value="belum" required> Belum
-                                                    </label>
-                                                    <label class="btn btn-outline-primary" onclick="toggleUploadField('diklatsar', false)">
-                                                        <input type="radio" name="diklatsar" value="lulus" required> Lulus
-                                                    </label>
+                                                <div class="icheck-primary d-inline">
+                                                    <input type="radio" id="diklatsar" name="pendidikanLatihan" value="Diklatsar" onchange="toggleUpload('diklatsarUpload', 'pendidikanLatihan')">
+                                                    <label for="diklatsar">Diklatsar</label>
                                                 </div>
-                                                <div id="diklatsarUpload" class="mt-2" style="display: none;">
-                                                    <label for="diklatsarCertificate" class="form-label">Upload Sertifikat Diklatsar</label>
-                                                    <div class="input-group mb-3">
+                                                <div class="icheck-primary d-inline">
+                                                    <input type="radio" id="susbalan" name="pendidikanLatihan" value="SUSBALAN" onchange="toggleUpload('susbalanUpload', 'pendidikanLatihan')">
+                                                    <label for="susbalan">SUSBALAN</label>
+                                                </div>
+                                                <div class="icheck-primary d-inline">
+                                                    <input type="radio" id="susbanpim" name="pendidikanLatihan" value="SUSBANPIM" onchange="toggleUpload('susbanpimUpload', 'pendidikanLatihan')">
+                                                    <label for="susbanpim">SUSBANPIM</label>
+                                                </div>
+                                            </div>
+
+                                            <div id="diklatsarUpload" class="upload-section pendidikanLatihan" style="display: none;">
+                                                <div class="form-group">
+                                                    <label>Upload Sertifikat Diklatsar</label>
+                                                    <div class="input-group">
                                                         <div class="custom-file">
                                                             <input type="file" class="custom-file-input" id="diklatsarCertificate" accept="image/*,application/pdf">
-                                                            <label class="custom-file-label" for="diklatsarCertificate">Pilih File</label>
+                                                            <label class="custom-file-label" for="diklatsarCertificate">Pilih file</label>
                                                         </div>
-                                                        <div class="invalid-feedback">Harap upload sertifikat Diklatsar jika memilih Lulus.</div>
                                                     </div>
                                                 </div>
                                             </div>
+                                            <br>
 
-                                            <button type="button" class="btn btn-secondary" onclick="prevStep('dataPelatihanKaderisasi', 'dataKepengurusan')">Kembali</button>
-                                            <button type="submit" class="btn btn-success" onclick="validateForm()">Selesai</button>
+                                            <!-- E. Kursus Kepelatihan -->
+                                            <h6>E. Kursus Kepelatihan</h6>
+                                            <div class="form-group">
+                                                <div class="icheck-primary d-inline">
+                                                    <input type="radio" id="suspelat1" name="kursus" value="SUSPELAT I" onchange="toggleUpload('suspelat1Upload', 'kursus')">
+                                                    <label for="suspelat1">SUSPELAT I</label>
+                                                </div>
+                                                <div class="icheck-primary d-inline">
+                                                    <input type="radio" id="suspelat2" name="kursus" value="SUSPELAT II" onchange="toggleUpload('suspelat2Upload', 'kursus')">
+                                                    <label for="suspelat2">SUSPELAT II</label>
+                                                </div>
+                                                <div class="icheck-primary d-inline">
+                                                    <input type="radio" id="suspelat3" name="kursus" value="SUSPELAT III" onchange="toggleUpload('suspelat3Upload', 'kursus')">
+                                                    <label for="suspelat3">SUSPELAT III</label>
+                                                </div>
+                                            </div>
+
+                                            <div id="suspelat1Upload" class="upload-section kursus" style="display: none;">
+                                                <div class="form-group">
+                                                    <label>Upload Sertifikat SUSPELAT I</label>
+                                                    <div class="input-group">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" id="suspelat1Certificate" accept="image/*,application/pdf">
+                                                            <label class="custom-file-label" for="suspelat1Certificate">Pilih file</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br>
+
+                                            <button type="button" class="btn btn-secondary" onclick="prevStep()">Kembali</button>
+                                            <button type="submit" class="btn btn-success">Selesai</button>
                                         </div>
                                     </div>
                                 </div>
-
-                            </form>
                         </div>
+
+                        </form>
                     </div>
                 </div>
             </div>
-
         </div>
+
+    </div>
     </div>
 
     </div>
@@ -701,11 +834,17 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.4/dist/sweetalert2.all.min.js"></script>
     <!-- bs-custom-file-input -->
     <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
+    <!-- icheck -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/icheck-bootstrap/3.0.1/icheck-bootstrap.css" integrity="sha512-J5tsMaZISEmI+Ly68nBDiQyNW6vzBoUlNHGsH8T3DzHTn2h9swZqiMeGm/4WMDxAphi5LMZMNA30LvxaEPiPkg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <script>
         function nextStep(current, next) {
             $('#' + current).collapse('hide');
             $('#' + next).collapse('show');
+            document.getElementById(next).scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
         }
 
         function prevStep(current, prev) {
@@ -780,33 +919,11 @@
         }
 
         // Field Riwayat Pelatihan Kaderisasi
-        function toggleUploadField(field, isHidden) {
-            const uploadField = document.getElementById(`${field}Upload`);
-            const uploadInput = document.getElementById(`${field}Certificate`);
-
-            if (isHidden) {
-                uploadField.style.display = 'none';
-                uploadInput.removeAttribute('required');
-                uploadInput.classList.remove('is-invalid');
-            } else {
-                uploadField.style.display = 'block';
-                uploadInput.setAttribute('required', 'required');
-            }
-        }
-
-        function validateForm() {
-            const inputs = ['pkd', 'dirosahUla', 'diklatsar'];
-
-            inputs.forEach(input => {
-                const uploadInput = document.getElementById(`${input}Certificate`);
-                const radioValue = document.querySelector(`input[name="${input}"]:checked`).value;
-
-                if (radioValue === 'lulus' && !uploadInput.value) {
-                    uploadInput.classList.add('is-invalid');
-                } else {
-                    uploadInput.classList.remove('is-invalid');
-                }
-            });
+        function toggleUpload(uploadId, sectionClass) {
+            // Sembunyikan semua upload-section pada kategori yang dipilih
+            document.querySelectorAll(`.${sectionClass}`).forEach(el => el.style.display = 'none');
+            // Tampilkan hanya elemen upload yang dipilih
+            document.getElementById(uploadId).style.display = 'block';
         }
 
         document.addEventListener('DOMContentLoaded', function() {
