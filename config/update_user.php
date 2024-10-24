@@ -19,11 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($type === 'role') {
         // Update role user
-        $stmt = $conn->prepare("UPDATE users SET role = ? WHERE id = ?");
+        $stmt = $conn->prepare("UPDATE tb_users SET role = ? WHERE id = ?");
         $stmt->bind_param("si", $value, $userId);
     } elseif ($type === 'akses') {
         // Update akses user
-        $stmt = $conn->prepare("UPDATE users SET akses = ? WHERE id = ?");
+        $stmt = $conn->prepare("UPDATE tb_users SET akses = ? WHERE id = ?");
         $stmt->bind_param("ii", $value, $userId);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Invalid request']);

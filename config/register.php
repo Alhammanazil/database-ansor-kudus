@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash password untuk keamanan
 
     // SQL untuk memasukkan data ke tabel users
-    $sql = "INSERT INTO users (nama_lengkap, username, password, akses, role) VALUES (?, ?, ?, 0, 'user')";
+    $sql = "INSERT INTO tb_users (nama_lengkap, username, password, akses, role) VALUES (?, ?, ?, 0, 'user')";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("sss", $nama_lengkap, $username, $password);
 
