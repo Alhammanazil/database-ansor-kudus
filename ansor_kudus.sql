@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Waktu pembuatan: 25 Okt 2024 pada 05.22
+-- Host: localhost
+-- Waktu pembuatan: 25 Okt 2024 pada 09.51
 -- Versi server: 10.4.28-MariaDB
 -- Versi PHP: 8.2.4
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `ansor_new`
+-- Database: `ansor_kudus`
 --
 
 -- --------------------------------------------------------
@@ -40,9 +40,9 @@ CREATE TABLE `tb_anggota` (
   `anggota_ayah` varchar(128) NOT NULL,
   `anggota_ibu` varchar(128) NOT NULL,
   `anggota_pernikahan` int(11) NOT NULL,
-  `anggota_istri` varchar(128) NOT NULL,
-  `anggota_anak_lk` int(11) NOT NULL,
-  `anggota_anak_pr` int(11) NOT NULL,
+  `anggota_istri` varchar(128) DEFAULT NULL,
+  `anggota_anak_lk` int(11) DEFAULT NULL,
+  `anggota_anak_pr` int(11) DEFAULT NULL,
   `anggota_npwp` int(11) NOT NULL,
   `anggota_bpjs` int(11) NOT NULL,
   `anggota_domisili_kec` int(11) NOT NULL,
@@ -59,29 +59,29 @@ CREATE TABLE `tb_anggota` (
   `anggota_sistem_kerja` int(11) NOT NULL,
   `anggota_nama_tempat_kerja` varchar(255) NOT NULL,
   `anggota_alamat_tempat_kerja` varchar(255) NOT NULL,
-  `anggota_pekerjaan_istri` int(11) NOT NULL,
+  `anggota_pekerjaan_istri` int(11) DEFAULT NULL,
   `anggota_pendapatan` int(11) NOT NULL,
-  `anggota_pendapatan_istri` int(11) NOT NULL,
+  `anggota_pendapatan_istri` int(11) DEFAULT NULL,
   `anggota_pendidikan` int(11) NOT NULL,
-  `anggota_jurusan_smk` int(11) NOT NULL,
-  `anggota_bidang_studi` int(11) NOT NULL,
+  `anggota_jurusan_smk` int(11) DEFAULT NULL,
+  `anggota_bidang_studi` int(11) DEFAULT NULL,
   `anggota_nama_pendidikan` varchar(255) NOT NULL,
-  `anggota_nama_pesantren` varchar(255) NOT NULL,
-  `anggota_nama_madin` varchar(255) NOT NULL,
+  `anggota_nama_pesantren` varchar(255) DEFAULT NULL,
+  `anggota_nama_madin` varchar(255) DEFAULT NULL,
   `anggota_ipnu` int(11) NOT NULL,
   `anggota_pmii` int(11) NOT NULL,
   `anggota_dema_bem` int(11) NOT NULL,
-  `anggota_organisasi_lain` varchar(255) NOT NULL,
+  `anggota_organisasi_lain` varchar(255) DEFAULT NULL,
   `anggota_parpol` int(11) NOT NULL,
-  `anggota_pr_kec` int(11) NOT NULL,
-  `anggota_pr_des` bigint(11) NOT NULL,
-  `anggota_pr_jabatan` int(11) NOT NULL,
-  `anggota_pr_mk` int(11) NOT NULL,
-  `anggota_pac_kec` int(11) NOT NULL,
-  `anggota_pac_jabatan` int(11) NOT NULL,
-  `anggota_pac_mk` int(11) NOT NULL,
-  `anggota_pc_jabatan` int(11) NOT NULL,
-  `anggota_pc_mk` int(11) NOT NULL
+  `anggota_pr_kec` int(11) DEFAULT NULL,
+  `anggota_pr_des` bigint(11) DEFAULT NULL,
+  `anggota_pr_jabatan` int(11) DEFAULT NULL,
+  `anggota_pr_mk` int(11) DEFAULT NULL,
+  `anggota_pac_kec` int(11) DEFAULT NULL,
+  `anggota_pac_jabatan` int(11) DEFAULT NULL,
+  `anggota_pac_mk` int(11) DEFAULT NULL,
+  `anggota_pc_jabatan` int(11) DEFAULT NULL,
+  `anggota_pc_mk` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
