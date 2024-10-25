@@ -14,14 +14,14 @@ if ($_SESSION['user']['role'] !== 'master' && $_SESSION['user']['role'] !== 'adm
 }
 
 // Ambil data enum dari kolom role
-$query = "SHOW COLUMNS FROM users LIKE 'role'";
+$query = "SHOW COLUMNS FROM tb_users LIKE 'role'";
 $result = $conn->query($query);
 $row = $result->fetch_assoc();
 preg_match("/^enum\(\'(.*)\'\)$/", $row['Type'], $matches);
 $enum_values = explode("','", $matches[1]);
 
 // Mengambil semua pengguna
-$sql = "SELECT * FROM users";
+$sql = "SELECT * FROM tb_users";
 $hasil = $conn->query($sql);
 
 require_once 'header.php';

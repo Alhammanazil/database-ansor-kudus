@@ -191,27 +191,60 @@
                                                     <?php } ?>
                                                 </select>
                                             </div>
+
                                             <div class="form-group">
                                                 <label>Nama Ayah Kandung</label>
                                                 <input type="text" class="form-control" name="ayah" placeholder="Masukkan Nama Ayah Kandung" required>
                                                 <div class="invalid-feedback">Harap masukkan Nama Ayah Kandung.</div>
                                             </div>
+
                                             <div class="form-group">
                                                 <label>Nama Ibu Kandung</label>
                                                 <input type="text" class="form-control" name="ibu" placeholder="Masukkan Nama Ibu Kandung" required>
                                                 <div class="invalid-feedback">Harap masukkan Nama Ibu Kandung.</div>
                                             </div>
+
+                                            <!-- Status Pernikahan -->
                                             <div class="form-group">
                                                 <label>Status Pernikahan</label>
-                                                <select class="form-control select2" name="status_pernikahan" required>
-                                                    <option value="">Pilih Status Pernikahan</option>
-                                                    <!-- ambil data dari tb_pernikahan -->
-                                                    <?php foreach ($pernikahan as $item) { ?>
-                                                        <option value="<?= $item['pernikahan_id'] ?>"><?= $item['pernikahan_name'] ?></option>
-                                                    <?php } ?>
-                                                </select>
+                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                    <label class="btn btn-outline-primary">
+                                                        <input type="radio" name="status_pernikahan" value="1" required onclick="toggleMarriageFields()"> Belum Menikah
+                                                    </label>
+                                                    <label class="btn btn-outline-primary">
+                                                        <input type="radio" name="status_pernikahan" value="2" required onclick="toggleMarriageFields()"> Sudah Menikah
+                                                    </label>
+                                                    <label class="btn btn-outline-primary">
+                                                        <input type="radio" name="status_pernikahan" value="3" required onclick="toggleMarriageFields()"> Cerai (Mati/Hidup)
+                                                    </label>
+                                                </div>
                                                 <div class="invalid-feedback">Harap pilih Status Pernikahan.</div>
                                             </div>
+
+                                            <!-- Wrapper for Marriage Details -->
+                                            <div id="marriageDetails" style="display: none;">
+                                                <!-- Nama Istri -->
+                                                <div class="form-group">
+                                                    <label>Nama Istri</label>
+                                                    <input type="text" class="form-control" name="nama_istri" placeholder="Masukkan Nama Istri">
+                                                    <div class="invalid-feedback">Harap masukkan Nama Istri.</div>
+                                                </div>
+
+                                                <!-- Jumlah Anak Laki-laki -->
+                                                <div class="form-group">
+                                                    <label>Jumlah Anak Laki-laki</label>
+                                                    <input type="number" class="form-control" name="anak_laki" placeholder="Masukkan Jumlah Anak Laki-laki">
+                                                    <div class="invalid-feedback">Harap masukkan Jumlah Anak Laki-laki.</div>
+                                                </div>
+
+                                                <!-- Jumlah Anak Perempuan -->
+                                                <div class="form-group">
+                                                    <label>Jumlah Anak Perempuan</label>
+                                                    <input type="number" class="form-control" name="anak_perempuan" placeholder="Masukkan Jumlah Anak Perempuan">
+                                                    <div class="invalid-feedback">Harap masukkan Jumlah Anak Perempuan.</div>
+                                                </div>
+                                            </div>
+
                                             <div class="form-group">
                                                 <label>Kepemilikan NPWP</label>
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -223,6 +256,7 @@
                                                     </label>
                                                 </div>
                                             </div>
+
                                             <div class="form-group">
                                                 <label>BPJS Kesehatan</label>
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -472,7 +506,7 @@
                                             </div>
 
                                             <!-- Jurusan SMK -->
-                                             <div class="form-group">
+                                            <div class="form-group">
                                                 <label for="jurusanSmk">Jurusan SMK</label>
                                                 <select name="jurusanSmk" class="form-control select2">
                                                     <option value="" disabled selected>Pilih Jurusan</option>
@@ -482,10 +516,10 @@
                                                         </option>
                                                     <?php } ?>
                                                 </select>
-                                             </div>
+                                            </div>
 
-                                             <!-- Bidang Studi -->
-                                             <div class="form-group">
+                                            <!-- Bidang Studi -->
+                                            <div class="form-group">
                                                 <label for="bidangStudi">Bidang Studi</label>
                                                 <select name="bidangStudi" class="form-control select2">
                                                     <option value="" disabled selected>Pilih Bidang Studi</option>
@@ -495,7 +529,7 @@
                                                         </option>
                                                     <?php } ?>
                                                 </select>
-                                             </div>
+                                            </div>
 
                                             <!-- Nama Lembaga Pendidikan -->
                                             <div class="form-group">
@@ -714,6 +748,19 @@
                                                 <div class="icheck-primary d-inline">
                                                     <input type="radio" id="pkn" name="pendidikanKader" value="PKN" onchange="toggleUpload('pknUpload', 'pendidikanKader')">
                                                     <label for="pkn">PKN</label>
+                                                </div>
+                                            </div>
+
+                                            <!-- Contoh -->
+                                            <div id="pendidikanKaderUpload" class="upload-section pendidikanKader" style="display: none;">
+                                                <div class="form-group">
+                                                    <label>Upload Sertifikat</label>
+                                                    <div class="input-group">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" id="pendidikanKaderUpload" accept="image/*,application/pdf">
+                                                            <label class="custom-file-label" for="pendidikanKaderUpload">Pilih file</label>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -1038,6 +1085,22 @@
             $('#' + current).collapse('hide');
             $('#' + prev).collapse('show');
         }
+
+        // FIeld Data Anggota
+        function toggleMarriageFields() {
+            const marriageDetails = document.getElementById('marriageDetails');
+            const selectedStatus = document.querySelector('input[name="nikah"]:checked').value;
+
+            // Show the fields only if the user selects "Menikah"
+            if (selectedStatus === '2') {
+                marriageDetails.style.display = 'block';
+            } else {
+                marriageDetails.style.display = 'none';
+            }
+        }
+
+        // Initialize the form on page load to check if a status is already selected
+        document.addEventListener('DOMContentLoaded', toggleMarriageFields);
 
         // Field Alamat
         document.addEventListener('DOMContentLoaded', function() {
