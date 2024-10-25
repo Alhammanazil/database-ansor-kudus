@@ -1,5 +1,6 @@
 <?php
 require '../config/config.php';
+require '../config/cookies.php';
 
 if (!check_login()) {
     header("Location: ../login.php");

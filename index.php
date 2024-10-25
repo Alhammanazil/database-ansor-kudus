@@ -42,7 +42,10 @@
 
 
 <body class="hold-transition sidebar-mini">
-    <?php include 'config/rt_rw.php'; ?>
+    <?php
+    include 'config/config.php';
+    include 'config/data.php';
+    ?>
 
     <div class="wrapper">
 
@@ -147,7 +150,12 @@
                                             </div>
                                             <div class="form-group">
                                                 <label>Tempat Lahir</label>
-                                                <input type="text" class="form-control" name="tempat_lahir" placeholder="Masukkan Tempat Lahir" required>
+                                                <select name="tempat_lahir" class="form-control select2" required>
+                                                    <option value="" disabled selected>Pilih Tempat Lahir</option>
+                                                    <?php foreach ($kabupaten as $item) { ?>
+                                                        <option value="<?= $item['regencies_id'] ?>"><?= $item['regencies_name'] ?></option>
+                                                    <?php } ?>
+                                                </select>
                                                 <div class="invalid-feedback">Harap masukkan Tempat Lahir.</div>
                                             </div>
                                             <div class="form-group">
@@ -157,24 +165,31 @@
                                             </div>
                                             <div class="form-group">
                                                 <label>Golongan Darah</label>
-                                                <select class="form-control" name="golongan_darah" required>
-                                                    <option value="">Pilih Golongan Darah</option>
-                                                    <option>A</option>
-                                                    <option>B</option>
-                                                    <option>AB</option>
-                                                    <option>O</option>
+                                                <select class="form-control select2" name="golongan_darah" required>
+                                                    <option value="" disabled selected>Pilih Golongan Darah</option>
+                                                    <?php foreach ($gol_darah as $item) { ?>
+                                                        <option value="<?= $item['golongan_darah_id'] ?>"><?= $item['golongan_darah_name'] ?></option>
+                                                    <?php } ?>
                                                 </select>
                                                 <div class="invalid-feedback">Harap pilih Golongan Darah.</div>
                                             </div>
                                             <div class="form-group">
                                                 <label>Tinggi Badan (cm)</label>
-                                                <input type="number" class="form-control" name="tinggi_badan" placeholder="Masukkan Tinggi Badan" required>
-                                                <div class="invalid-feedback">Harap masukkan Tinggi Badan.</div>
+                                                <select name="tinggi_badan" class="form-control select2" required>
+                                                    <option value="" disabled selected>Pilih Tinggi Badan</option>
+                                                    <?php foreach ($tb as $item) { ?>
+                                                        <option value="<?= $item['tinggi_badan_id'] ?>"><?= $item['tinggi_badan_name'] ?></option>
+                                                    <?php } ?>
+                                                </select>
                                             </div>
                                             <div class="form-group">
                                                 <label>Berat Badan (kg)</label>
-                                                <input type="number" class="form-control" name="berat_badan" placeholder="Masukkan Berat Badan" required>
-                                                <div class="invalid-feedback">Harap masukkan Berat Badan.</div>
+                                                <select name="berat_badan" class="form-control select2" required>
+                                                    <option value="" disabled selected>Pilih Berat Badan</option>
+                                                    <?php foreach ($bb as $item) { ?>
+                                                        <option value="<?= $item['berat_badan_id'] ?>"><?= $item['berat_badan_name'] ?></option>
+                                                    <?php } ?>
+                                                </select>
                                             </div>
                                             <div class="form-group">
                                                 <label>Nama Ayah Kandung</label>
@@ -188,11 +203,12 @@
                                             </div>
                                             <div class="form-group">
                                                 <label>Status Pernikahan</label>
-                                                <select class="form-control" name="status_pernikahan" required>
+                                                <select class="form-control select2" name="status_pernikahan" required>
                                                     <option value="">Pilih Status Pernikahan</option>
-                                                    <option>Belum Menikah</option>
-                                                    <option>Menikah</option>
-                                                    <option>Cerai</option>
+                                                    <!-- ambil data dari tb_pernikahan -->
+                                                    <?php foreach ($pernikahan as $item) { ?>
+                                                        <option value="<?= $item['pernikahan_id'] ?>"><?= $item['pernikahan_name'] ?></option>
+                                                    <?php } ?>
                                                 </select>
                                                 <div class="invalid-feedback">Harap pilih Status Pernikahan.</div>
                                             </div>
@@ -249,9 +265,11 @@
                                             <div class="form-group">
                                                 <label for="rt">RT</label>
                                                 <select class="form-control select2" id="rt" name="rt" required>
-                                                    <option value="">Pilih RT</option>
-                                                    <?php while ($row = mysqli_fetch_assoc($rt_result)) { ?>
-                                                        <option value="<?= $row['rt_id'] ?>"><?= $row['rt_name'] ?></option>
+                                                    <option value="" disabled selected>Pilih RT</option>
+                                                    <?php foreach ($rt as $item) { ?>
+                                                        <option value="<?= $item['rt_id'] ?>">
+                                                            <?= $item['rt_name'] ?>
+                                                        </option>
                                                     <?php } ?>
                                                 </select>
                                                 <div class="invalid-feedback">Harap pilih RT.</div>
@@ -260,9 +278,11 @@
                                             <div class="form-group">
                                                 <label for="rw">RW</label>
                                                 <select class="form-control select2" id="rw" name="rw" required>
-                                                    <option value="">Pilih RW</option>
-                                                    <?php while ($row = mysqli_fetch_assoc($rw_result)) { ?>
-                                                        <option value="<?= $row['rw_id'] ?>"><?= $row['rw_name'] ?></option>
+                                                    <option value="" disabled selected>Pilih RW</option>
+                                                    <?php foreach ($rw as $item) { ?>
+                                                        <option value="<?= $item['rw_id'] ?>">
+                                                            <?= $item['rw_name'] ?>
+                                                        </option>
                                                     <?php } ?>
                                                 </select>
                                                 <div class="invalid-feedback">Harap pilih RW.</div>
@@ -337,7 +357,6 @@
 
                                             <button type="button" class="btn btn-secondary" onclick="prevStep('dataAlamat', 'dataAnggota')">Kembali</button>
                                             <button type="button" class="btn btn-primary" onclick="nextStep('dataAlamat', 'dataPekerjaan')">Lanjut</button>
-                                            <button type="submit" class="btn btn-success" onclick="validateForm()">Selesai</button>
                                         </div>
                                     </div>
                                 </div>
@@ -351,12 +370,13 @@
                                         <div class="card-body">
                                             <div class="form-group">
                                                 <label for="jenisPekerjaan">Jenis Pekerjaan</label>
-                                                <select class="form-control" id="jenisPekerjaan" onchange="toggleJobFields()" required>
+                                                <select class="form-control select2" id="jenisPekerjaan" name="jenisPekerjaan" required>
                                                     <option value="" disabled selected>Pilih Jenis Pekerjaan</option>
-                                                    <option value="tidak_bekerja">Tidak Bekerja</option>
-                                                    <option value="pedagang">Pedagang</option>
-                                                    <option value="pegawai">Pegawai</option>
-                                                    <option value="lainnya">Lainnya</option>
+                                                    <?php foreach ($pekerjaan as $job) { ?>
+                                                        <option value="<?= $job['pekerjaan_id'] ?>">
+                                                            <?= $job['pekerjaan_name'] ?>
+                                                        </option>
+                                                    <?php } ?>
                                                 </select>
                                                 <div class="invalid-feedback">Harap pilih Jenis Pekerjaan.</div>
                                             </div>
@@ -386,21 +406,40 @@
                                                 </div>
 
                                                 <div class="form-group">
+                                                    <label for="jenisPekerjaanIstri">Jenis Pekerjaan Istri</label>
+                                                    <select class="form-control select2" id="jenisPekerjaan" name="jenisPekerjaan" required>
+                                                        <option value="" disabled selected>Pilih Jenis Pekerjaan</option>
+                                                        <?php foreach ($pekerjaan as $job) { ?>
+                                                            <option value="<?= $job['pekerjaan_id'] ?>">
+                                                                <?= $job['pekerjaan_name'] ?>
+                                                            </option>
+                                                        <?php } ?>
+                                                    </select>
+                                                    <div class="invalid-feedback">Harap pilih Jenis Pekerjaan.</div>
+                                                </div>
+
+                                                <div class="form-group">
                                                     <label>Pendapatan Perbulan Suami</label>
-                                                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                        <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="pendapatan" value="<3juta" autocomplete="off"> Kurang dari 3 juta
-                                                        </label>
-                                                        <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="pendapatan" value="3-5juta" autocomplete="off"> 3-5 juta
-                                                        </label>
-                                                        <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="pendapatan" value="5-10juta" autocomplete="off"> 5-10 juta
-                                                        </label>
-                                                        <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="pendapatan" value=">10juta" autocomplete="off"> Di atas 10 juta
-                                                        </label>
-                                                    </div>
+                                                    <select name="pendapatanSuami" class="form-control select2">
+                                                        <option value="" disabled selected>Pilih Pendapatan</option>
+                                                        <?php foreach ($pendapatan as $item) { ?>
+                                                            <option value="<?= $item['pendapatan_id'] ?>">
+                                                                <?= $item['pendapatan_name'] ?>
+                                                            </option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>Pendapatan Perbulan Suami</label>
+                                                    <select name="pendapatanIstri" class="form-control select2">
+                                                        <option value="" disabled selected>Pilih Pendapatan</option>
+                                                        <?php foreach ($pendapatan as $item) { ?>
+                                                            <option value="<?= $item['pendapatan_id'] ?>">
+                                                                <?= $item['pendapatan_name'] ?>
+                                                            </option>
+                                                        <?php } ?>
+                                                    </select>
                                                 </div>
                                             </div>
 
@@ -409,6 +448,7 @@
                                         </div>
                                     </div>
                                 </div>
+
 
                                 <!-- Step 4: Riwayat Pendidikan dan Organisasi -->
                                 <div class="card card-outline card-primary mt-4">
@@ -420,35 +460,60 @@
                                             <!-- Pendidikan Terakhir -->
                                             <div class="form-group">
                                                 <label for="pendidikanTerakhir">Pendidikan Terakhir</label>
-                                                <select id="pendidikanTerakhir" class="form-control" required>
+                                                <select class="form-control select2" id="pendidikanTerakhir" name="pendidikanTerakhir" required>
                                                     <option value="" disabled selected>Pilih Pendidikan Terakhir</option>
-                                                    <option value="sd">SD</option>
-                                                    <option value="smp">SMP</option>
-                                                    <option value="sma">SMA/SMK</option>
-                                                    <option value="diploma">Diploma</option>
-                                                    <option value="sarjana">Sarjana</option>
-                                                    <option value="lainnya">Lainnya</option>
+                                                    <?php foreach ($pendidikan as $edu) { ?>
+                                                        <option value="<?= $edu['pendidikan_id'] ?>">
+                                                            <?= $edu['pendidikan_name'] ?>
+                                                        </option>
+                                                    <?php } ?>
                                                 </select>
                                                 <div class="invalid-feedback">Harap pilih Pendidikan Terakhir.</div>
                                             </div>
 
+                                            <!-- Jurusan SMK -->
+                                             <div class="form-group">
+                                                <label for="jurusanSmk">Jurusan SMK</label>
+                                                <select name="jurusanSmk" class="form-control select2">
+                                                    <option value="" disabled selected>Pilih Jurusan</option>
+                                                    <?php foreach ($smk as $item) { ?>
+                                                        <option value="<?= $item['jurusan_smk_id'] ?>">
+                                                            <?= $item['jurusan_smk_name'] ?>
+                                                        </option>
+                                                    <?php } ?>
+                                                </select>
+                                             </div>
+
+                                             <!-- Bidang Studi -->
+                                             <div class="form-group">
+                                                <label for="bidangStudi">Bidang Studi</label>
+                                                <select name="bidangStudi" class="form-control select2">
+                                                    <option value="" disabled selected>Pilih Bidang Studi</option>
+                                                    <?php foreach ($studi as $item) { ?>
+                                                        <option value="<?= $item['bidang_studi_id'] ?>">
+                                                            <?= $item['bidang_studi_name'] ?>
+                                                        </option>
+                                                    <?php } ?>
+                                                </select>
+                                             </div>
+
                                             <!-- Nama Lembaga Pendidikan -->
                                             <div class="form-group">
                                                 <label for="lembagaPendidikan">Nama Lembaga Pendidikan Terakhir</label>
-                                                <input type="text" class="form-control" id="lembagaPendidikan" placeholder="Masukkan Nama Lembaga" required>
+                                                <input type="text" class="form-control" id="lembagaPendidikan" placeholder="Masukkan Nama Lembaga">
                                                 <div class="invalid-feedback">Harap masukkan Nama Lembaga Pendidikan Terakhir.</div>
                                             </div>
 
                                             <!-- Nama Pesantren -->
                                             <div class="form-group">
                                                 <label for="namaPesantren">Nama Pesantren</label>
-                                                <input type="text" class="form-control" id="namaPesantren" placeholder="Masukkan Nama Pesantren" required>
+                                                <input type="text" class="form-control" id="namaPesantren" placeholder="Masukkan Nama Pesantren">
                                             </div>
 
                                             <!-- Nama Madrasah Diniyah -->
                                             <div class="form-group">
                                                 <label for="madrasahDiniyah">Nama Madrasah Diniyah</label>
-                                                <input type="text" class="form-control" id="madrasahDiniyah" placeholder="Masukkan Nama Madrasah" required>
+                                                <input type="text" class="form-control" id="madrasahDiniyah" placeholder="Masukkan Nama Madrasah">
                                             </div>
 
                                             <!-- Riwayat Organisasi -->
@@ -458,10 +523,10 @@
                                                 <label>IPNU</label>
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-outline-primary">
-                                                        <input type="radio" name="ipnu" value="pernah"> Pernah
+                                                        <input type="radio" name="ipnu" value="1"> Pernah
                                                     </label>
                                                     <label class="btn btn-outline-primary">
-                                                        <input type="radio" name="ipnu" value="tidak_pernah"> Tidak Pernah
+                                                        <input type="radio" name="ipnu" value="0"> Tidak Pernah
                                                     </label>
                                                 </div>
                                             </div>
@@ -470,10 +535,10 @@
                                                 <label>PMII</label>
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-outline-primary">
-                                                        <input type="radio" name="pmii" value="pernah"> Pernah
+                                                        <input type="radio" name="pmii" value="1"> Pernah
                                                     </label>
                                                     <label class="btn btn-outline-primary">
-                                                        <input type="radio" name="pmii" value="tidak_pernah"> Tidak Pernah
+                                                        <input type="radio" name="pmii" value="0"> Tidak Pernah
                                                     </label>
                                                 </div>
                                             </div>
@@ -482,10 +547,10 @@
                                                 <label>DEMA / BEM</label>
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-outline-primary">
-                                                        <input type="radio" name="dema" value="pernah"> Pernah
+                                                        <input type="radio" name="dema" value="1"> Pernah
                                                     </label>
                                                     <label class="btn btn-outline-primary">
-                                                        <input type="radio" name="dema" value="tidak_pernah"> Tidak Pernah
+                                                        <input type="radio" name="dema" value="0"> Tidak Pernah
                                                     </label>
                                                 </div>
                                             </div>
@@ -497,12 +562,14 @@
 
                                             <div class="form-group">
                                                 <label for="afiliasiPartai">Afiliasi Partai Politik Saat Ini</label>
-                                                <select id="afiliasiPartai" class="form-control" required>
-                                                    <option value="" disabled selected>Pilih Afiliasi</option>
-                                                    <option value="tidak_berafiliasi">Tidak Berafiliasi</option>
-                                                    <option value="partai_a">Partai A</option>
-                                                    <option value="partai_b">Partai B</option>
-                                                    <option value="partai_c">Partai C</option>
+                                                <select id="afiliasiPartai" class="form-control select2" required>
+                                                    <!-- ambil data dari tb_partai -->
+                                                    <option value="" disabled selected>Pilih Partai</option>
+                                                    <?php foreach ($partai as $item) { ?>
+                                                        <option value="<?= $item['partai_id'] ?>">
+                                                            <?= $item['partai_name'] ?>
+                                                        </option>
+                                                    <?php } ?>
                                                 </select>
                                                 <div class="invalid-feedback">Harap pilih Afiliasi Partai Politik Saat Ini.</div>
                                             </div>
@@ -524,19 +591,36 @@
                                             <h6>A. Tingkat Pimpinan Ranting</h6>
                                             <div class="form-group">
                                                 <label for="namaKecamatanRanting">Nama Kecamatan</label>
-                                                <select id="namaKecamatanRanting" class="form-control">
+                                                <select id="namaKecamatanRanting" class="form-control select2">
                                                     <option value="" disabled selected>Pilih Kecamatan</option>
-                                                    <option value="kecamatan1">Kecamatan 1</option>
-                                                    <option value="kecamatan2">Kecamatan 2</option>
+                                                    <?php foreach ($kecamatan as $item) { ?>
+                                                        <option value="<?= $item['districts_id'] ?>">
+                                                            <?= $item['districts_name'] ?>
+                                                        </option>
+                                                    <?php } ?>
                                                 </select>
                                             </div>
                                             <div class="form-group">
                                                 <label for="jabatanRanting">Jabatan Tertinggi di Ranting</label>
-                                                <input type="text" class="form-control" id="jabatanRanting" placeholder="Masukkan Jabatan di Ranting">
+                                                <select name="jabatanRanting" class="form-control select2">
+                                                    <option value="" disabled selected>Pilih Jabatan</option>
+                                                    <?php foreach ($pr as $item) { ?>
+                                                        <option value="<?= $item['jabatan_pr_id'] ?>">
+                                                            <?= $item['jabatan_pr_name'] ?>
+                                                        </option>
+                                                    <?php } ?>
+                                                </select>
                                             </div>
                                             <div class="form-group">
                                                 <label for="masaRanting">Masa Khidmat di Ranting</label>
-                                                <input type="text" class="form-control" id="masaRanting" placeholder="Contoh: 2020 - 2022">
+                                                <select name="masaRanting" class="form-control select2">
+                                                    <option value="" disabled selected>Pilih Masa</option>
+                                                    <?php foreach ($masa_khidmat as $item) { ?>
+                                                        <option value="<?= $item['masa_khidmat_id'] ?>">
+                                                            <?= $item['masa_khidmat_name'] ?>
+                                                        </option>
+                                                    <?php } ?>
+                                                </select>
                                             </div>
                                             <br>
 
@@ -544,19 +628,36 @@
                                             <h6>B. Tingkat Pimpinan Anak Cabang (PAC)</h6>
                                             <div class="form-group">
                                                 <label for="kecamatanPAC">Kecamatan (PAC)</label>
-                                                <select id="kecamatanPAC" class="form-control">
+                                                <select id="kecamatanPAC" class="form-control select2">
                                                     <option value="" disabled selected>Pilih Kecamatan</option>
-                                                    <option value="kecamatan1">Kecamatan 1</option>
-                                                    <option value="kecamatan2">Kecamatan 2</option>
+                                                    <?php foreach ($kecamatan as $item) { ?>
+                                                        <option value="<?= $item['districts_id'] ?>">
+                                                            <?= $item['districts_name'] ?>
+                                                        </option>
+                                                    <?php } ?>
                                                 </select>
                                             </div>
                                             <div class="form-group">
                                                 <label for="jabatanPAC">Jabatan Tertinggi di PAC</label>
-                                                <input type="text" class="form-control" id="jabatanPAC" placeholder="Masukkan Jabatan di PAC">
+                                                <select name="jabatanPAC" class="form-control select2">
+                                                    <option value="" disabled selected>Pilih Jabatan</option>
+                                                    <?php foreach ($pac as $item) { ?>
+                                                        <option value="<?= $item['jabatan_pac_id'] ?>">
+                                                            <?= $item['jabatan_pac_name'] ?>
+                                                        </option>
+                                                    <?php } ?>
+                                                </select>
                                             </div>
                                             <div class="form-group">
                                                 <label for="masaPAC">Masa Khidmat di PAC</label>
-                                                <input type="text" class="form-control" id="masaPAC" placeholder="Contoh: 2020 - 2022">
+                                                <select name="masaPAC" class="form-control select2">
+                                                    <option value="" disabled selected>Pilih Masa</option>
+                                                    <?php foreach ($masa_khidmat as $item) { ?>
+                                                        <option value="<?= $item['masa_khidmat_id'] ?>">
+                                                            <?= $item['masa_khidmat_name'] ?>
+                                                        </option>
+                                                    <?php } ?>
+                                                </select>
                                             </div>
                                             <br>
 
@@ -564,11 +665,25 @@
                                             <h6>C. Tingkat Pimpinan Cabang (PC)</h6>
                                             <div class="form-group">
                                                 <label for="jabatanPC">Jabatan Tertinggi di PC</label>
-                                                <input type="text" class="form-control" id="jabatanPC" placeholder="Masukkan Jabatan di PC">
+                                                <select name="jabatanPC" class="form-control select2">
+                                                    <option value="" disabled selected>Pilih Jabatan</option>
+                                                    <?php foreach ($pc as $item) { ?>
+                                                        <option value="<?= $item['jabatan_pc_id'] ?>">
+                                                            <?= $item['jabatan_pc_name'] ?>
+                                                        </option>
+                                                    <?php } ?>
+                                                </select>
                                             </div>
                                             <div class="form-group">
                                                 <label for="masaPC">Masa Khidmat di PC</label>
-                                                <input type="text" class="form-control" id="masaPC" placeholder="Contoh: 2020 - 2022">
+                                                <select name="masaPC" class="form-control select2">
+                                                    <option value="" disabled selected>Pilih Masa</option>
+                                                    <?php foreach ($masa_khidmat as $item) { ?>
+                                                        <option value="<?= $item['masa_khidmat_id'] ?>">
+                                                            <?= $item['masa_khidmat_name'] ?>
+                                                        </option>
+                                                    <?php } ?>
+                                                </select>
                                             </div>
 
                                             <button type="button" class="btn btn-secondary" onclick="prevStep('dataKepengurusan', 'dataPendidikan')">Kembali</button>
@@ -667,7 +782,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+
                                             <div id="li2Upload" class="upload-section instruktur" style="display: none;">
                                                 <div class="form-group">
                                                     <label>Upload Sertifikat LI II</label>
@@ -721,6 +836,30 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            <div id="dirosahWusthoUpload" class="upload-section dirosah" style="display: none;">
+                                                <div class="form-group">
+                                                    <label>Upload Sertifikat Dirosah Wustho</label>
+                                                    <div class="input-group">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" id="dirosahWusthoCertificate" accept="image/*,application/pdf">
+                                                            <label class="custom-file-label" for="dirosahWusthoCertificate">Pilih file</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div id="dirosahUlyaUpload" class="upload-section dirosah" style="display: none;">
+                                                <div class="form-group">
+                                                    <label>Upload Sertifikat Dirosah Ulya</label>
+                                                    <div class="input-group">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" id="dirosahUlyaCertificate" accept="image/*,application/pdf">
+                                                            <label class="custom-file-label" for="dirosahUlyaCertificate">Pilih file</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <br>
 
                                             <!-- D. Pendidikan & Latihan -->
@@ -747,6 +886,30 @@
                                                         <div class="custom-file">
                                                             <input type="file" class="custom-file-input" id="diklatsarCertificate" accept="image/*,application/pdf">
                                                             <label class="custom-file-label" for="diklatsarCertificate">Pilih file</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div id="susbalanUpload" class="upload-section pendidikanLatihan" style="display: none;">
+                                                <div class="form-group">
+                                                    <label>Upload Sertifikat SUSBALAN</label>
+                                                    <div class="input-group">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" id="susbalanCertificate" accept="image/*,application/pdf">
+                                                            <label class="custom-file-label" for="susbalanCertificate">Pilih file</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div id="susbanpimUpload" class="upload-section pendidikanLatihan" style="display: none;">
+                                                <div class="form-group">
+                                                    <label>Upload Sertifikat SUSBANPIM</label>
+                                                    <div class="input-group">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" id="susbanpimCertificate" accept="image/*,application/pdf">
+                                                            <label class="custom-file-label" for="susbanpimCertificate">Pilih file</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -781,9 +944,33 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            <div id="suspelat2Upload" class="upload-section kursus" style="display: none;">
+                                                <div class="form-group">
+                                                    <label>Upload Sertifikat SUSPELAT II</label>
+                                                    <div class="input-group">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" id="suspelat2Certificate" accept="image/*,application/pdf">
+                                                            <label class="custom-file-label" for="suspelat2Certificate">Pilih file</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div id="suspelat3Upload" class="upload-section kursus" style="display: none;">
+                                                <div class="form-group">
+                                                    <label>Upload Sertifikat SUSPELAT III</label>
+                                                    <div class="input-group">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" id="suspelat3Certificate" accept="image/*,application/pdf">
+                                                            <label class="custom-file-label" for="suspelat3Certificate">Pilih file</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <br>
 
-                                            <button type="button" class="btn btn-secondary" onclick="prevStep()">Kembali</button>
+                                            <button type="button" class="btn btn-secondary" onclick="prevStep('dataPelatihanKaderisasi', 'dataKepengurusan')">Kembali</button>
                                             <button type="submit" class="btn btn-success">Selesai</button>
                                         </div>
                                     </div>
@@ -907,16 +1094,10 @@
 
 
         // Field Pekerjaan
-        function toggleJobFields() {
-            const jobType = document.getElementById('jenisPekerjaan').value;
-            const jobFields = document.getElementById('jobFields');
-
-            if (jobType === 'tidak_bekerja') {
-                jobFields.style.display = 'none';
-            } else {
-                jobFields.style.display = 'block';
-            }
-        }
+        document.getElementById('jenisPekerjaan').onchange = function() {
+            document.getElementById('jobFields').style.display =
+                this.value === '21' ? 'none' : 'block';
+        };
 
         // Field Riwayat Pelatihan Kaderisasi
         function toggleUpload(uploadId, sectionClass) {
@@ -925,6 +1106,36 @@
             // Tampilkan hanya elemen upload yang dipilih
             document.getElementById(uploadId).style.display = 'block';
         }
+
+        // fungsi untuk menangani toggle radio button
+        document.addEventListener('DOMContentLoaded', function() {
+            let lastChecked = null; // Variabel untuk menyimpan radio button terakhir yang dipilih
+
+            // Fungsi untuk menangani toggle radio button
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('click', function() {
+                    if (lastChecked === this) {
+                        // Jika radio yang sama diklik, batalkan pilihan
+                        this.checked = false;
+                        lastChecked = null; // Reset lastChecked
+                        toggleUpload('', this.name); // Sembunyikan upload section
+                    } else {
+                        lastChecked = this; // Simpan radio yang baru dipilih
+                    }
+                });
+            });
+
+            // Fungsi untuk menampilkan atau menyembunyikan upload section
+            function toggleUpload(uploadId, sectionClass) {
+                // Sembunyikan semua upload-section berdasarkan kategori
+                document.querySelectorAll(`.${sectionClass}`).forEach(el => el.style.display = 'none');
+
+                if (uploadId) {
+                    // Tampilkan hanya elemen yang dipilih
+                    document.getElementById(uploadId).style.display = 'block';
+                }
+            }
+        });
 
         document.addEventListener('DOMContentLoaded', function() {
             bsCustomFileInput.init();

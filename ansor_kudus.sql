@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Waktu pembuatan: 25 Okt 2024 pada 04.51
+-- Host: 127.0.0.1
+-- Waktu pembuatan: 25 Okt 2024 pada 05.22
 -- Versi server: 10.4.28-MariaDB
 -- Versi PHP: 8.2.4
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `ansor_kudus`
+-- Database: `ansor_new`
 --
 
 -- --------------------------------------------------------
@@ -1102,6 +1102,32 @@ INSERT INTO `tb_tinggi_badan` (`tinggi_badan_id`, `tinggi_badan_name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Struktur dari tabel `tb_users`
+--
+
+CREATE TABLE `tb_users` (
+  `id` int(11) NOT NULL,
+  `nama_lengkap` varchar(255) DEFAULT NULL,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `akses` tinyint(1) DEFAULT 0,
+  `role` enum('master','admin kecamatan','admin desa','user') DEFAULT 'user',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `tb_users`
+--
+
+INSERT INTO `tb_users` (`id`, `nama_lengkap`, `username`, `password`, `akses`, `role`, `created_at`, `updated_at`) VALUES
+(1, 'Albert Einstein', 'alham', '$2y$10$1a.a.OfbIAtFyhTkmRHyZuG50d51KTF3CRL1W5WToOVzJJVHwRH/2', 1, 'master', '2024-08-19 22:37:37', '2024-08-19 22:51:54'),
+(5, 'makunouchi ippo', 'ippo', '$2y$10$LmH3ayN3NII7dNb37agzEuZ7czVS8tQco0r76BF7u.mqS5iYxeZOy', 1, 'admin kecamatan', '2024-10-09 20:13:06', '2024-10-09 21:16:12'),
+(6, 'takamura', 'takamura', '$2y$10$zzb3jdUEuw.3r.SQ06Y.Rekz4/hCAgBwHf8Az2TTUTrBTFQHr6cM6', 1, 'admin desa', '2024-10-09 20:26:20', '2024-10-09 21:12:56');
+
+-- --------------------------------------------------------
+
+--
 -- Struktur dari tabel `tb_villages`
 --
 
@@ -1394,6 +1420,12 @@ ALTER TABLE `tb_tinggi_badan`
   ADD PRIMARY KEY (`tinggi_badan_id`);
 
 --
+-- Indeks untuk tabel `tb_users`
+--
+ALTER TABLE `tb_users`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indeks untuk tabel `tb_villages`
 --
 ALTER TABLE `tb_villages`
@@ -1498,6 +1530,12 @@ ALTER TABLE `tb_rw`
 --
 ALTER TABLE `tb_tinggi_badan`
   MODIFY `tinggi_badan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT untuk tabel `tb_users`
+--
+ALTER TABLE `tb_users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
