@@ -549,9 +549,10 @@
                                                 <label for="madrasahDiniyah">Nama Madrasah Diniyah</label>
                                                 <input type="text" class="form-control" id="madrasahDiniyah" placeholder="Masukkan Nama Madrasah">
                                             </div>
+                                            <br>
 
                                             <!-- Riwayat Organisasi -->
-                                            <h6>Riwayat Organisasi</h6>
+                                            <h6><b>Riwayat Organisasi</b></h6>
 
                                             <div class="form-group">
                                                 <label>IPNU</label>

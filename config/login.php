@@ -22,6 +22,7 @@ if ($result->num_rows === 1) {
         if ($user['akses'] == 1) {
             // Set sesi
             $_SESSION['user'] = $user;
+            $_SESSION['id'] = $user['id']; // Pastikan `id` disimpan di session sebagai `$_SESSION['id']`
 
             // Set cookie untuk "Remember Me"
             if ($rememberMe) {
@@ -30,7 +31,6 @@ if ($result->num_rows === 1) {
                 $cookie_time = time() + (86400 * 30); // 30 hari
                 setcookie($cookie_name, $cookie_value, $cookie_time, "/");
             }
-
 
             // Redirect berdasarkan role
             switch ($user['role']) {
