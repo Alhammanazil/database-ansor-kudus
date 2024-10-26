@@ -1,15 +1,17 @@
 <?php
 include 'config.php';
 
-// cookies
 function check_login()
 {
   global $conn;
 
-  session_start();
+  // Mulai session jika belum dimulai
+  if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+  }
 
   // Cek apakah user sudah login dengan session
-  if (isset($_SESSION['user'])) {
+  if (isset($_SESSION['user']) && isset($_SESSION['id'])) {
     return true;
   }
 
@@ -17,7 +19,6 @@ function check_login()
   if (isset($_COOKIE['user_login'])) {
     list($username, $password) = explode(':', base64_decode($_COOKIE['user_login']));
     $username = mysqli_real_escape_string($conn, $username);
-    $password = mysqli_real_escape_string($conn, $password);
 
     $stmt = $conn->prepare("SELECT * FROM tb_users WHERE username = ?");
     $stmt->bind_param("s", $username);
@@ -25,8 +26,10 @@ function check_login()
     $result = $stmt->get_result();
     $user = $result->fetch_assoc();
 
+    // Verifikasi password dan set session jika cookie benar
     if ($user && password_verify($password, $user['password'])) {
       $_SESSION['user'] = $user;
+      $_SESSION['id'] = $user['id']; // Set `id` dalam session
       return true;
     }
   }
