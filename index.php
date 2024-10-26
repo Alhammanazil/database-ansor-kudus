@@ -465,7 +465,7 @@
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label>Pendapatan Perbulan Suami</label>
+                                                    <label>Pendapatan Perbulan Istri</label>
                                                     <select name="pendapatanIstri" class="form-control select2">
                                                         <option value="" disabled selected>Pilih Pendapatan</option>
                                                         <?php foreach ($pendapatan as $item) { ?>
@@ -558,10 +558,10 @@
                                                 <label>IPNU</label>
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-outline-primary">
-                                                        <input type="radio" name="ipnu" value="1"> Pernah
+                                                        <input type="radio" name="ipnu" value="1" required> Pernah
                                                     </label>
                                                     <label class="btn btn-outline-primary">
-                                                        <input type="radio" name="ipnu" value="0"> Tidak Pernah
+                                                        <input type="radio" name="ipnu" value="0" required> Tidak Pernah
                                                     </label>
                                                 </div>
                                             </div>
@@ -570,22 +570,23 @@
                                                 <label>PMII</label>
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-outline-primary">
-                                                        <input type="radio" name="pmii" value="1"> Pernah
+                                                        <input type="radio" name="pmii" value="1" required> Pernah
                                                     </label>
                                                     <label class="btn btn-outline-primary">
-                                                        <input type="radio" name="pmii" value="0"> Tidak Pernah
+                                                        <input type="radio" name="pmii" value="0" required> Tidak Pernah
                                                     </label>
                                                 </div>
                                             </div>
+
 
                                             <div class="form-group">
                                                 <label>DEMA / BEM</label>
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-outline-primary">
-                                                        <input type="radio" name="dema" value="1"> Pernah
+                                                        <input type="radio" name="dema" value="1" required> Pernah
                                                     </label>
                                                     <label class="btn btn-outline-primary">
-                                                        <input type="radio" name="dema" value="0"> Tidak Pernah
+                                                        <input type="radio" name="dema" value="0" required> Tidak Pernah
                                                     </label>
                                                 </div>
                                             </div>
@@ -626,14 +627,14 @@
                                             <h6>A. Tingkat Pimpinan Ranting</h6>
                                             <div class="form-group">
                                                 <label for="namaKecamatanRanting">Kecamatan</label>
-                                                <select class="form-control" id="namaKecamatanRanting" name="namaKecamatanRanting" required>
+                                                <select class="form-control" id="namaKecamatanRanting" name="namaKecamatanRanting">
                                                     <option value="">Pilih Kecamatan</option>
                                                 </select>
                                                 <div class="invalid-feedback">Harap pilih Kecamatan.</div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="namaDesaRanting">Desa</label>
-                                                <select class="form-control" id="namaDesaRanting" name="namaDesaRanting" required>
+                                                <select class="form-control" id="namaDesaRanting" name="namaDesaRanting">
                                                     <option value="">Pilih Desa</option>
                                                 </select>
                                                 <div class="invalid-feedback">Harap pilih Desa.</div>
