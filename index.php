@@ -421,27 +421,27 @@
                                                     <label for="sistemKerja">Sistem Kerja</label>
                                                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                         <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="sistemKerja" value="non_shift" autocomplete="off"> Non Shift
+                                                            <input type="radio" name="sistemKerja" value="0" autocomplete="off"> Non Shift
                                                         </label>
                                                         <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="sistemKerja" value="shift" autocomplete="off"> Shift
+                                                            <input type="radio" name="sistemKerja" value="1" autocomplete="off"> Shift
                                                         </label>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group">
                                                     <label for="namaInstansi">Nama Instansi / Tempat Bekerja</label>
-                                                    <input type="text" class="form-control" id="namaInstansi" placeholder="Masukkan Nama Instansi">
+                                                    <input type="text" class="form-control" id="namaInstansi" name="namaInstansi" placeholder="Masukkan Nama Instansi">
                                                 </div>
 
                                                 <div class="form-group">
                                                     <label for="alamatInstansi">Alamat Instansi / Tempat Bekerja</label>
-                                                    <input type="text" class="form-control" id="alamatInstansi" placeholder="Masukkan Alamat Instansi">
+                                                    <input type="text" class="form-control" id="alamatInstansi" name="alamatInstansi" placeholder="Masukkan Alamat Instansi">
                                                 </div>
 
                                                 <div class="form-group">
                                                     <label for="jenisPekerjaanIstri">Jenis Pekerjaan Istri</label>
-                                                    <select class="form-control select2" id="jenisPekerjaan" name="jenisPekerjaan" required>
+                                                    <select class="form-control select2" id="jenisPekerjaanIstri" name="jenisPekerjaanIstri" required>
                                                         <option value="" disabled selected>Pilih Jenis Pekerjaan</option>
                                                         <?php foreach ($pekerjaan as $job) { ?>
                                                             <option value="<?= $job['pekerjaan_id'] ?>">
@@ -534,20 +534,20 @@
                                             <!-- Nama Lembaga Pendidikan -->
                                             <div class="form-group">
                                                 <label for="lembagaPendidikan">Nama Lembaga Pendidikan Terakhir</label>
-                                                <input type="text" class="form-control" id="lembagaPendidikan" placeholder="Masukkan Nama Lembaga">
+                                                <input type="text" class="form-control" id="lembagaPendidikan" name="lembagaPendidikan" placeholder="Masukkan Nama Lembaga">
                                                 <div class="invalid-feedback">Harap masukkan Nama Lembaga Pendidikan Terakhir.</div>
                                             </div>
 
                                             <!-- Nama Pesantren -->
                                             <div class="form-group">
                                                 <label for="namaPesantren">Nama Pesantren</label>
-                                                <input type="text" class="form-control" id="namaPesantren" placeholder="Masukkan Nama Pesantren">
+                                                <input type="text" class="form-control" name="namaPesantren" id="namaPesantren" placeholder="Masukkan Nama Pesantren">
                                             </div>
 
                                             <!-- Nama Madrasah Diniyah -->
                                             <div class="form-group">
                                                 <label for="madrasahDiniyah">Nama Madrasah Diniyah</label>
-                                                <input type="text" class="form-control" id="madrasahDiniyah" placeholder="Masukkan Nama Madrasah">
+                                                <input type="text" class="form-control" name="madrasahDiniyah" id="madrasahDiniyah" placeholder="Masukkan Nama Madrasah">
                                             </div>
 
                                             <!-- Riwayat Organisasi -->
@@ -591,12 +591,12 @@
 
                                             <div class="form-group">
                                                 <label for="organisasiLainnya">Organisasi Lainnya</label>
-                                                <input type="text" class="form-control" id="organisasiLainnya" placeholder="Masukkan Nama Organisasi">
+                                                <input type="text" class="form-control" id="organisasiLainnya" name="organisasiLainnya" placeholder="Masukkan Nama Organisasi">
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="afiliasiPartai">Afiliasi Partai Politik Saat Ini</label>
-                                                <select id="afiliasiPartai" class="form-control select2" required>
+                                                <select name="afiliasiPartai" id="afiliasiPartai" class="form-control select2" required>
                                                     <!-- ambil data dari tb_partai -->
                                                     <option value="" disabled selected>Pilih Partai</option>
                                                     <?php foreach ($partai as $item) { ?>
@@ -624,15 +624,18 @@
                                             <!-- Tingkat Pimpinan Ranting -->
                                             <h6>A. Tingkat Pimpinan Ranting</h6>
                                             <div class="form-group">
-                                                <label for="namaKecamatanRanting">Nama Kecamatan</label>
-                                                <select id="namaKecamatanRanting" class="form-control select2">
-                                                    <option value="" disabled selected>Pilih Kecamatan</option>
-                                                    <?php foreach ($kecamatan as $item) { ?>
-                                                        <option value="<?= $item['districts_id'] ?>">
-                                                            <?= $item['districts_name'] ?>
-                                                        </option>
-                                                    <?php } ?>
+                                                <label for="namaKecamatanRanting">Kecamatan</label>
+                                                <select class="form-control" id="namaKecamatanRanting" name="namaKecamatanRanting" required>
+                                                    <option value="">Pilih Kecamatan</option>
                                                 </select>
+                                                <div class="invalid-feedback">Harap pilih Kecamatan.</div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="namaDesaRanting">Desa</label>
+                                                <select class="form-control" id="namaDesaRanting" name="namaDesaRanting" required>
+                                                    <option value="">Pilih Desa</option>
+                                                </select>
+                                                <div class="invalid-feedback">Harap pilih Desa.</div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="jabatanRanting">Jabatan Tertinggi di Ranting</label>
@@ -662,7 +665,7 @@
                                             <h6>B. Tingkat Pimpinan Anak Cabang (PAC)</h6>
                                             <div class="form-group">
                                                 <label for="kecamatanPAC">Kecamatan (PAC)</label>
-                                                <select id="kecamatanPAC" class="form-control select2">
+                                                <select id="kecamatanPAC" name="kecamatanPAC" class="form-control select2">
                                                     <option value="" disabled selected>Pilih Kecamatan</option>
                                                     <?php foreach ($kecamatan as $item) { ?>
                                                         <option value="<?= $item['districts_id'] ?>">
@@ -1128,6 +1131,60 @@
             document.getElementById('kecamatan').addEventListener('change', function() {
                 const districtsId = this.value;
                 const desaSelect = document.getElementById('desa');
+
+                if (!districtsId) {
+                    desaSelect.innerHTML = '<option value="" disabled selected>Pilih Desa</option>';
+                    return;
+                }
+
+                // Fetch desa berdasarkan kecamatan yang dipilih
+                fetch(`config/villages.php?districts_id=${districtsId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        desaSelect.innerHTML = '<option value="" disabled selected>Pilih Desa</option>';
+
+                        if (data.status === "success") {
+                            data.data.forEach(village => {
+                                const option = document.createElement('option');
+                                option.value = village.villages_id;
+                                option.textContent = village.villages_name;
+                                desaSelect.appendChild(option);
+                            });
+                        } else {
+                            alert('Tidak ada data desa ditemukan.');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            });
+        });
+
+
+        // Field Kepengurusan Ranting
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fetch data kecamatan saat halaman dimuat
+            fetch('config/districts.php')
+                .then(response => response.json())
+                .then(data => {
+                    const kecamatanSelect = document.getElementById('namaKecamatanRanting');
+                    kecamatanSelect.innerHTML = '<option value="" disabled selected>Pilih Kecamatan</option>';
+
+                    if (data.status === "success") {
+                        data.data.forEach(district => {
+                            const option = document.createElement('option');
+                            option.value = district.districts_id;
+                            option.textContent = district.districts_name;
+                            kecamatanSelect.appendChild(option);
+                        });
+                    } else {
+                        alert('Tidak ada data kecamatan ditemukan.');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+
+            // Fetch data desa saat kecamatan berubah
+            document.getElementById('namaKecamatanRanting').addEventListener('change', function() {
+                const districtsId = this.value;
+                const desaSelect = document.getElementById('namaDesaRanting');
 
                 if (!districtsId) {
                     desaSelect.innerHTML = '<option value="" disabled selected>Pilih Desa</option>';
