@@ -20,25 +20,32 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <!-- icheck -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/icheck-bootstrap/3.0.1/icheck-bootstrap.min.css" integrity="sha512-8vq2g5nHE062j3xor4XxPeZiPjmRDh6wlufQlfC6pdQ/9urJkU07NM0tEREeymP++NczacJ/Q59ul+/K2eYvcg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* Pastikan tampilan Select2 sesuai dengan Bootstrap */
+        .select2-container--default .select2-selection--single {
+            height: calc(2.25rem + 2px);
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 1.5rem;
+        }
+
+        .required-label::after {
+            content: "*";
+            color: red;
+            margin-left: 4px;
+        }
+    </style>
+
 </head>
-
-<style>
-    /* Pastikan tampilan Select2 sesuai dengan Bootstrap */
-    .select2-container--default .select2-selection--single {
-        height: calc(2.25rem + 2px);
-        padding: 0.375rem 0.75rem;
-        font-size: 1rem;
-        line-height: 1.5;
-        color: #495057;
-        background-color: #fff;
-        border: 1px solid #ced4da;
-        border-radius: 0.25rem;
-    }
-
-    .select2-container--default .select2-selection--single .select2-selection__rendered {
-        line-height: 1.5rem;
-    }
-</style>
 
 
 <body class="hold-transition sidebar-mini">
@@ -134,22 +141,22 @@
                                     <div id="dataAnggota" class="collapse show">
                                         <div class="card-body">
                                             <div class="form-group">
-                                                <label>Alamat Email</label>
-                                                <input type="email" class="form-control" name="email" placeholder="Masukkan Alamat Email" required>
+                                                <label class="required-label" for="email">Alamat Email</label>
+                                                <input type="email" class="form-control" name="email" id="email" placeholder="Masukkan Alamat Email" required>
                                                 <div class="invalid-feedback">Harap masukkan email yang valid.</div>
                                             </div>
                                             <div class="form-group">
-                                                <label>Nama Lengkap</label>
-                                                <input type="text" class="form-control" name="nama" placeholder="Masukkan Nama Lengkap" required>
+                                                <label class="required-label" for="nama">Nama Lengkap</label>
+                                                <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukkan Nama Lengkap" required>
                                                 <div class="invalid-feedback">Harap masukkan Nama Lengkap.</div>
                                             </div>
                                             <div class="form-group">
-                                                <label>No. KTP / NIK</label>
-                                                <input type="text" class="form-control" name="nik" placeholder="Masukkan No. KTP / NIK" required>
+                                                <label class="required-label" for="nik">No. KTP / NIK</label>
+                                                <input type="text" class="form-control" name="nik" id="nik" placeholder="Masukkan No. KTP / NIK" required>
                                                 <div class="invalid-feedback">Harap masukkan No. KTP / NIK.</div>
                                             </div>
                                             <div class="form-group">
-                                                <label>Tempat Lahir</label>
+                                                <label class="required-label">Tempat Lahir</label>
                                                 <select name="tempat_lahir" class="form-control select2" required>
                                                     <option value="" disabled selected>Pilih Tempat Lahir</option>
                                                     <?php foreach ($kabupaten as $item) { ?>
@@ -159,12 +166,12 @@
                                                 <div class="invalid-feedback">Harap masukkan Tempat Lahir.</div>
                                             </div>
                                             <div class="form-group">
-                                                <label>Tanggal Lahir</label>
-                                                <input type="date" class="form-control" name="tanggal_lahir" required>
+                                                <label class="required-label" for="tanggal_lahir">Tanggal Lahir</label>
+                                                <input type="date" class="form-control" name="tanggal_lahir" id="tanggal_lahir" required>
                                                 <div class="invalid-feedback">Harap masukkan Tanggal Lahir.</div>
                                             </div>
                                             <div class="form-group">
-                                                <label>Golongan Darah</label>
+                                                <label class="required-label">Golongan Darah</label>
                                                 <select class="form-control select2" name="golongan_darah" required>
                                                     <option value="" disabled selected>Pilih Golongan Darah</option>
                                                     <?php foreach ($gol_darah as $item) { ?>
@@ -174,39 +181,40 @@
                                                 <div class="invalid-feedback">Harap pilih Golongan Darah.</div>
                                             </div>
                                             <div class="form-group">
-                                                <label>Tinggi Badan (cm)</label>
+                                                <label class="required-label">Tinggi Badan (cm)</label>
                                                 <select name="tinggi_badan" class="form-control select2" required>
                                                     <option value="" disabled selected>Pilih Tinggi Badan</option>
                                                     <?php foreach ($tb as $item) { ?>
                                                         <option value="<?= $item['tinggi_badan_id'] ?>"><?= $item['tinggi_badan_name'] ?></option>
                                                     <?php } ?>
                                                 </select>
+                                                <div class="invalid-feedback">Harap pilih Tinggi Badan.</div>
                                             </div>
                                             <div class="form-group">
-                                                <label>Berat Badan (kg)</label>
+                                                <label class="required-label">Berat Badan (kg)</label>
                                                 <select name="berat_badan" class="form-control select2" required>
                                                     <option value="" disabled selected>Pilih Berat Badan</option>
                                                     <?php foreach ($bb as $item) { ?>
                                                         <option value="<?= $item['berat_badan_id'] ?>"><?= $item['berat_badan_name'] ?></option>
                                                     <?php } ?>
                                                 </select>
+                                                <div class="invalid-feedback">Harap pilih Berat Badan.</div>
                                             </div>
-
                                             <div class="form-group">
-                                                <label>Nama Ayah Kandung</label>
-                                                <input type="text" class="form-control" name="ayah" placeholder="Masukkan Nama Ayah Kandung" required>
+                                                <label class="required-label" for="ayah">Nama Ayah Kandung</label>
+                                                <input type="text" class="form-control" name="ayah" id="ayah" placeholder="Masukkan Nama Ayah Kandung" required>
                                                 <div class="invalid-feedback">Harap masukkan Nama Ayah Kandung.</div>
                                             </div>
 
                                             <div class="form-group">
-                                                <label>Nama Ibu Kandung</label>
-                                                <input type="text" class="form-control" name="ibu" placeholder="Masukkan Nama Ibu Kandung" required>
+                                                <label class="required-label" for="ibu">Nama Ibu Kandung</label>
+                                                <input type="text" class="form-control" name="ibu" id="ibu" placeholder="Masukkan Nama Ibu Kandung" required>
                                                 <div class="invalid-feedback">Harap masukkan Nama Ibu Kandung.</div>
                                             </div>
 
                                             <!-- Status Pernikahan -->
                                             <div class="form-group">
-                                                <label>Status Pernikahan</label>
+                                                <label class="required-label">Status Pernikahan</label>
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-outline-primary">
                                                         <input type="radio" name="status_pernikahan" value="1" required onclick="toggleMarriageFields()"> Belum Menikah
@@ -225,28 +233,28 @@
                                             <div id="marriageDetails" style="display: none;">
                                                 <!-- Nama Istri -->
                                                 <div class="form-group">
-                                                    <label>Nama Istri</label>
-                                                    <input type="text" class="form-control" name="nama_istri" placeholder="Masukkan Nama Istri">
+                                                    <label id="nama_istriLabel" for="nama_istri">Nama Istri</label>
+                                                    <input type="text" class="form-control" name="nama_istri" id="nama_istri" placeholder="Masukkan Nama Istri">
                                                     <div class="invalid-feedback">Harap masukkan Nama Istri.</div>
                                                 </div>
 
                                                 <!-- Jumlah Anak Laki-laki -->
                                                 <div class="form-group">
-                                                    <label>Jumlah Anak Laki-laki</label>
-                                                    <input type="number" class="form-control" name="anak_laki" placeholder="Masukkan Jumlah Anak Laki-laki">
+                                                    <label id="anak_lakiLabel" for="anak_laki">Jumlah Anak Laki-laki</label>
+                                                    <input type="number" class="form-control" name="anak_laki" id="anak_laki" placeholder="Masukkan Jumlah Anak Laki-laki">
                                                     <div class="invalid-feedback">Harap masukkan Jumlah Anak Laki-laki.</div>
                                                 </div>
 
                                                 <!-- Jumlah Anak Perempuan -->
                                                 <div class="form-group">
-                                                    <label>Jumlah Anak Perempuan</label>
-                                                    <input type="number" class="form-control" name="anak_perempuan" placeholder="Masukkan Jumlah Anak Perempuan">
+                                                    <label id="anak_perempuanLabel" for="anak_perempuan">Jumlah Anak Perempuan</label>
+                                                    <input type="number" class="form-control" name="anak_perempuan" id="anak_perempuan" placeholder="Masukkan Jumlah Anak Perempuan">
                                                     <div class="invalid-feedback">Harap masukkan Jumlah Anak Perempuan.</div>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
-                                                <label>Kepemilikan NPWP</label>
+                                                <label class="required-label">Kepemilikan NPWP</label>
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-outline-primary">
                                                         <input type="radio" name="npwp" value="1" required> Sudah Memiliki
@@ -258,7 +266,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label>BPJS Kesehatan</label>
+                                                <label class="required-label">BPJS Kesehatan</label>
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-outline-primary">
                                                         <input type="radio" name="bpjs" value="1" required> Sudah Memiliki
@@ -281,7 +289,7 @@
                                     <div id="dataAlamat" class="collapse">
                                         <div class="card-body">
                                             <div class="form-group">
-                                                <label for="kecamatan">Kecamatan</label>
+                                                <label class="required-label">Kecamatan</label>
                                                 <select class="form-control" id="kecamatan" name="kecamatan" required>
                                                     <option value="">Pilih Kecamatan</option>
                                                 </select>
@@ -289,7 +297,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label for="desa">Desa</label>
+                                                <label class="required-label">Desa</label>
                                                 <select class="form-control" id="desa" name="desa" required>
                                                     <option value="">Pilih Desa</option>
                                                 </select>
@@ -297,7 +305,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label for="rt">RT</label>
+                                                <label class="required-label" for="rt">RT</label>
                                                 <select class="form-control select2" id="rt" name="rt" required>
                                                     <option value="" disabled selected>Pilih RT</option>
                                                     <?php foreach ($rt as $item) { ?>
@@ -310,7 +318,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label for="rw">RW</label>
+                                                <label class="required-label" for="rw">RW</label>
                                                 <select class="form-control select2" id="rw" name="rw" required>
                                                     <option value="" disabled selected>Pilih RW</option>
                                                     <?php foreach ($rw as $item) { ?>
@@ -322,15 +330,14 @@
                                                 <div class="invalid-feedback">Harap pilih RW.</div>
                                             </div>
 
-
                                             <div class="form-group">
-                                                <label>No. Telp / WA</label>
-                                                <input type="text" class="form-control" name="no_telp" placeholder="Masukkan No. Telp / WA" required>
+                                                <label class="required-label" for="no_telp">No. Telp / WA</label>
+                                                <input type="text" class="form-control" name="no_telp" id="no_telp" placeholder="Masukkan No. Telp / WA" required>
                                                 <div class="invalid-feedback">Harap masukkan No. Telp / WA.</div>
                                             </div>
 
                                             <div class="form-group">
-                                                <label>Akun Facebook</label>
+                                                <label class="required-label">Akun Facebook</label>
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-outline-primary">
                                                         <input type="radio" name="facebook" value="1" required> Punya
@@ -342,7 +349,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label>Akun Instagram</label>
+                                                <label class="required-label">Akun Instagram</label>
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-outline-primary">
                                                         <input type="radio" name="instagram" value="1" required> Punya
@@ -354,7 +361,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label>Akun TikTok</label>
+                                                <label class="required-label">Akun TikTok</label>
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-outline-primary">
                                                         <input type="radio" name="tiktok" value="1" required> Punya
@@ -366,7 +373,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label>Akun YouTube</label>
+                                                <label class="required-label">Akun YouTube</label>
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-outline-primary">
                                                         <input type="radio" name="youtube" value="1" required> Punya
@@ -378,7 +385,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label>Akun Twitter</label>
+                                                <label class="required-label">Akun Twitter</label>
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-outline-primary">
                                                         <input type="radio" name="twitter" value="1" required> Punya
@@ -403,7 +410,7 @@
                                     <div id="dataPekerjaan" class="collapse">
                                         <div class="card-body">
                                             <div class="form-group">
-                                                <label for="jenisPekerjaan">Jenis Pekerjaan</label>
+                                                <label class="required-label" for="jenisPekerjaan">Jenis Pekerjaan</label>
                                                 <select class="form-control select2" id="jenisPekerjaan" name="jenisPekerjaan" required>
                                                     <option value="" disabled selected>Pilih Jenis Pekerjaan</option>
                                                     <?php foreach ($pekerjaan as $job) { ?>
@@ -418,30 +425,47 @@
                                             <!-- Fields tambahan yang akan disembunyikan jika tidak bekerja -->
                                             <div id="jobFields" style="display: none;">
                                                 <div class="form-group">
-                                                    <label for="sistemKerja">Sistem Kerja</label>
+                                                    <label id="pendapatanSuamiLabel">Pendapatan Perbulan</label>
+                                                    <select name="pendapatanSuami" class="form-control select2" id="pendapatanSuami">
+                                                        <option value="" disabled selected>Pilih Pendapatan</option>
+                                                        <?php foreach ($pendapatan as $item) { ?>
+                                                            <option value="<?= $item['pendapatan_id'] ?>">
+                                                                <?= $item['pendapatan_name'] ?>
+                                                            </option>
+                                                        <?php } ?>
+                                                    </select>
+                                                    <div class="invalid-feedback">Harap pilih Pendapatan.</div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label id="sistemKerjaLabel">Sistem Kerja</label>
                                                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                         <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="sistemKerja" value="0" autocomplete="off"> Non Shift
+                                                            <input type="radio" name="sistemKerja" id="sistemKerja" value="0" autocomplete="off"> Non Shift
                                                         </label>
                                                         <label class="btn btn-outline-primary">
-                                                            <input type="radio" name="sistemKerja" value="1" autocomplete="off"> Shift
+                                                            <input type="radio" name="sistemKerja" id="sistemKerja" value="1" autocomplete="off"> Shift
                                                         </label>
                                                     </div>
+                                                    <div class="invalid-feedback">Harap pilih Sistem Kerja.</div>
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label for="namaInstansi">Nama Instansi / Tempat Bekerja</label>
+                                                    <label for="namaInstansi" id="namaInstansiLabel">Nama Instansi / Tempat Bekerja</label>
                                                     <input type="text" class="form-control" id="namaInstansi" name="namaInstansi" placeholder="Masukkan Nama Instansi">
+                                                    <div class="invalid-feedback">Harap isi Nama Instansi.</div>
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label for="alamatInstansi">Alamat Instansi / Tempat Bekerja</label>
+                                                    <label for="alamatInstansi" id="alamatInstansiLabel">Alamat Instansi / Tempat Bekerja</label>
                                                     <input type="text" class="form-control" id="alamatInstansi" name="alamatInstansi" placeholder="Masukkan Alamat Instansi">
                                                 </div>
+                                                <div class="invalid-feedback">Harap isi Alamat Instansi.</div>
+                                            </div>
 
+                                            <div id="pekerjaanIstriFields" style="display: none;">
                                                 <div class="form-group">
-                                                    <label for="jenisPekerjaanIstri">Jenis Pekerjaan Istri</label>
-                                                    <select class="form-control select2" id="jenisPekerjaanIstri" name="jenisPekerjaanIstri">
+                                                    <label id="pekerjaanIstriLabel" for="jenisPekerjaanIstri">Jenis Pekerjaan Istri</label>
+                                                    <select class="form-control select2" id="pekerjaanIstri" name="jenisPekerjaanIstri">
                                                         <option value="" disabled selected>Pilih Jenis Pekerjaan</option>
                                                         <?php foreach ($pekerjaan as $job) { ?>
                                                             <option value="<?= $job['pekerjaan_id'] ?>">
@@ -451,10 +475,12 @@
                                                     </select>
                                                     <div class="invalid-feedback">Harap pilih Jenis Pekerjaan.</div>
                                                 </div>
+                                            </div>
 
+                                            <div id="pendapatanIstriFields" style="display: none;">
                                                 <div class="form-group">
-                                                    <label>Pendapatan Perbulan Suami</label>
-                                                    <select name="pendapatanSuami" class="form-control select2">
+                                                    <label for="pendapatanIstri" id="pendapatanIstriLabel">Pendapatan Perbulan Istri</label>
+                                                    <select name="pendapatanIstri" class="form-control select2" id="pendapatanIstri">
                                                         <option value="" disabled selected>Pilih Pendapatan</option>
                                                         <?php foreach ($pendapatan as $item) { ?>
                                                             <option value="<?= $item['pendapatan_id'] ?>">
@@ -462,18 +488,7 @@
                                                             </option>
                                                         <?php } ?>
                                                     </select>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label>Pendapatan Perbulan Istri</label>
-                                                    <select name="pendapatanIstri" class="form-control select2">
-                                                        <option value="" disabled selected>Pilih Pendapatan</option>
-                                                        <?php foreach ($pendapatan as $item) { ?>
-                                                            <option value="<?= $item['pendapatan_id'] ?>">
-                                                                <?= $item['pendapatan_name'] ?>
-                                                            </option>
-                                                        <?php } ?>
-                                                    </select>
+                                                    <div class="invalid-feedback">Harap pilih Pendapatan.</div>
                                                 </div>
                                             </div>
 
@@ -493,7 +508,7 @@
                                         <div class="card-body">
                                             <!-- Pendidikan Terakhir -->
                                             <div class="form-group">
-                                                <label for="pendidikanTerakhir">Pendidikan Terakhir</label>
+                                                <label class="required-label" for="pendidikanTerakhir">Pendidikan Terakhir</label>
                                                 <select class="form-control select2" id="pendidikanTerakhir" name="pendidikanTerakhir" required>
                                                     <option value="" disabled selected>Pilih Pendidikan Terakhir</option>
                                                     <?php foreach ($pendidikan as $edu) { ?>
@@ -506,35 +521,41 @@
                                             </div>
 
                                             <!-- Jurusan SMK -->
-                                            <div class="form-group">
-                                                <label for="jurusanSmk">Jurusan SMK</label>
-                                                <select name="jurusanSmk" class="form-control select2">
-                                                    <option value="" disabled selected>Pilih Jurusan</option>
-                                                    <?php foreach ($smk as $item) { ?>
-                                                        <option value="<?= $item['jurusan_smk_id'] ?>">
-                                                            <?= $item['jurusan_smk_name'] ?>
-                                                        </option>
-                                                    <?php } ?>
-                                                </select>
+                                            <div id="jurusanSmkField" style="display: none;">
+                                                <div class="form-group">
+                                                    <label id="jurusanSmkLabel">Jurusan SMK</label>
+                                                    <select name="jurusanSmk" class="form-control select2" id="jurusanSmk">
+                                                        <option value="" disabled selected>Pilih Jurusan</option>
+                                                        <?php foreach ($smk as $item) { ?>
+                                                            <option value="<?= $item['jurusan_smk_id'] ?>">
+                                                                <?= $item['jurusan_smk_name'] ?>
+                                                            </option>
+                                                        <?php } ?>
+                                                    </select>
+                                                    <div class="invalid-feedback">Harap pilih Jurusan SMK.</div>
+                                                </div>
                                             </div>
 
                                             <!-- Bidang Studi -->
-                                            <div class="form-group">
-                                                <label for="bidangStudi">Bidang Studi</label>
-                                                <select name="bidangStudi" class="form-control select2">
-                                                    <option value="" disabled selected>Pilih Bidang Studi</option>
-                                                    <?php foreach ($studi as $item) { ?>
-                                                        <option value="<?= $item['bidang_studi_id'] ?>">
-                                                            <?= $item['bidang_studi_name'] ?>
-                                                        </option>
-                                                    <?php } ?>
-                                                </select>
+                                            <div id="bidangStudiField" style="display: none;">
+                                                <div class="form-group">
+                                                    <label id="bidangStudiLabel">Bidang Studi</label>
+                                                    <select name="bidangStudi" class="form-control select2" id="bidangStudi">
+                                                        <option value="" disabled selected>Pilih Bidang Studi</option>
+                                                        <?php foreach ($studi as $item) { ?>
+                                                            <option value="<?= $item['bidang_studi_id'] ?>">
+                                                                <?= $item['bidang_studi_name'] ?>
+                                                            </option>
+                                                        <?php } ?>
+                                                    </select>
+                                                    <div class="invalid-feedback">Harap pilih Bidang Studi.</div>
+                                                </div>
                                             </div>
 
                                             <!-- Nama Lembaga Pendidikan -->
                                             <div class="form-group">
-                                                <label for="lembagaPendidikan">Nama Lembaga Pendidikan Terakhir</label>
-                                                <input type="text" class="form-control" id="lembagaPendidikan" name="lembagaPendidikan" placeholder="Masukkan Nama Lembaga">
+                                                <label class="required-label" for="lembagaPendidikan">Nama Lembaga Pendidikan Terakhir</label>
+                                                <input type="text" class="form-control" id="lembagaPendidikan" name="lembagaPendidikan" placeholder="Masukkan Nama Lembaga" required>
                                                 <div class="invalid-feedback">Harap masukkan Nama Lembaga Pendidikan Terakhir.</div>
                                             </div>
 
@@ -555,7 +576,7 @@
                                             <h6><b>Riwayat Organisasi</b></h6>
 
                                             <div class="form-group">
-                                                <label>IPNU</label>
+                                                <label class="required-label">IPNU</label>
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-outline-primary">
                                                         <input type="radio" name="ipnu" value="1" required> Pernah
@@ -567,7 +588,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label>PMII</label>
+                                                <label class="required-label">PMII</label>
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-outline-primary">
                                                         <input type="radio" name="pmii" value="1" required> Pernah
@@ -580,7 +601,7 @@
 
 
                                             <div class="form-group">
-                                                <label>DEMA / BEM</label>
+                                                <label class="required-label">DEMA / BEM</label>
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-outline-primary">
                                                         <input type="radio" name="dema" value="1" required> Pernah
@@ -597,7 +618,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label for="afiliasiPartai">Afiliasi Partai Politik Saat Ini</label>
+                                                <label class="required-label" for="afiliasiPartai">Afiliasi Partai Politik Saat Ini</label>
                                                 <select name="afiliasiPartai" id="afiliasiPartai" class="form-control select2" required>
                                                     <!-- ambil data dari tb_partai -->
                                                     <option value="" disabled selected>Pilih Partai</option>
@@ -1091,16 +1112,66 @@
             $('#' + prev).collapse('show');
         }
 
-        // FIeld Data Anggota
+        // FIeld Data Anggota & Pekerjaan Istri
         function toggleMarriageFields() {
             const marriageDetails = document.getElementById('marriageDetails');
-            const selectedStatus = document.querySelector('input[name="nikah"]:checked').value;
+            const nama_istri = document.getElementById('nama_istri');
+            const anak_laki = document.getElementById('anak_laki');
+            const anak_perempuan = document.getElementById('anak_perempuan');
+            const nama_istriLabel = document.getElementById('nama_istriLabel');
+            const anak_lakiLabel = document.getElementById('anak_lakiLabel');
+            const anak_perempuanLabel = document.getElementById('anak_perempuanLabel');
 
-            // Show the fields only if the user selects "Menikah"
-            if (selectedStatus === '2') {
+            const pekerjaanIstriFields = document.getElementById('pekerjaanIstriFields');
+            const pekerjaanIstri = document.getElementById('pekerjaanIstri');
+            const pendapatanIstri = document.getElementById('pendapatanIstri');
+            const pekerjaanIstriLabel = document.getElementById('pekerjaanIstriLabel');
+            const pendapatanIstriLabel = document.getElementById('pendapatanIstriLabel');
+
+            const selectedStatusPernikahan = document.querySelector('input[name="status_pernikahan"]:checked').value;
+
+            document.getElementById('pekerjaanIstri').onchange = function() {
+                if (this.value !== '21') {
+                    pendapatanIstriFields.style.display = 'block';
+                    pendapatanIstri.required = true;
+                    pendapatanIstriLabel.classList.add('required-label');
+                } else {
+                    pendapatanIstriFields.style.display = 'none';
+                    pendapatanIstri.required = false;
+                    pendapatanIstriLabel.classList.remove('required-label');
+                }
+            }
+
+            // Show fields and mark as required if "Menikah" is selected
+            if (selectedStatusPernikahan === '2') {
                 marriageDetails.style.display = 'block';
+                pekerjaanIstriFields.style.display = 'block';
+                nama_istri.required = true;
+                anak_laki.required = true;
+                anak_perempuan.required = true;
+                pekerjaanIstri.required = true;
+
+                // Add red asterisk to labels
+                nama_istriLabel.classList.add('required-label');
+                anak_lakiLabel.classList.add('required-label');
+                anak_perempuanLabel.classList.add('required-label');
+                pekerjaanIstriLabel.classList.add('required-label');
             } else {
+                // Hide fields and remove required attribute
                 marriageDetails.style.display = 'none';
+                pekerjaanIstriFields.style.display = 'none';
+                nama_istri.required = false;
+                anak_laki.required = false;
+                anak_perempuan.required = false;
+                pekerjaanIstri.required = false;
+                pendapatanIstri.required = false;
+
+                // Remove red asterisk from labels
+                nama_istriLabel.classList.remove('required-label');
+                anak_lakiLabel.classList.remove('required-label');
+                anak_perempuanLabel.classList.remove('required-label');
+                pekerjaanIstriLabel.classList.remove('required-label');
+                pendapatanIstriLabel.classList.remove('required-label');
             }
         }
 
@@ -1215,10 +1286,75 @@
         });
 
 
-        // Field Pekerjaan
+        // Field Pekerjaan Suami
         document.getElementById('jenisPekerjaan').onchange = function() {
-            document.getElementById('jobFields').style.display =
-                this.value === '21' ? 'none' : 'block';
+            const jobFields = document.getElementById('jobFields');
+            const pendapatanLabel = document.getElementById('pendapatanSuamiLabel');
+            const sistemKerjaLabel = document.getElementById('sistemKerjaLabel');
+            const namaInstansiLabel = document.getElementById('namaInstansiLabel');
+            const alamatInstansiLabel = document.getElementById('alamatInstansiLabel');
+
+            const pendapatan = document.getElementById('pendapatanSuami');
+            const sistemKerja = document.getElementById('sistemKerja');
+            const namaInstansi = document.getElementById('namaInstansi');
+            const alamatInstansi = document.getElementById('alamatInstansi');
+
+            if (this.value !== '21') {
+                jobFields.style.display = 'block';
+                pendapatanLabel.classList.add('required-label');
+                sistemKerjaLabel.classList.add('required-label');
+                namaInstansiLabel.classList.add('required-label');
+                alamatInstansiLabel.classList.add('required-label');
+                pendapatan.required = true;
+                sistemKerja.required = true;
+                namaInstansi.required = true;
+                alamatInstansi.required = true;
+            } else {
+                jobFields.style.display = 'none';
+                pendapatanLabel.classList.remove('required-label');
+                sistemKerjaLabel.classList.remove('required-label');
+                namaInstansiLabel.classList.remove('required-label');
+                alamatInstansiLabel.classList.remove('required-label');
+                pendapatan.required = false;
+                sistemKerja.required = false;
+                namaInstansi.required = false;
+                alamatInstansi.required = false;
+            }
+        };
+
+        // Field Pendidikan Terakhir
+        document.getElementById('pendidikanTerakhir').onchange = function() {
+            const jurusanSmkField = document.getElementById('jurusanSmkField');
+            const bidangStudiField = document.getElementById('bidangStudiField');
+
+            const jurusanSmkLabel = document.getElementById('jurusanSmkLabel');
+            const bidangStudiLabel = document.getElementById('bidangStudiLabel');
+
+            const jurusanSmk = document.getElementById('jurusanSmk');
+            const bidangStudi = document.getElementById('bidangStudi');
+
+            if (this.value === '4') {
+                jurusanSmkField.style.display = 'block';
+                bidangStudiField.style.display = 'none';
+                jurusanSmkLabel.classList.add('required-label');
+                bidangStudiLabel.classList.remove('required-label');
+                jurusanSmk.required = true;
+                bidangStudi.required = false;
+            } else if (this.value === '5' || this.value === '6' || this.value === '7') {
+                jurusanSmkField.style.display = 'none';
+                bidangStudiField.style.display = 'block';
+                jurusanSmkLabel.classList.remove('required-label');
+                bidangStudiLabel.classList.add('required-label');
+                jurusanSmk.required = false;
+                bidangStudi.required = true;
+            } else {
+                jurusanSmkField.style.display = 'none';
+                bidangStudiField.style.display = 'none';
+                jurusanSmkLabel.classList.remove('required-label');
+                bidangStudiLabel.classList.remove('required-label');
+                jurusanSmk.required = false;
+                bidangStudi.required = false;
+            }
         };
 
         // Field Riwayat Pelatihan Kaderisasi
