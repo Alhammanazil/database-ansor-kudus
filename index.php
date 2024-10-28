@@ -441,7 +441,7 @@
 
                                                 <div class="form-group">
                                                     <label for="jenisPekerjaanIstri">Jenis Pekerjaan Istri</label>
-                                                    <select class="form-control select2" id="jenisPekerjaanIstri" name="jenisPekerjaanIstri" required>
+                                                    <select class="form-control select2" id="jenisPekerjaanIstri" name="jenisPekerjaanIstri">
                                                         <option value="" disabled selected>Pilih Jenis Pekerjaan</option>
                                                         <?php foreach ($pekerjaan as $job) { ?>
                                                             <option value="<?= $job['pekerjaan_id'] ?>">
