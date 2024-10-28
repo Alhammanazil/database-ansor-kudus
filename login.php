@@ -120,8 +120,8 @@ if (isset($_SESSION['user'])) {
                     </div>
                 </form>
 
-                <p class="mb-0 text-center">Belum punya akun?
-                    <a href="register.php" class="text-center">Daftar</a>
+                <!-- <p class="mb-0 text-center">Belum punya akun?
+                    <a href="register.php" class="text-center">Daftar</a> -->
                 </p>
             </div>
         </div>

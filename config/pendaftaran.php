@@ -40,7 +40,21 @@ function sendUserCredentials($no_hp, $nama, $username, $plain_password)
     }
 }
 
+// buat uniqueid
+function generateUniqueId()
+{
+    $length = 6;
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
+}
+
 // Ambil data dari form
+$id = generateUniqueId();
 $email = mysqli_real_escape_string($conn, $_POST['email']);
 $nama = mysqli_real_escape_string($conn, $_POST['nama']);
 $nik = mysqli_real_escape_string($conn, $_POST['nik']);
@@ -107,7 +121,7 @@ $kursus = isset($_POST['kursus']) ? mysqli_real_escape_string($conn, $_POST['kur
 
 // SQL untuk menyimpan data ke tabel tb_anggota
 $sql = "INSERT INTO tb_anggota (
-    anggota_email, anggota_nama, anggota_nik, anggota_tempat_lahir, anggota_tanggal_lahir, anggota_golongan_darah, anggota_tinggi_badan, anggota_berat_badan, anggota_ayah, anggota_ibu, anggota_pernikahan, anggota_istri, anggota_anak_lk, anggota_anak_pr, anggota_npwp, anggota_bpjs, 
+    anggota_id, anggota_email, anggota_nama, anggota_nik, anggota_tempat_lahir, anggota_tanggal_lahir, anggota_golongan_darah, anggota_tinggi_badan, anggota_berat_badan, anggota_ayah, anggota_ibu, anggota_pernikahan, anggota_istri, anggota_anak_lk, anggota_anak_pr, anggota_npwp, anggota_bpjs, 
 
     anggota_domisili_kec, anggota_domisili_des, anggota_rt, anggota_rw, anggota_hp, anggota_fb, anggota_ig, anggota_tiktok, anggota_yt, anggota_twitter, 
 
@@ -119,7 +133,7 @@ $sql = "INSERT INTO tb_anggota (
 ) 
 
 VALUES (
-    '$email', '$nama', '$nik', '$tempat_lahir', '$tanggal_lahir', '$golongan_darah', '$tinggi_badan', '$berat_badan', '$ayah', '$ibu', '$status_pernikahan', '$nama_istri', '$anak_laki', '$anak_perempuan', '$npwp', '$bpjs',
+    '$id', '$email', '$nama', '$nik', '$tempat_lahir', '$tanggal_lahir', '$golongan_darah', '$tinggi_badan', '$berat_badan', '$ayah', '$ibu', '$status_pernikahan', '$nama_istri', '$anak_laki', '$anak_perempuan', '$npwp', '$bpjs',
 
     '$kecamatan', '$desa', '$rt', '$rw', '$no_telp', '$facebook', '$instagram', '$tiktok', '$youtube', '$twitter', 
 

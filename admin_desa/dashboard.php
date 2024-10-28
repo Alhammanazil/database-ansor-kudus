@@ -1,5 +1,6 @@
 <?php
 require '../config/config.php';
+require '../config/cookies.php';
 
 if (!check_login()) {
     header("Location: ../login.php");
@@ -7,177 +8,61 @@ if (!check_login()) {
 }
 
 // Cek role
-if ($_SESSION['user']['role'] !== 'master' && $_SESSION['user']['role'] !== 'admin desa') {
-    header("Location: dashboard.php"); // atau halaman lain yang sesuai
+if (!in_array($_SESSION['user']['role'], ['master', 'admin desa'])) {
+    header("Location: dashboard.php");
     exit();
 }
 
-// Data dummy untuk kecamatan di Kudus, dengan maksimal pendaftar 100
-$kecamatans = [
-    ['kecamatan' => 'Kudus Kota', 'total_pendaftar' => 20],
-    ['kecamatan' => 'Jati', 'total_pendaftar' => 15],
-    ['kecamatan' => 'Bae', 'total_pendaftar' => 12],
-    ['kecamatan' => 'Undaan', 'total_pendaftar' => 10],
-    ['kecamatan' => 'Mejobo', 'total_pendaftar' => 14],
-    ['kecamatan' => 'Jekulo', 'total_pendaftar' => 10],
-    ['kecamatan' => 'Dawe', 'total_pendaftar' => 8],
-    ['kecamatan' => 'Gebog', 'total_pendaftar' => 6],
-    ['kecamatan' => 'Kaliwungu', 'total_pendaftar' => 5]
-];
+if (empty($_SESSION['id'])) {
+    echo "Error: Anda harus login untuk mengakses halaman ini.";
+    exit();
+}
 
-// Data Kecamatan dan Desa di Kudus
-$kecamatanDesaData = [
-    'Kaliwungu' => [
-        'Bakalan Krapyak',
-        'Banget',
-        'Blimbing Kidul',
-        'Gamong',
-        'Garung Kidul',
-        'Garung Lor',
-        'Kalirejo',
-        'Karangampel',
-        'Kedungdowo',
-        'Mijen',
-        'Papringan',
-        'Prambatan Kidul',
-        'Prambatan Lor',
-        'Setrokalangan',
-        'Sidorekso'
-    ],
-    'Kota' => [
-        'Barongan',
-        'Burikan',
-        'Damaran',
-        'Demaan',
-        'Demangan',
-        'Glantengan',
-        'Janggalan',
-        'Kajosari',
-        'Kaliputu',
-        'Kauman',
-        'Kesambi',
-        'Kerjasari',
-        'Kramat',
-        'Krandon',
-        'Langgardalem',
-        'Mlatinorowito',
-        'Mlatinorowito',
-        'Nganguk',
-        'Panji',
-        'Purwosari',
-        'Rendeng',
-        'Singocandi',
-        'Sunggingan',
-        'Wergu Kulon',
-        'Wergu Wetan'
-    ],
-    'Jati' => [
-        'Getas Pejaten',
-        'Jati Kulon',
-        'Jati Wetan',
-        'Jepang Pakis',
-        'Jetis Kapuan',
-        'Loram Kulon',
-        'Loram Wetan',
-        'Megawon',
-        'Ngembal Kulon',
-        'Pasuruhan Kidul',
-        'Pasuruhan Lor',
-        'Piso',
-        'Tanjungkarang',
-        'Tumpangkrasak'
-    ],
-    'Undaan' => [
-        'Berugenjang',
-        'Glagahwaru',
-        'Kalirejo',
-        'Karangrowo',
-        'Kutuk',
-        'Lambangan',
-        'Larikrejo',
-        'Medini',
-        'Ngemplak',
-        'Sambung',
-        'Terasan',
-        'Undaan Kidul',
-        'Undaan Lor',
-        'Undaan Tengah',
-        'Wates',
-        'Wonosoco'
-    ],
-    'Mejobo' => [
-        'Golantepus',
-        'Gulang',
-        'Hadipolo',
-        'Japah',
-        'Jojo',
-        'Kesambi',
-        'Krikil',
-        'Mejobo',
-        'Payaman',
-        'Temulus',
-        'Tenggeles'
-    ],
-    'Jekulo' => [
-        'Bulung Kulon',
-        'Bulungcangkring',
-        'Gondoharum',
-        'Hadipolo',
-        'Honggosoco',
-        'Jekulo',
-        'Kaliwungu',
-        'Pladen',
-        'Sadang',
-        'Sidomulyo',
-        'Tanjungrejo',
-        'Terban'
-    ],
-    'Bae' => [
-        'Bacin',
-        'Bae',
-        'Besito',
-        'Gondangmanis',
-        'Gemulung',
-        'Ngembalrejo',
-        'Panjunan',
-        'Pedawang',
-        'Peganjaran',
-        'Purworejo'
-    ],
-    'Gebog' => [
-        'Besito',
-        'Getassrabi',
-        'Gondosari',
-        'Gribig',
-        'Jurang',
-        'Karangmalang',
-        'Kedungsari',
-        'Klumpit',
-        'Menawan',
-        'Padurenan',
-        'Rahtawu'
-    ],
-    'Dawe' => [
-        'Cendono',
-        'Colo',
-        'Cranggang',
-        'Dukuhwaringin',
-        'Glagahkulon',
-        'Japan',
-        'Kajar',
-        'Kandangmas',
-        'Krusen',
-        'Lau',
-        'Margorejo',
-        'Piji',
-        'Puyoh',
-        'Rejosari',
-        'Samirejo',
-        'Socokangsi',
-        'Tergo',
-        'Ternadi'
-    ]
-];
+$user_id = $_SESSION['id'];
+
+// Query untuk mendapatkan data user beserta nama desa
+$query = "
+SELECT 
+    a.*, 
+    v.villages_name AS desa
+FROM 
+    tb_anggota a
+LEFT JOIN 
+    tb_villages v ON a.anggota_domisili_des = v.villages_id
+WHERE 
+    a.anggota_id = ?";
+
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$data = $stmt->get_result()->fetch_assoc();
+
+if (!$data) {
+    echo "Data tidak ditemukan.";
+    exit();
+}
+
+// total pendaftar
+$query_total_pendaftar = "SELECT COUNT(*) AS total_pendaftar FROM tb_anggota";
+$total_pendaftar = $conn->query($query_total_pendaftar)->fetch_assoc()['total_pendaftar'];
+
+// Nama desa
+$desa_name = $data['desa'];
+
+// Query untuk menghitung total pendaftar di desa yang sesuai
+$query_total_pendaftar_desa = "
+    SELECT COUNT(*) AS total_pendaftar
+    FROM tb_anggota
+    WHERE anggota_domisili_des = (
+        SELECT villages_id FROM tb_villages WHERE villages_name = ?
+    )
+";
+
+// Eksekusi query
+$stmt_total_pendaftar_desa = $conn->prepare($query_total_pendaftar_desa);
+$stmt_total_pendaftar_desa->bind_param("s", $desa_name);
+$stmt_total_pendaftar_desa->execute();
+$total_pendaftar_desa = $stmt_total_pendaftar_desa->get_result()->fetch_assoc()['total_pendaftar'];
 
 require_once 'header.php';
 ?>
@@ -189,11 +74,11 @@ require_once 'header.php';
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Dashboard Admin Desa</h1>
+                    <h1>Dashboard Admin Desa <?php echo $data['desa']; ?></h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="dashboard.php">Admin</a></li>
+                        <li class="breadcrumb-item"><a href="dashboard.php">Admin Desa</a></li>
                         <li class="breadcrumb-item active">Dashboard</li>
                     </ol>
                 </div>
@@ -211,7 +96,7 @@ require_once 'header.php';
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>100</h3>
+                            <h3><?php echo $total_pendaftar; ?></h3>
                             <p>Total Pendaftar</p>
                         </div>
                         <div class="icon">
@@ -226,8 +111,8 @@ require_once 'header.php';
                     <!-- kotak kecil -->
                     <div class="small-box bg-dark">
                         <div class="inner">
-                            <h3>65</h3>
-                            <p>Pendaftar Desa Pasuruhan Lor</p>
+                            <h3><?php echo $total_pendaftar_desa; ?></h3>
+                            <p>Pendaftar Desa <?php echo $data['desa']; ?></p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-ios-home"></i>
@@ -267,111 +152,6 @@ require_once 'header.php';
                 </div>
             </div>
             <!-- Dashboard Card -->
-
-            <!-- Tabel Data Kecamatan & Desa -->
-            <section class="content-header">
-                <div class="container-fluid">
-                    <div class="row my-3">
-                        <div class="col-sm-6">
-                            <h1>Data Kecamatan & Desa</h1>
-                        </div>
-                    </div>
-                </div><!-- /.container-fluid -->
-
-                <!-- TABEL PENDAFTAR KECAMATAN -->
-                <div class="card">
-                    <div class="card-header border-transparent">
-                        <h3 class="card-title"><b>9 Kecamatan</b></h3>
-
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-toggle="collapse" data-target="#kecamatanCollapse" aria-expanded="false">
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <!-- /.card-header -->
-                    <div id="kecamatanCollapse" class="collapse">
-                        <div class="card-body p-0">
-                            <div class="table-responsive table-bordered table-hover">
-                                <table id="data-kecamatan" class="table m-3">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Kecamatan</th>
-                                            <th>Total Pendaftar</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                        $no = 1; // Inisialisasi nomor
-                                        foreach ($kecamatans as $kecamatan): ?>
-                                            <tr>
-                                                <td><?php echo $no++; ?></td>
-                                                <td><?php echo htmlspecialchars($kecamatan['kecamatan']); ?></td>
-                                                <td><?php echo htmlspecialchars($kecamatan['total_pendaftar']); ?></td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- /.table-responsive -->
-                        </div>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-
-                <!-- TABEL PENDAFTAR DESA -->
-                <div class="card">
-                    <div class="card-header border-transparent">
-                        <h3 class="card-title"><b>123 Desa</b></h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-toggle="collapse" data-target="#desaCollapse" aria-expanded="false">
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- /.card-header -->
-                    <div id="desaCollapse" class="collapse">
-                        <div class="card-body p-0">
-                            <div class="table-responsive table-bordered table-hover">
-                                <table id="data-desa" class="table m-2">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Kecamatan</th>
-                                            <th>Desa / Kelurahan</th>
-                                            <th>Total Pendaftar</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                        $no = 1; // Inisialisasi nomor
-                                        foreach ($kecamatanDesaData as $kecamatan => $desas): ?>
-                                            <?php $rowspan = count($desas); ?>
-                                            <tr>
-                                                <td rowspan="<?php echo $rowspan; ?>"><?php echo $no++; ?></td>
-                                                <td rowspan="<?php echo $rowspan; ?>"><?php echo htmlspecialchars($kecamatan); ?></td>
-                                                <td>1. <?php echo htmlspecialchars($desas[0]); ?></td>
-                                            </tr>
-                                            <?php for ($i = 1; $i < $rowspan; $i++): ?>
-                                                <tr>
-                                                    <td><?php echo ($i + 1) . ". " . htmlspecialchars($desas[$i]); ?></td>
-                                                </tr>
-                                            <?php endfor; ?>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- /.table-responsive -->
-                        </div>
-                        <!-- /.card-body -->
-                    </div>
-                    <!-- /.card -->
-                </div>
-                <!-- /.row -->
-            </section>
         </div>
 </div>
 

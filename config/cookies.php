@@ -28,8 +28,7 @@ function check_login()
 
     // Verifikasi password dan set session jika cookie benar
     if ($user && password_verify($password, $user['password'])) {
-      $_SESSION['user'] = $user;
-      $_SESSION['id'] = $user['id']; // Set `id` dalam session
+      $_SESSION['id'] = $user['id'];
       return true;
     }
   }

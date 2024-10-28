@@ -8,210 +8,104 @@ if (!check_login()) {
 }
 
 // Cek role
-if ($_SESSION['user']['role'] !== 'master' && $_SESSION['user']['role'] !== 'user') {
-    header("Location: dashboard.php"); // atau halaman lain yang sesuai
+if (!in_array($_SESSION['user']['role'], ['master', 'user'])) {
+    header("Location: dashboard.php");
     exit();
 }
 
-// Data dummy untuk kecamatan di Kudus, dengan maksimal pendaftar 100
-$kecamatans = [
-    ['kecamatan' => 'Kudus Kota', 'total_pendaftar' => 20],
-    ['kecamatan' => 'Jati', 'total_pendaftar' => 15],
-    ['kecamatan' => 'Bae', 'total_pendaftar' => 12],
-    ['kecamatan' => 'Undaan', 'total_pendaftar' => 10],
-    ['kecamatan' => 'Mejobo', 'total_pendaftar' => 14],
-    ['kecamatan' => 'Jekulo', 'total_pendaftar' => 10],
-    ['kecamatan' => 'Dawe', 'total_pendaftar' => 8],
-    ['kecamatan' => 'Gebog', 'total_pendaftar' => 6],
-    ['kecamatan' => 'Kaliwungu', 'total_pendaftar' => 5]
-];
+$user_id = $_SESSION['id'];
 
-// Data Kecamatan dan Desa di Kudus
-$kecamatanDesaData = [
-    'Kaliwungu' => [
-        'Bakalan Krapyak',
-        'Banget',
-        'Blimbing Kidul',
-        'Gamong',
-        'Garung Kidul',
-        'Garung Lor',
-        'Kalirejo',
-        'Karangampel',
-        'Kedungdowo',
-        'Mijen',
-        'Papringan',
-        'Prambatan Kidul',
-        'Prambatan Lor',
-        'Setrokalangan',
-        'Sidorekso'
-    ],
-    'Kota' => [
-        'Barongan',
-        'Burikan',
-        'Damaran',
-        'Demaan',
-        'Demangan',
-        'Glantengan',
-        'Janggalan',
-        'Kajosari',
-        'Kaliputu',
-        'Kauman',
-        'Kesambi',
-        'Kerjasari',
-        'Kramat',
-        'Krandon',
-        'Langgardalem',
-        'Mlatinorowito',
-        'Mlatinorowito',
-        'Nganguk',
-        'Panji',
-        'Purwosari',
-        'Rendeng',
-        'Singocandi',
-        'Sunggingan',
-        'Wergu Kulon',
-        'Wergu Wetan'
-    ],
-    'Jati' => [
-        'Getas Pejaten',
-        'Jati Kulon',
-        'Jati Wetan',
-        'Jepang Pakis',
-        'Jetis Kapuan',
-        'Loram Kulon',
-        'Loram Wetan',
-        'Megawon',
-        'Ngembal Kulon',
-        'Pasuruhan Kidul',
-        'Pasuruhan Lor',
-        'Piso',
-        'Tanjungkarang',
-        'Tumpangkrasak'
-    ],
-    'Undaan' => [
-        'Berugenjang',
-        'Glagahwaru',
-        'Kalirejo',
-        'Karangrowo',
-        'Kutuk',
-        'Lambangan',
-        'Larikrejo',
-        'Medini',
-        'Ngemplak',
-        'Sambung',
-        'Terasan',
-        'Undaan Kidul',
-        'Undaan Lor',
-        'Undaan Tengah',
-        'Wates',
-        'Wonosoco'
-    ],
-    'Mejobo' => [
-        'Golantepus',
-        'Gulang',
-        'Hadipolo',
-        'Japah',
-        'Jojo',
-        'Kesambi',
-        'Krikil',
-        'Mejobo',
-        'Payaman',
-        'Temulus',
-        'Tenggeles'
-    ],
-    'Jekulo' => [
-        'Bulung Kulon',
-        'Bulungcangkring',
-        'Gondoharum',
-        'Hadipolo',
-        'Honggosoco',
-        'Jekulo',
-        'Kaliwungu',
-        'Pladen',
-        'Sadang',
-        'Sidomulyo',
-        'Tanjungrejo',
-        'Terban'
-    ],
-    'Bae' => [
-        'Bacin',
-        'Bae',
-        'Besito',
-        'Gondangmanis',
-        'Gemulung',
-        'Ngembalrejo',
-        'Panjunan',
-        'Pedawang',
-        'Peganjaran',
-        'Purworejo'
-    ],
-    'Gebog' => [
-        'Besito',
-        'Getassrabi',
-        'Gondosari',
-        'Gribig',
-        'Jurang',
-        'Karangmalang',
-        'Kedungsari',
-        'Klumpit',
-        'Menawan',
-        'Padurenan',
-        'Rahtawu'
-    ],
-    'Dawe' => [
-        'Cendono',
-        'Colo',
-        'Cranggang',
-        'Dukuhwaringin',
-        'Glagahkulon',
-        'Japan',
-        'Kajar',
-        'Kandangmas',
-        'Krusen',
-        'Lau',
-        'Margorejo',
-        'Piji',
-        'Puyoh',
-        'Rejosari',
-        'Samirejo',
-        'Socokangsi',
-        'Tergo',
-        'Ternadi'
-    ]
-];
+// Query untuk mendapatkan data user
+$query = "
+SELECT a.*, t.regencies_name AS kabupaten, d.districts_name AS kecamatan, v.villages_name AS desa
+FROM tb_anggota a
+LEFT JOIN tb_regencies t ON a.anggota_tempat_lahir = t.regencies_id
+LEFT JOIN tb_districts d ON a.anggota_domisili_kec = d.districts_id
+LEFT JOIN tb_villages v ON a.anggota_domisili_des = v.villages_id
+WHERE a.anggota_id = ?";
+
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$data = $stmt->get_result()->fetch_assoc();
+
+if (!$data) {
+    echo "Data tidak ditemukan.";
+    exit();
+}
+
+// Query untuk menghitung total pendaftar
+$total_pendaftar = $conn->query("SELECT COUNT(*) AS total_pendaftar FROM tb_anggota")->fetch_assoc()['total_pendaftar'];
+
+// Query untuk menghitung total admin kecamatan
+$total_admin_kecamatan = $conn->query("SELECT COUNT(*) AS total FROM tb_users WHERE role = 'admin kecamatan'")->fetch_assoc()['total'];
+
+// Query untuk menghitung total admin desa
+$total_admin_desa = $conn->query("SELECT COUNT(*) AS total FROM tb_users WHERE role = 'admin desa'")->fetch_assoc()['total'];
+
+// Query untuk menghitung total master
+$total_master = $conn->query("SELECT COUNT(*) AS total FROM tb_users WHERE role = 'master'")->fetch_assoc()['total'];
+
+// Query untuk menghitung total kecamatan
+$total_kecamatan = $conn->query("SELECT COUNT(*) AS total FROM tb_districts")->fetch_assoc()['total'];
+
+// Query untuk menghitung total desa
+$total_desa = $conn->query("SELECT COUNT(*) AS total FROM tb_villages")->fetch_assoc()['total'];
+
+// Query untuk mendapatkan data kecamatan
+$kecamatans = $conn->query("SELECT d.districts_name AS kecamatan, COUNT(a.anggota_id) AS total_pendaftar
+                            FROM tb_districts d
+                            LEFT JOIN tb_anggota a ON a.anggota_domisili_kec = d.districts_id
+                            GROUP BY d.districts_name")->fetch_all(MYSQLI_ASSOC);
+
+// Query untuk mendapatkan data desa
+$kecamatanDesaData = [];
+$resultDesa = $conn->query("
+    SELECT d.districts_name AS kecamatan, v.villages_name AS desa, COUNT(a.anggota_id) AS total_pendaftar
+    FROM tb_districts d
+    LEFT JOIN tb_villages v ON v.districts_id = d.districts_id
+    LEFT JOIN tb_anggota a ON a.anggota_domisili_des = v.villages_id
+    GROUP BY d.districts_name, v.villages_name
+    ORDER BY d.districts_name, v.villages_name
+");
+
+while ($row = $resultDesa->fetch_assoc()) {
+    $kecamatanDesaData[$row['kecamatan']][] = [
+        'desa' => $row['desa'],
+        'total_pendaftar' => $row['total_pendaftar']
+    ];
+}
 
 require_once 'header.php';
 ?>
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+    <!-- Header -->
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Dashboard</h1>
+                    <h1>Dashboard Master</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="dashboard.php">Admin</a></li>
+                        <li class="breadcrumb-item"><a href="dashboard.php">Master</a></li>
                         <li class="breadcrumb-item active">Dashboard</li>
                     </ol>
                 </div>
             </div>
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
 
-    <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <!-- Dashboard Card -->
             <div class="row">
+                <!-- Total Pendaftar -->
                 <div class="col-lg-3 col-6">
-                    <!-- kotak kecil -->
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>100</h3>
+                            <h3><?php echo $total_pendaftar; ?></h3>
                             <p>Total Pendaftar</p>
                         </div>
                         <div class="icon">
@@ -220,61 +114,77 @@ require_once 'header.php';
                         <a href="#" class="small-box-footer">Info Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
+
+                <!-- Total Admin Kecamatan -->
                 <div class="col-lg-3 col-6">
-                    <!-- kotak kecil -->
                     <div class="small-box bg-primary">
                         <div class="inner">
-                            <h3>9</h3>
-                            <p>Total Kecamatan</p>
+                            <h3><?php echo $total_admin_kecamatan; ?></h3>
+                            <p>Total Admin Kecamatan</p>
                         </div>
                         <div class="icon">
-                            <i class="ion ion-android-pin"></i>
-                            <!-- Alternatif:
-            <i class="ion ion-map"></i>
-            -->
+                            <i class="ion ion-map"></i>
                         </div>
                         <a href="#" class="small-box-footer">Info Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
+
+                <!-- Total Admin Desa -->
                 <div class="col-lg-3 col-6">
-                    <!-- kotak kecil -->
                     <div class="small-box bg-primary">
                         <div class="inner">
-                            <h3>123</h3>
-                            <p>Total Desa</p>
+                            <h3><?php echo $total_admin_desa; ?></h3>
+                            <p>Total Admin Desa</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-home"></i>
-                            <!-- Alternatif:
-            <i class="ion ion-location"></i>
-            -->
                         </div>
                         <a href="#" class="small-box-footer">Info Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
+
+                <!-- Total Master -->
                 <div class="col-lg-3 col-6">
-                    <!-- kotak kecil -->
                     <div class="small-box bg-dark">
                         <div class="inner">
-                            <h3>65</h3>
-                            <p>Total Pendaftar [Kecamatan/Desa]</p>
+                            <h3><?php echo $total_master; ?></h3>
+                            <p>Total Master</p>
                         </div>
                         <div class="icon">
-                            <i class="ion ion-ios-home"></i>
-                            <!-- Alternatif:
-            <i class="ion ion-person"></i>
-            -->
+                            <i class="ion ion-person"></i>
                         </div>
                         <a href="#" class="small-box-footer">Info Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
+
+                <!-- Total Kecamatan -->
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3><?php echo $total_kecamatan; ?></h3>
+                            <p>Total Kecamatan</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-map"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">Info Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Total Desa -->
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3><?php echo $total_desa; ?></h3>
+                            <p>Total Desa</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-location"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">Info Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
             </div>
-            <!-- /.row -->
-            <!-- Dashboard Card -->
 
             <!-- Tabel Data Kecamatan & Desa -->
             <section class="content-header">
@@ -361,11 +271,13 @@ require_once 'header.php';
                                             <tr>
                                                 <td rowspan="<?php echo $rowspan; ?>"><?php echo $no++; ?></td>
                                                 <td rowspan="<?php echo $rowspan; ?>"><?php echo htmlspecialchars($kecamatan); ?></td>
-                                                <td>1. <?php echo htmlspecialchars($desas[0]); ?></td>
+                                                <td>1. <?php echo htmlspecialchars($desas[0]['desa']); ?></td>
+                                                <td><?php echo htmlspecialchars($desas[0]['total_pendaftar']); ?></td>
                                             </tr>
                                             <?php for ($i = 1; $i < $rowspan; $i++): ?>
                                                 <tr>
-                                                    <td><?php echo ($i + 1) . ". " . htmlspecialchars($desas[$i]); ?></td>
+                                                    <td><?php echo ($i + 1) . ". " . htmlspecialchars($desas[$i]['desa']); ?></td>
+                                                    <td><?php echo htmlspecialchars($desas[$i]['total_pendaftar']); ?></td>
                                                 </tr>
                                             <?php endfor; ?>
                                         <?php endforeach; ?>

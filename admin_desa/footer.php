@@ -142,6 +142,24 @@
 
 <!-- Akhir Halaman Dashboard -->
 
+<!-- Halaman Form Pendaftaran -->
+<script>
+  function nextStep(current, next) {
+    $('#' + current).collapse('hide');
+    $('#' + next).collapse('show');
+    document.getElementById(next).scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  }
+
+  function prevStep(current, prev) {
+    $('#' + current).collapse('hide');
+    $('#' + prev).collapse('show');
+  }
+</script>
+<!-- Akhir Halaman Form Pendaftaran -->
+
 <!-- Halaman Data Pribadi -->
 <script>
   $('#data-pribadi').DataTable({

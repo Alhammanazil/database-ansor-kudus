@@ -1,16 +1,68 @@
 <?php
 require '../config/config.php';
+require '../config/cookies.php';
 
 if (!check_login()) {
     header("Location: ../login.php");
     exit();
 }
 
-// Cek role
-if ($_SESSION['user']['role'] !== 'master' && $_SESSION['user']['role'] !== 'admin desa') {
-    header("Location: dashboard.php"); // atau halaman lain yang sesuai
-    exit();
+// Setelah login berhasil, cek role pengguna
+if ($_SESSION['user']['role'] === 'admin desa') {
+    // Ambil desa_id dan kecamatan_id dari database sesuai dengan admin desa yang login
+    $user_id = $_SESSION['user']['id'];
+    $query = "SELECT anggota_domisili_des AS desa_id, anggota_domisili_kec AS kecamatan_id FROM tb_anggota WHERE anggota_id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user_data = $result->fetch_assoc();
+
+    // Simpan desa_id dan kecamatan_id ke dalam sesi
+    $_SESSION['user']['desa_id'] = $user_data['desa_id'];
+    $_SESSION['user']['kecamatan_id'] = $user_data['kecamatan_id'];
 }
+
+// Cek apakah variabel sesi desa_id dan kecamatan_id sudah di-set
+$role = $_SESSION['user']['role'];
+$user_desa = isset($_SESSION['user']['desa_id']) ? $_SESSION['user']['desa_id'] : null;
+$user_kecamatan = isset($_SESSION['user']['kecamatan_id']) ? $_SESSION['user']['kecamatan_id'] : null;
+
+
+// Query untuk mengambil data anggota dengan filter berdasarkan role
+$query = "
+SELECT 
+    a.*, 
+    t.regencies_name AS kabupaten,
+    CONCAT(d.districts_name, ', ', v.villages_name) AS alamat,
+    pe.pekerjaan_name AS pekerjaan,
+    pt.pendidikan_name AS pendidikan
+FROM 
+    tb_anggota a
+LEFT JOIN 
+    tb_regencies t ON a.anggota_tempat_lahir = t.regencies_id
+LEFT JOIN 
+    tb_districts d ON a.anggota_domisili_kec = d.districts_id
+LEFT JOIN 
+    tb_villages v ON a.anggota_domisili_des = v.villages_id
+LEFT JOIN
+    tb_pekerjaan pe ON a.anggota_pekerjaan = pe.pekerjaan_id
+LEFT JOIN
+    tb_pendidikan pt ON a.anggota_pendidikan = pt.pendidikan_id";
+
+// Tambahkan kondisi untuk admin desa
+if ($role === 'admin desa' && $user_desa) {
+    $query .= " WHERE a.anggota_domisili_des = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $user_desa);
+} else {
+    // Jika role adalah master, tampilkan semua data tanpa filter
+    $stmt = $conn->prepare($query);
+}
+
+// Eksekusi query
+$stmt->execute();
+$result = $stmt->get_result();
 
 require_once 'header.php';
 ?>
@@ -50,46 +102,41 @@ require_once 'header.php';
                                     <tr>
                                         <th>No</th>
                                         <th>Nama Lengkap</th>
-                                        <th>No Registrasi</th>
-                                        <th>Status Keanggotaan</th>
-                                        <th>Diklat Kader</th>
+                                        <th>Alamat</th>
+                                        <th>Pekerjaan</th>
+                                        <th>Pendidikan</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php for ($i = 1; $i <= 5; $i++) : ?>
+                                    <?php if ($result->num_rows > 0): ?>
+                                        <?php $no = 1; ?>
+                                        <?php while ($row = $result->fetch_assoc()): ?>
+                                            <tr>
+                                                <td><?php echo $no++; ?></td>
+                                                <td><?php echo htmlspecialchars($row['anggota_nama']); ?></td>
+                                                <td><?php echo htmlspecialchars($row['alamat']); ?></td>
+                                                <td><?php echo htmlspecialchars($row['pekerjaan']); ?></td>
+                                                <td><?php echo htmlspecialchars($row['pendidikan']); ?></td>
+                                                <td>
+                                                    <a href="edit-anggota.php?id=<?php echo $row['anggota_id']; ?>" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+                                                    <a href="hapus-anggota.php?id=<?php echo $row['anggota_id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus data anggota?')"><i class="fas fa-trash"></i></a>
+                                                </td>
+                                            </tr>
+                                        <?php endwhile; ?>
+                                    <?php else: ?>
                                         <tr>
-                                            <td><?php echo $i; ?></td>
-                                            <td>Anggota <?php echo $i; ?></td>
-                                            <td>Nomor Registrasi <?php echo $i; ?></td>
-                                            <td>
-                                                <?php if ($i % 2 == 0) : ?>
-                                                    <span class="badge bg-success">Aktif</span>
-                                                <?php else : ?>
-                                                    <span class="badge bg-danger">Tidak Aktif</span>
-                                                <?php endif; ?>
-                                            </td>
-                                            <td>
-                                                <?php if ($i % 2 == 0) : ?>
-                                                    <span class="badge bg-success">Sudah</span>
-                                                <?php else : ?>
-                                                    <span class="badge bg-danger">Belum</span>
-                                                <?php endif; ?>
-                                            </td>
-                                            <td>
-                                                <a href="edit-anggota.php?id=<?php echo $i; ?>" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
-                                                <a href="hapus-anggota.php?id=<?php echo $i; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus data anggota?')"><i class="fas fa-trash"></i></a>
-                                            </td>
+                                            <td colspan="6" class="text-center">Tidak ada data anggota.</td>
                                         </tr>
-                                    <?php endfor; ?>
+                                    <?php endif; ?>
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <th>No</th>
                                         <th>Nama Lengkap</th>
-                                        <th>No Registrasi</th>
-                                        <th>Status Keanggotaan</th>
-                                        <th>Diklat Kader</th>
+                                        <th>Alamat</th>
+                                        <th>Pekerjaan</th>
+                                        <th>Pendidikan</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </tfoot>

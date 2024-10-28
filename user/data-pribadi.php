@@ -14,9 +14,13 @@ if (!isset($_SESSION['id'])) {
 }
 
 // Mendapatkan user_id dari session login
+$user_id = $_SESSION['id'];
+
+// Mendapatkan user_id dari session login
 $query = "
 SELECT 
     a.*, 
+    t.regencies_name AS kabupaten,
     d.districts_name AS kecamatan,
     v.villages_name AS desa,
     rt.rt_name AS rt,
@@ -45,6 +49,8 @@ SELECT
     
 FROM 
     tb_anggota a
+LEFT JOIN 
+    tb_regencies t ON a.anggota_tempat_lahir = t.regencies_id
 LEFT JOIN 
     tb_districts d ON a.anggota_domisili_kec = d.districts_id
 LEFT JOIN 
@@ -96,10 +102,11 @@ LEFT JOIN
 LEFT JOIN
     tb_districts kpac ON a.anggota_pac_kec = kpac.districts_id 
 WHERE 
-    a.anggota_id = 1;
-";
+    a.anggota_id = ?";
 
+// Prepare dan bind parameter
 $stmt = $conn->prepare($query);
+$stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 $data = $result->fetch_assoc();
@@ -151,7 +158,7 @@ require_once 'header.php';
                             <p><b>Tanggal Lahir</b>: <?php echo htmlspecialchars($data['anggota_tanggal_lahir']); ?></p>
                             <p><b>Email</b>: <?php echo htmlspecialchars($data['anggota_email']); ?></p>
                             <p><b>NIK / KK</b>: <?php echo htmlspecialchars($data['anggota_nik']); ?></p>
-                            <p><b>Tempat Lahir</b>: <?php echo htmlspecialchars($data['kecamatan']); ?></p>
+                            <p><b>Tempat Lahir</b>: <?php echo htmlspecialchars($data['kabupaten']); ?></p>
                             <p><b>Gol. Darah</b>: <?php echo htmlspecialchars($data['gol_darah']); ?></p>
                             <p><b>Tinggi</b>: <?php echo htmlspecialchars($data['tinggi_badan']) . ' cm'; ?></p>
                             <p><b>Berat</b>: <?php echo htmlspecialchars($data['berat_badan']) . ' kg'; ?></p>
@@ -194,7 +201,7 @@ require_once 'header.php';
 
         <!-- Additional Sections -->
         <div class="row">
-            <div class="col-md-4 col-sm-12">
+            <div class="col-md-6 col-sm-12">
                 <!-- Kartu Data Pekerjaan -->
                 <div class="card card-outline card-primary mt-4">
                     <div class="card-header">
@@ -219,7 +226,7 @@ require_once 'header.php';
                 </div>
             </div>
 
-            <div class="col-md-4 col-sm-12">
+            <div class="col-md-6 col-sm-12">
                 <!-- Kartu Data Riwayat Pendidikan & Organisasi -->
                 <div class="card card-outline card-primary mt-4">
                     <div class="card-header">
@@ -249,18 +256,18 @@ require_once 'header.php';
                 </div>
             </div>
 
-            <div class="col-md-4 col-sm-12">
+            <div class="col-md-6 col-sm-12">
                 <!-- Kartu Riwayat Kepengurusan Ansor -->
                 <div class="card card-outline card-primary mt-4">
                     <div class="card-header">
                         <h3 class="card-title">Riwayat Kepengurusan Ansor</h3>
                         <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-toggle="collapse" data-target="#dataPelatihan" aria-expanded="false">
+                            <button type="button" class="btn btn-tool" data-toggle="collapse" data-target="#dataKepengurusan" aria-expanded="false">
                                 <i class="fas fa-minus"></i>
                             </button>
                         </div>
                     </div>
-                    <div id="dataPelatihan" class="collapse">
+                    <div id="dataKepengurusan" class="collapse">
                         <div class="card-body">
                             <!-- Informasi Tingkat Pimpinan Rating (PR) -->
                             <p>A. Tingkat Pimpinan Rating (PR)</p>
@@ -285,10 +292,41 @@ require_once 'header.php';
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
 
-<?php
-require_once 'footer.php';
-?>
+            <div class="col-md-6 col-sm-12">
+                <!-- Kartu Riwayat Pelatihan Kaderisasi -->
+                <div class="card card-outline card-primary mt-4">
+                    <div class="card-header">
+                        <h3 class="card-title">Riwayat Pelatihan Kaderisasi</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-toggle="collapse" data-target="#dataPelatihan" aria-expanded="false">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="dataPelatihan" class="collapse">
+                        <div class="card-body">
+                            <p>A. Pendidikan Kader</p>
+                            <br>
+
+                            <p>B. Latihan Instruktur</p>
+                            <br>
+
+                            <p>C. Disorah</p>
+                            <br>
+
+                            <p>D. Pendidikan & Latihan</p>
+                            <br>
+
+                            <p>E. Kursus Kepelatihan</p>
+                            <br>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <?php
+        require_once 'footer.php';
+        ?>
