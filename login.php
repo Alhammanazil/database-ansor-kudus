@@ -114,7 +114,7 @@ if (isset($_SESSION['user'])) {
                         </div>
 
                         <!-- Button -->
-                        <div class="col-4 mb-4">
+                        <div class="col-4">
                             <button type="submit" class="btn btn-primary btn-block">Login</button>
                         </div>
                     </div>

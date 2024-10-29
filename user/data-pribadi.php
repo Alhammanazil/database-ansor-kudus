@@ -1,11 +1,5 @@
 <?php
-require '../config/config.php';
-require '../config/cookies.php';
-
-if (!check_login()) {
-    header("Location: ../login.php");
-    exit();
-}
+require_once '../style/header.php';
 
 // Pastikan session 'id' tersedia
 if (!isset($_SESSION['id'])) {
@@ -116,8 +110,6 @@ if (!$data) {
     echo "Data tidak ditemukan.";
     exit();
 }
-
-require_once 'header.php';
 ?>
 
 <div class="content-wrapper">
@@ -328,5 +320,5 @@ require_once 'header.php';
         </div>
 
         <?php
-        require_once 'footer.php';
+        require_once '../style/footer.php';
         ?>

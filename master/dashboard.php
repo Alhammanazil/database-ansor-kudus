@@ -1,82 +1,5 @@
 <?php
-require '../config/config.php';
-require '../config/cookies.php';
-
-if (!check_login()) {
-    header("Location: ../login.php");
-    exit();
-}
-
-// Cek role
-if (!in_array($_SESSION['user']['role'], ['master', 'user'])) {
-    header("Location: dashboard.php");
-    exit();
-}
-
-$user_id = $_SESSION['id'];
-
-// Query untuk mendapatkan data user
-$query = "
-SELECT a.*, t.regencies_name AS kabupaten, d.districts_name AS kecamatan, v.villages_name AS desa
-FROM tb_anggota a
-LEFT JOIN tb_regencies t ON a.anggota_tempat_lahir = t.regencies_id
-LEFT JOIN tb_districts d ON a.anggota_domisili_kec = d.districts_id
-LEFT JOIN tb_villages v ON a.anggota_domisili_des = v.villages_id
-WHERE a.anggota_id = ?";
-
-$stmt = $conn->prepare($query);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$data = $stmt->get_result()->fetch_assoc();
-
-if (!$data) {
-    echo "Data tidak ditemukan.";
-    exit();
-}
-
-// Query untuk menghitung total pendaftar
-$total_pendaftar = $conn->query("SELECT COUNT(*) AS total_pendaftar FROM tb_anggota")->fetch_assoc()['total_pendaftar'];
-
-// Query untuk menghitung total admin kecamatan
-$total_admin_kecamatan = $conn->query("SELECT COUNT(*) AS total FROM tb_users WHERE role = 'admin kecamatan'")->fetch_assoc()['total'];
-
-// Query untuk menghitung total admin desa
-$total_admin_desa = $conn->query("SELECT COUNT(*) AS total FROM tb_users WHERE role = 'admin desa'")->fetch_assoc()['total'];
-
-// Query untuk menghitung total master
-$total_master = $conn->query("SELECT COUNT(*) AS total FROM tb_users WHERE role = 'master'")->fetch_assoc()['total'];
-
-// Query untuk menghitung total kecamatan
-$total_kecamatan = $conn->query("SELECT COUNT(*) AS total FROM tb_districts")->fetch_assoc()['total'];
-
-// Query untuk menghitung total desa
-$total_desa = $conn->query("SELECT COUNT(*) AS total FROM tb_villages")->fetch_assoc()['total'];
-
-// Query untuk mendapatkan data kecamatan
-$kecamatans = $conn->query("SELECT d.districts_name AS kecamatan, COUNT(a.anggota_id) AS total_pendaftar
-                            FROM tb_districts d
-                            LEFT JOIN tb_anggota a ON a.anggota_domisili_kec = d.districts_id
-                            GROUP BY d.districts_name")->fetch_all(MYSQLI_ASSOC);
-
-// Query untuk mendapatkan data desa
-$kecamatanDesaData = [];
-$resultDesa = $conn->query("
-    SELECT d.districts_name AS kecamatan, v.villages_name AS desa, COUNT(a.anggota_id) AS total_pendaftar
-    FROM tb_districts d
-    LEFT JOIN tb_villages v ON v.districts_id = d.districts_id
-    LEFT JOIN tb_anggota a ON a.anggota_domisili_des = v.villages_id
-    GROUP BY d.districts_name, v.villages_name
-    ORDER BY d.districts_name, v.villages_name
-");
-
-while ($row = $resultDesa->fetch_assoc()) {
-    $kecamatanDesaData[$row['kecamatan']][] = [
-        'desa' => $row['desa'],
-        'total_pendaftar' => $row['total_pendaftar']
-    ];
-}
-
-require_once 'header.php';
+require_once '../style/header.php';
 ?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -296,5 +219,5 @@ require_once 'header.php';
 </div>
 
 <?php
-require_once 'footer.php';
+require_once '../style/footer.php';
 ?>

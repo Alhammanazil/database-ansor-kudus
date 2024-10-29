@@ -1,11 +1,5 @@
 <?php
-require '../config/config.php';
-require '../config/cookies.php';
-
-if (!check_login()) {
-    header("Location: ../login.php");
-    exit();
-}
+require_once '../style/header.php';
 
 // Setelah login berhasil, cek role pengguna
 if ($_SESSION['user']['role'] === 'admin kecamatan') {
@@ -61,8 +55,6 @@ if ($role === 'admin kecamatan' && $user_kecamatan) {
 // Eksekusi query
 $stmt->execute();
 $result = $stmt->get_result();
-
-require_once 'header.php';
 ?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -154,5 +146,5 @@ require_once 'header.php';
 </div>
 
 <?php
-require_once 'footer.php';
+require_once '../style/footer.php';
 ?>

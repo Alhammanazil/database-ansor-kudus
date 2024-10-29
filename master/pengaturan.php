@@ -1,17 +1,5 @@
 <?php
-require '../config/config.php';
-require '../config/cookies.php';
-
-if (!check_login()) {
-  header("Location: ../login.php");
-  exit();
-}
-
-// Cek role
-if ($_SESSION['user']['role'] !== 'master' && $_SESSION['user']['role'] !== 'admin') {
-  header("Location: dashboard.php"); // atau halaman lain yang sesuai
-  exit();
-}
+require_once '../style/header.php';
 
 // Ambil data enum dari kolom role
 $query = "SHOW COLUMNS FROM tb_users LIKE 'role'";
@@ -23,8 +11,6 @@ $enum_values = explode("','", $matches[1]);
 // Mengambil semua pengguna
 $sql = "SELECT * FROM tb_users";
 $hasil = $conn->query($sql);
-
-require_once 'header.php';
 ?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -114,5 +100,5 @@ require_once 'header.php';
 </div>
 
 <?php
-require_once 'footer.php';
+require_once '../style/footer.php';
 ?>

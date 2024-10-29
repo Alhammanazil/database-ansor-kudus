@@ -1,18 +1,5 @@
 <?php
-require '../config/config.php';
-require '../config/cookies.php';
-
-if (!check_login()) {
-    header("Location: ../login.php");
-    exit();
-}
-
-// Cek role untuk memastikan hanya pengguna dengan role 'master' yang bisa mengakses halaman ini
-$role = $_SESSION['user']['role'];
-if ($role !== 'master') {
-    header("Location: dashboard.php"); // Redirect ke halaman lain jika bukan master
-    exit();
-}
+require_once '../style/header.php';
 
 // Query untuk mengambil semua data anggota tanpa filter berdasarkan kecamatan atau desa
 $query = "
@@ -39,8 +26,6 @@ LEFT JOIN
 $stmt = $conn->prepare($query);
 $stmt->execute();
 $result = $stmt->get_result();
-
-require_once 'header.php';
 ?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -132,5 +117,5 @@ require_once 'header.php';
 </div>
 
 <?php
-require_once 'footer.php';
+require_once '../style/footer.php';
 ?>

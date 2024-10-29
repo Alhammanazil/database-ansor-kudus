@@ -1,70 +1,5 @@
 <?php
-require '../config/config.php';
-require '../config/cookies.php';
-
-if (!check_login()) {
-    header("Location: ../login.php");
-    exit();
-}
-
-// Cek role
-if (!in_array($_SESSION['user']['role'], ['master', 'admin desa'])) {
-    header("Location: dashboard.php");
-    exit();
-}
-
-if (empty($_SESSION['id'])) {
-    echo "Error: Anda harus login untuk mengakses halaman ini.";
-    exit();
-}
-
-$user_id = $_SESSION['id'];
-
-// Query untuk mendapatkan data user beserta nama desa
-$query = "
-SELECT 
-    a.*, 
-    v.villages_name AS desa
-FROM 
-    tb_anggota a
-LEFT JOIN 
-    tb_villages v ON a.anggota_domisili_des = v.villages_id
-WHERE 
-    a.anggota_id = ?";
-
-$stmt = $conn->prepare($query);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$data = $stmt->get_result()->fetch_assoc();
-
-if (!$data) {
-    echo "Data tidak ditemukan.";
-    exit();
-}
-
-// total pendaftar
-$query_total_pendaftar = "SELECT COUNT(*) AS total_pendaftar FROM tb_anggota";
-$total_pendaftar = $conn->query($query_total_pendaftar)->fetch_assoc()['total_pendaftar'];
-
-// Nama desa
-$desa_name = $data['desa'];
-
-// Query untuk menghitung total pendaftar di desa yang sesuai
-$query_total_pendaftar_desa = "
-    SELECT COUNT(*) AS total_pendaftar
-    FROM tb_anggota
-    WHERE anggota_domisili_des = (
-        SELECT villages_id FROM tb_villages WHERE villages_name = ?
-    )
-";
-
-// Eksekusi query
-$stmt_total_pendaftar_desa = $conn->prepare($query_total_pendaftar_desa);
-$stmt_total_pendaftar_desa->bind_param("s", $desa_name);
-$stmt_total_pendaftar_desa->execute();
-$total_pendaftar_desa = $stmt_total_pendaftar_desa->get_result()->fetch_assoc()['total_pendaftar'];
-
-require_once 'header.php';
+require_once '../style/header.php';
 ?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -156,5 +91,5 @@ require_once 'header.php';
 </div>
 
 <?php
-require_once 'footer.php';
+require_once '../style/footer.php';
 ?>

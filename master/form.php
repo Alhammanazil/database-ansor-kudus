@@ -1,19 +1,5 @@
 <?php
-require '../config/config.php';
-require '../config/cookies.php';
-
-if (!check_login()) {
-    header("Location: ../login.php");
-    exit();
-}
-
-// Cek role pengguna
-if ($_SESSION['user']['role'] !== 'master' && $_SESSION['user']['role'] !== 'admin') {
-    header("Location: dashboard.php");
-    exit();
-}
-
-require_once 'header.php';
+require_once '../style/header.php';
 ?>
 
 <div class="content-wrapper">
@@ -192,5 +178,5 @@ require_once 'header.php';
 </script>
 
 <?php
-require_once 'footer.php';
+require_once '../style/footer.php';
 ?>

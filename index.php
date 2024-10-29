@@ -333,7 +333,7 @@
                                             <div class="form-group">
                                                 <label class="required-label" for="no_telp">No. Telp / WA</label>
                                                 <input type="text" class="form-control" name="no_telp" id="no_telp" placeholder="Masukkan No. Telp / WA" required>
-                                                <div class="invalid-feedback">Harap masukkan No. Telp / WA.</div>
+                                                <div class="invalid-feedback">Nomor telepon ini sudah terdaftar. Gunakan nomor lain.</div>
                                             </div>
 
                                             <div class="form-group">
@@ -497,7 +497,6 @@
                                         </div>
                                     </div>
                                 </div>
-
 
                                 <!-- Step 4: Riwayat Pendidikan dan Organisasi -->
                                 <div class="card card-outline card-primary mt-4">
@@ -1397,6 +1396,50 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             bsCustomFileInput.init();
+        });
+
+        // Validasi duplikat nomor wa
+        $(document).ready(function() {
+            $('#no_telp').on('blur', function() {
+                var noTelp = $(this).val();
+
+                // Lakukan pengecekan hanya jika input tidak kosong
+                if (noTelp !== '') {
+                    $.ajax({
+                        url: 'config/check_phone.php', // Endpoint untuk pengecekan
+                        method: 'POST',
+                        data: {
+                            no_telp: noTelp
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.exists) {
+                                // Jika nomor telepon sudah terdaftar
+                                Swal.fire({
+                                    title: 'Ganti Nomor Hp Anda!',
+                                    text: 'Nomor Hp yang anda masukkan sudah terdaftar. Gunakan nomor lain.',
+                                    icon: 'warning',
+                                    confirmButtonText: 'OK'
+                                });
+
+                                // Tambahkan kelas invalid-feedback
+                                $('#no_telp').addClass('is-invalid');
+                            } else {
+                                // Nomor telepon valid, hilangkan pesan error
+                                $('#no_telp').removeClass('is-invalid');
+                            }
+                        },
+                        error: function() {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Gagal memeriksa nomor telepon. Coba lagi.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    });
+                }
+            });
         });
 
         // Validasi form
