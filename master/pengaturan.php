@@ -31,7 +31,7 @@ $hasil = $conn->query($sql);
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="pengaturan.php">Admin</a></li>
+            <li class="breadcrumb-item"><a href="pengaturan.php">Master</a></li>
             <li class="breadcrumb-item active">Manajemen Akun</li>
           </ol>
         </div>

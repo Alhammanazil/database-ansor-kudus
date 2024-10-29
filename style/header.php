@@ -296,7 +296,7 @@ while ($row = $resultDesa->fetch_assoc()) {
         <!-- /.navbar -->
 
         <?php
-        $current_page = basename($_SERVER['PHP_SELF']); // Mendapatkan nama file yang sedang diakses
+        $current_page = basename($_SERVER['PHP_SELF']);
         ?>
 
         <!-- Sidebar Dinamis -->
@@ -342,15 +342,15 @@ while ($row = $resultDesa->fetch_assoc()) {
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
-                        <!-- Dashboard -->
-                        <li class="nav-item">
-                            <a href="dashboard.php" class="nav-link <?php echo ($current_page == 'dashboard.php') ? 'active' : ''; ?>">
-                                <i class="nav-icon fas fa-home"></i>
-                                <p>Dashboard</p>
-                            </a>
-                        </li>
-
                         <?php if ($user_level == 'admin desa' || $user_level == 'admin kecamatan' || $user_level == 'master'): ?>
+                            <!-- Dashboard -->
+                            <li class="nav-item">
+                                <a href="dashboard.php" class="nav-link <?php echo ($current_page == 'dashboard.php') ? 'active' : ''; ?>">
+                                    <i class="nav-icon fas fa-home"></i>
+                                    <p>Dashboard</p>
+                                </a>
+                            </li>
+
                             <!-- Data Anggota -->
                             <li class="nav-item">
                                 <a href="data-ansor.php" class="nav-link <?php echo ($current_page == 'data-ansor.php') ? 'active' : ''; ?>">
