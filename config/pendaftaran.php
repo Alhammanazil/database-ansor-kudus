@@ -88,8 +88,8 @@ $sistem_kerja = isset($_POST['sistemKerja']) ? mysqli_real_escape_string($conn, 
 $nama_instansi = isset($_POST['namaInstansi']) ? mysqli_real_escape_string($conn, $_POST['namaInstansi']) : null;
 $alamat_instansi = isset($_POST['alamatInstansi']) ? mysqli_real_escape_string($conn, $_POST['alamatInstansi']) : null;
 $jenis_pekerjaan_istri = isset($_POST['jenisPekerjaanIstri']) ? mysqli_real_escape_string($conn, $_POST['jenisPekerjaanIstri']) : null;
-$pendapatan_suami = isset($_POST['pendapatanSuami']) ? mysqli_real_escape_string($conn, $_POST['pendapatanSuami']) : 5;
-$pendapatan_istri = isset($_POST['pendapatanIstri']) ? mysqli_real_escape_string($conn, $_POST['pendapatanIstri']) : 5;
+$pendapatan_suami = isset($_POST['pendapatanSuami']) ? mysqli_real_escape_string($conn, $_POST['pendapatanSuami']) : null;
+$pendapatan_istri = isset($_POST['pendapatanIstri']) ? mysqli_real_escape_string($conn, $_POST['pendapatanIstri']) : null;
 
 $pendidikan_terakhir = mysqli_real_escape_string($conn, $_POST['pendidikanTerakhir']);
 $jurusanSmk = isset($_POST['jurusanSmk']) ? mysqli_real_escape_string($conn, $_POST['jurusanSmk']) : null;

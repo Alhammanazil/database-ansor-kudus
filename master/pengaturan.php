@@ -13,6 +13,13 @@ $sql = "SELECT * FROM tb_users";
 $hasil = $conn->query($sql);
 ?>
 
+<style>
+  .container-fluid {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+</style>
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
@@ -32,7 +39,7 @@ $hasil = $conn->query($sql);
     </div><!-- /.container-fluid -->
   </section>
 
-  <div class="container-fluid">
+  <div class="container-fluid px-5">
     <div class="row">
       <div class="col-12">
         <div class="card">
@@ -53,9 +60,9 @@ $hasil = $conn->query($sql);
             </div>
           </div>
 
-          <!-- Data Admin -->
-          <div class="table-responsive mt-3 mb-3">
-            <h2 class="text-center">Data Admin</h2>
+          <!-- Data User -->
+          <div class="table-responsive my-3 mr-3">
+            <h2 class="text-center">Data User</h2>
             <table id="usersTable" class="table table-bordered table-hover table-striped" style="margin: 20px;">
               <thead class="table-dark">
                 <tr>
@@ -92,7 +99,7 @@ $hasil = $conn->query($sql);
               </tbody>
             </table>
           </div>
-          <!-- Akhir Data Admin -->
+          <!-- Akhir Data User -->
         </div>
       </div>
     </div>

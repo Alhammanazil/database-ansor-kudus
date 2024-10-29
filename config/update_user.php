@@ -1,5 +1,6 @@
 <?php
 require 'config.php';
+require 'cookies.php';
 
 if (!check_login()) {
     echo json_encode(['status' => 'error', 'message' => 'Unauthorized']);
@@ -39,4 +40,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->close();
     $conn->close();
 }
-?>

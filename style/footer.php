@@ -673,6 +673,20 @@
             });
         });
     });
+
+    //datatables
+    $(document).ready(function() {
+        $('#usersTable').DataTable({
+            "paging": true, // Aktifkan paginasi
+            "searching": true, // Aktifkan pencarian
+            "ordering": true, // Aktifkan sorting
+            "info": true, // Menampilkan informasi jumlah data
+            "lengthMenu": [10, 25, 50, 100], // Opsi jumlah data per halaman
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/id.json"
+            }
+        });
+    });
 </script>
 <!-- Akhir Halaman Pengaturan -->
 
