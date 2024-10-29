@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "ansor";
+$dbname = "ansor_kudus";
 
 // Membuat koneksi
 $conn = mysqli_connect($servername, $username, $password, $dbname);
