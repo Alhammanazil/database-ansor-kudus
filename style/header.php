@@ -13,7 +13,7 @@ $user_level = $_SESSION['user']['role'] ?? 'guest';
 
 // Daftar akses halaman berdasarkan role
 $role_access = [
-    'master' => ['dashboard.php', 'data-ansor.php', 'form.php', 'pengaturan.php', 'data-pribadi.php'],
+    'master' => ['dashboard.php', 'data-ansor.php', 'form.php', 'pengaturan.php', 'data-pribadi.php', 'edit-anggota.php'],
 
     'admin desa' => ['dashboard.php', 'data-ansor.php', 'form.php', 'data-pribadi.php'],
 
