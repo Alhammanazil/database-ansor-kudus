@@ -564,7 +564,6 @@
     $(document).ready(function() {
         // Inisialisasi Select2 pada semua elemen dengan kelas 'select2'
         $('.select2').select2({
-            placeholder: "Pilih",
             allowClear: true,
             width: '100%'
         });
