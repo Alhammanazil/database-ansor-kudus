@@ -1,6 +1,7 @@
 <?php
 require '../config/config.php';
 require '../config/cookies.php';
+require '../config/data.php';
 
 // Cek apakah user sudah login, jika tidak arahkan ke halaman login
 if (!check_login()) {
