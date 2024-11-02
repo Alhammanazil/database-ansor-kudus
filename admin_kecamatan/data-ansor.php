@@ -88,13 +88,14 @@ $result = $stmt->get_result();
                         <!-- /.card-header -->
                         <div class="card-body">
                             <table id="data-ansor" class="table-bordered table-striped table-hover table-responsive">
-                                <thead>
+                                <thead class="text-center btn-dark">
                                     <tr>
                                         <th>No</th>
                                         <th>Nama Lengkap</th>
                                         <th>Alamat</th>
                                         <th>Pekerjaan</th>
                                         <th>Pendidikan</th>
+                                        <th>Kartu Anggota</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -108,9 +109,15 @@ $result = $stmt->get_result();
                                                 <td><?php echo htmlspecialchars($row['alamat']); ?></td>
                                                 <td><?php echo htmlspecialchars($row['pekerjaan']); ?></td>
                                                 <td><?php echo htmlspecialchars($row['pendidikan']); ?></td>
+                                                <td style="text-align: center;">
+                                                    <button onclick="previewCard(<?php echo $row['anggota_id']; ?>)" class="btn btn-primary btn-sm">
+                                                        <i class="fas fa-eye"></i> Preview
+                                                    </button>
+                                                </td>
+
                                                 <td>
-                                                    <a href="edit-anggota.php?id=<?php echo $row['anggota_id']; ?>" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
-                                                    <a href="hapus-anggota.php?id=<?php echo $row['anggota_id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus data anggota?')"><i class="fas fa-trash"></i></a>
+                                                    <a href="edit-anggota.php?id=<?php echo $row['anggota_id']; ?>" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Edit</a>
+                                                    <a href="hapus-anggota.php?id=<?php echo $row['anggota_id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus data anggota?')"><i class="fas fa-trash"></i> Delete</a>
                                                 </td>
                                             </tr>
                                         <?php endwhile; ?>
@@ -120,16 +127,6 @@ $result = $stmt->get_result();
                                         </tr>
                                     <?php endif; ?>
                                 </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nama Lengkap</th>
-                                        <th>Alamat</th>
-                                        <th>Pekerjaan</th>
-                                        <th>Pendidikan</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </tfoot>
                             </table>
                         </div>
                         <!-- /.card-body -->

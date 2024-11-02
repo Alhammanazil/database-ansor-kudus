@@ -145,6 +145,36 @@
 </script>
 <!-- Akhir Halaman Dashboard -->
 
+<!-- Halaman Data_Ansor -->
+
+<!-- Modal untuk preview kartu anggota -->
+<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="previewModalLabel">Preview Kartu Anggota</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="cardPreview" src="" alt="Preview Kartu Anggota" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function previewCard(id) {
+        // Set URL gambar di modal
+        document.getElementById('cardPreview').src = `../kartu/card.php?id=${id}`;
+        // Tampilkan modal
+        $('#previewModal').modal('show');
+    }
+</script>
+
+<!-- Akhir Halaman Data_Ansor -->
+
 <!-- Halaman Form Pendaftaran -->
 <script>
     function nextStep(current, next) {
@@ -161,7 +191,7 @@
         $('#' + prev).collapse('show');
     }
 
-    // FIeld Data Anggota & Pekerjaan Istri
+    // Field Data Anggota & Pekerjaan Istri
     function toggleMarriageFields() {
         const marriageDetails = document.getElementById('marriageDetails');
         const nama_istri = document.getElementById('nama_istri');

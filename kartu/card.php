@@ -1,154 +1,142 @@
 <?php
+require_once '../config/config.php'; // Pastikan path ini benar
 
-// Menampilkan Gambar
 header('Content-Type: image/png');
+
+// Pastikan ID diterima
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    die("ID anggota tidak disertakan.");
+}
+
+$id = $_GET['id'];
+
+// Query untuk mengambil data anggota berdasarkan ID
+$query = "
+SELECT a.*, d.districts_name AS kecamatan, v.villages_name AS desa
+FROM tb_anggota a
+LEFT JOIN tb_districts d ON a.anggota_domisili_kec = d.districts_id
+LEFT JOIN tb_villages v ON a.anggota_domisili_des = v.villages_id
+WHERE a.anggota_id = ?
+";
+$stmt = $conn->prepare($query);
+$stmt->bind_param('i', $id);
+$stmt->execute();
+$result = $stmt->get_result();
+$data = $result->fetch_assoc();
+
+if (!$data) {
+    die("Data anggota tidak ditemukan.");
+}
 
 // Format dan jalur font
 $fontPathRegular = 'font/Poppins-SemiBold.ttf';
-$fontSize = 55;
+$fontSize = 45;
+if (!file_exists($fontPathRegular)) {
+    die("Error: File font Poppins-SemiBold.ttf tidak ditemukan.");
+}
 
 // Fungsi untuk memformat nama
 function format_name($full_name)
 {
-    // Hilangkan gelar di akhir nama
     $name = preg_replace('/, [A-Za-z.]+$/', '', $full_name);
-
-    // Pisahkan nama menjadi array
     $name_parts = explode(' ', $name);
 
-    // Jika nama terlalu panjang, singkat setelah dua kata pertama
-    if (count($name_parts) > 3) { // Batas kata sesuai kebutuhan
+    if (count($name_parts) > 3) {
         $formatted_name = $name_parts[0] . ' ' . $name_parts[1];
-        // Tambahkan inisial untuk sisa kata
         for ($i = 2; $i < count($name_parts); $i++) {
             $formatted_name .= ' ' . substr($name_parts[$i], 0, 1) . '.';
         }
     } else {
-        $formatted_name = $name; // Jika pendek, biarkan seperti semula
+        $formatted_name = $name;
     }
 
     return $formatted_name;
 }
 
-// Load pass-foto, template dengan transparansi, dan QR code
-$pass_foto = imagecreatefrompng('marsha.png');
+// Load template, foto anggota, dan QR code
 $template = imagecreatefrompng('template.png');
-$qrcode = imagecreatefrompng('qrcode.png');
+$pass_foto = imagecreatefrompng('marsha.png');
+$qrcode = imagecreatefrompng('qrcode.png'); // QR code statis
 
-// Tentukan ukuran kanvas utama (menggunakan ukuran template sebagai dasar)
+if (!$template || !$pass_foto || !$qrcode) {
+    die("Error: Gagal memuat gambar yang diperlukan.");
+}
+
+// Tentukan ukuran kanvas utama berdasarkan ukuran template
 $canvas_width = imagesx($template);
 $canvas_height = imagesy($template);
 $image = imagecreatetruecolor($canvas_width, $canvas_height);
-
-// Aktifkan transparansi untuk kanvas utama
 imagesavealpha($image, true);
 $transparent_color = imagecolorallocatealpha($image, 0, 0, 0, 127);
 imagefill($image, 0, 0, $transparent_color);
 
-// Tentukan ukuran dan posisi kotak foto di dalam template
-$foto_box_width = 730; // Lebar kotak foto
-$foto_box_height = 975; // Tinggi kotak foto
-$foto_x = 250; // Posisi X untuk foto
-$foto_y = 418; // Posisi Y untuk foto
-
-// Mendapatkan rasio asli dari pass-foto
-$pass_foto_width = imagesx($pass_foto);
-$pass_foto_height = imagesy($pass_foto);
-$foto_aspect_ratio = $pass_foto_width / $pass_foto_height;
-$box_aspect_ratio = $foto_box_width / $foto_box_height;
-
-// Menyesuaikan ukuran foto agar memenuhi kotak foto dengan pemotongan
-if ($foto_aspect_ratio > $box_aspect_ratio) {
-    // Jika foto lebih lebar, isi kotak secara vertikal dan potong bagian samping
-    $new_foto_height = $foto_box_height;
-    $new_foto_width = $foto_box_height * $foto_aspect_ratio;
-    $src_x = ($pass_foto_width - ($pass_foto_height * $box_aspect_ratio)) / 2;
-    $src_y = 0;
-    $src_width = $pass_foto_height * $box_aspect_ratio;
-    $src_height = $pass_foto_height;
-} else {
-    // Jika foto lebih tinggi, isi kotak secara horizontal dan potong bagian atas/bawah
-    $new_foto_width = $foto_box_width;
-    $new_foto_height = $foto_box_width / $foto_aspect_ratio;
-    $src_x = 0;
-    $src_y = ($pass_foto_height - ($pass_foto_width / $box_aspect_ratio)) / 2;
-    $src_width = $pass_foto_width;
-    $src_height = $pass_foto_width / $box_aspect_ratio;
-}
-
-// Tempelkan pass-foto ke kanvas utama pada posisi yang sesuai
+// Tempelkan pass-foto
+$foto_box_width = 730;
+$foto_box_height = 975;
+$foto_x = 250;
+$foto_y = 418;
 imagecopyresampled(
     $image,
     $pass_foto,
     $foto_x,
     $foto_y,
-    $src_x,
-    $src_y,
+    0,
+    0,
     $foto_box_width,
     $foto_box_height,
-    $src_width,
-    $src_height
+    imagesx($pass_foto),
+    imagesy($pass_foto)
 );
 
-// Tempelkan template dengan transparansi di atas foto
+// Tempelkan template dengan transparansi di atas kanvas utama
 imagecopy($image, $template, 0, 0, 0, 0, $canvas_width, $canvas_height);
 
-// Koordinat X untuk Field dan Data
-$x_field = 1250; // Posisi X untuk label field
-$x_data = 1900; // Posisi X untuk nilai data dinamis
-$color = imagecolorallocate($image, 0, 0, 0); // Warna hitam untuk teks
+// Tentukan warna teks
+$color = imagecolorallocate($image, 0, 0, 0); // Hitam
 
-// Field Labels dengan titik dua
-$fnama = 'Nama';
-$fno_registrasi = 'No. Registrasi';
-$fkecamatan = 'Kecamatan';
-$fdesa_kelurahan = 'Desa / Kel.';
-$fkeanggotaan = 'Keanggotaan';
+// Tentukan data anggota
+$nama = ": " . format_name($data['anggota_nama']);
+$no_registrasi = ": 0186/X-11-06-07/KTR/2024"; // Data dummy
+$kecamatan = ": " . ($data['kecamatan'] ?? 'Undefined');
+$desa = ": " . ($data['desa'] ?? 'Undefined');
+$keanggotaan = ": Undefined"; // Data dummy
+$line_spacing = 120; // Jarak antar baris teks
 
-// Data Dummy
-$nama = ': ' . format_name("Marsha Lenathea Lapian");
-$no_registrasi = ': 0186/X-11-06-07/KTR/2024';
-$kecamatan = ': Undefined';
-$desa_kelurahan = ': Undefined';
-$keanggotaan = ': Undefined';
+// Koordinat untuk posisi teks
+$x_field = 1250;
+$x_data = 1900;
+$y_position = 600;
 
-// Jarak antar baris
-$line_spacing = 120;
-
-// Menambahkan field labels dan data dinamis ke template dengan koordinat yang disesuaikan
-$y_position = 740; // Posisi Y awal
-
-// Nama
-imagettftext($image, $fontSize, 0, $x_field, $y_position, $color, $fontPathRegular, $fnama);
+// Tampilkan Nama
+$y_position += $line_spacing;
+imagettftext($image, $fontSize, 0, $x_field, $y_position, $color, $fontPathRegular, "Nama");
 imagettftext($image, $fontSize, 0, $x_data, $y_position, $color, $fontPathRegular, $nama);
 
-// No. Registrasi
+// Tampilkan No. Registrasi
 $y_position += $line_spacing;
-imagettftext($image, $fontSize, 0, $x_field, $y_position, $color, $fontPathRegular, $fno_registrasi);
+imagettftext($image, $fontSize, 0, $x_field, $y_position, $color, $fontPathRegular, "No. Registrasi");
 imagettftext($image, $fontSize, 0, $x_data, $y_position, $color, $fontPathRegular, $no_registrasi);
 
-// Kecamatan
+// Tampilkan Kecamatan
 $y_position += $line_spacing;
-imagettftext($image, $fontSize, 0, $x_field, $y_position, $color, $fontPathRegular, $fkecamatan);
+imagettftext($image, $fontSize, 0, $x_field, $y_position, $color, $fontPathRegular, "Kecamatan");
 imagettftext($image, $fontSize, 0, $x_data, $y_position, $color, $fontPathRegular, $kecamatan);
 
-// Desa / Kel.
+// Tampilkan Desa / Kelurahan
 $y_position += $line_spacing;
-imagettftext($image, $fontSize, 0, $x_field, $y_position, $color, $fontPathRegular, $fdesa_kelurahan);
-imagettftext($image, $fontSize, 0, $x_data, $y_position, $color, $fontPathRegular, $desa_kelurahan);
+imagettftext($image, $fontSize, 0, $x_field, $y_position, $color, $fontPathRegular, "Desa / Kelurahan");
+imagettftext($image, $fontSize, 0, $x_data, $y_position, $color, $fontPathRegular, $desa);
 
-// Keanggotaan
+// Tampilkan Keanggotaan
 $y_position += $line_spacing;
-imagettftext($image, $fontSize, 0, $x_field, $y_position, $color, $fontPathRegular, $fkeanggotaan);
+imagettftext($image, $fontSize, 0, $x_field, $y_position, $color, $fontPathRegular, "Keanggotaan");
 imagettftext($image, $fontSize, 0, $x_data, $y_position, $color, $fontPathRegular, $keanggotaan);
 
-// Tentukan ukuran dan posisi QR code di dalam template
-$qrcode_width = 300;
-$qrcode_height = 300;
+// Tempelkan QR code di posisi yang ditentukan
 $qrcode_x = 1875;
 $qrcode_y = 1400;
-
-// Salin dan tempelkan QR code ke template
+$qrcode_width = 300;
+$qrcode_height = 300;
 imagecopyresampled($image, $qrcode, $qrcode_x, $qrcode_y, 0, 0, $qrcode_width, $qrcode_height, imagesx($qrcode), imagesy($qrcode));
 
 // Menampilkan gambar
