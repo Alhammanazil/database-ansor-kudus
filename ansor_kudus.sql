@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Waktu pembuatan: 05 Nov 2024 pada 04.25
+-- Waktu pembuatan: 05 Nov 2024 pada 08.40
 -- Versi server: 10.4.28-MariaDB
 -- Versi PHP: 8.2.4
 
@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `tb_anggota` (
-  `anggota_id` varchar(6) NOT NULL,
+  `anggota_id` int(11) NOT NULL,
   `anggota_email` varchar(64) NOT NULL,
   `anggota_nama` varchar(256) NOT NULL,
   `anggota_nik` varchar(16) NOT NULL,
@@ -153,15 +153,15 @@ CREATE TABLE `tb_districts` (
 --
 
 INSERT INTO `tb_districts` (`districts_id`, `districts_name`) VALUES
-(331901, 'Kaliwungu'),
-(331902, 'Kota Kudus'),
-(331903, 'Jati'),
-(331904, 'Undaan'),
-(331905, 'Mejobo'),
-(331906, 'Jekulo'),
-(331907, 'Bae'),
-(331908, 'Gebog'),
-(331909, 'Dawe');
+(3319010, 'Kaliwungu'),
+(3319020, 'Kota Kudus'),
+(3319030, 'Jati'),
+(3319040, 'Undaan'),
+(3319050, 'Mejobo'),
+(3319060, 'Jekulo'),
+(3319070, 'Bae'),
+(3319080, 'Gebog'),
+(3319090, 'Dawe');
 
 -- --------------------------------------------------------
 
@@ -990,6 +990,19 @@ INSERT INTO `tb_regencies` (`regencies_id`, `regencies_name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Struktur dari tabel `tb_riwayat_diklat`
+--
+
+CREATE TABLE `tb_riwayat_diklat` (
+  `riwayat_diklat_id` int(11) NOT NULL,
+  `anggota_id` int(11) NOT NULL,
+  `riwayat_diklat_item` varchar(64) NOT NULL,
+  `riwayat_diklat_file` varchar(128) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Struktur dari tabel `tb_rt`
 --
 
@@ -1110,6 +1123,7 @@ INSERT INTO `tb_tinggi_badan` (`tinggi_badan_id`, `tinggi_badan_name`) VALUES
 
 CREATE TABLE `tb_users` (
   `id` int(11) NOT NULL,
+  `anggota_id` int(11) NOT NULL,
   `nama_lengkap` varchar(255) DEFAULT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
@@ -1118,15 +1132,6 @@ CREATE TABLE `tb_users` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data untuk tabel `tb_users`
---
-
-INSERT INTO `tb_users` (`id`, `nama_lengkap`, `username`, `password`, `akses`, `role`, `created_at`, `updated_at`) VALUES
-(1, 'Albert Einstein', 'alham', '$2y$10$1a.a.OfbIAtFyhTkmRHyZuG50d51KTF3CRL1W5WToOVzJJVHwRH/2', 1, 'master', '2024-08-19 22:37:37', '2024-08-19 22:51:54'),
-(5, 'makunouchi ippo', 'ippo', '$2y$10$LmH3ayN3NII7dNb37agzEuZ7czVS8tQco0r76BF7u.mqS5iYxeZOy', 1, 'admin kecamatan', '2024-10-09 20:13:06', '2024-10-09 21:16:12'),
-(6, 'takamura', 'takamura', '$2y$10$zzb3jdUEuw.3r.SQ06Y.Rekz4/hCAgBwHf8Az2TTUTrBTFQHr6cM6', 1, 'admin desa', '2024-10-09 20:26:20', '2024-10-09 21:12:56');
 
 -- --------------------------------------------------------
 
@@ -1410,6 +1415,12 @@ ALTER TABLE `tb_regencies`
   ADD PRIMARY KEY (`regencies_id`);
 
 --
+-- Indeks untuk tabel `tb_riwayat_diklat`
+--
+ALTER TABLE `tb_riwayat_diklat`
+  ADD PRIMARY KEY (`riwayat_diklat_id`);
+
+--
 -- Indeks untuk tabel `tb_rt`
 --
 ALTER TABLE `tb_rt`
@@ -1431,7 +1442,8 @@ ALTER TABLE `tb_tinggi_badan`
 -- Indeks untuk tabel `tb_users`
 --
 ALTER TABLE `tb_users`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `anggota_id` (`anggota_id`);
 
 --
 -- Indeks untuk tabel `tb_villages`
@@ -1442,6 +1454,12 @@ ALTER TABLE `tb_villages`
 --
 -- AUTO_INCREMENT untuk tabel yang dibuang
 --
+
+--
+-- AUTO_INCREMENT untuk tabel `tb_anggota`
+--
+ALTER TABLE `tb_anggota`
+  MODIFY `anggota_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_berat_badan`
@@ -1516,6 +1534,12 @@ ALTER TABLE `tb_pernikahan`
   MODIFY `pernikahan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT untuk tabel `tb_riwayat_diklat`
+--
+ALTER TABLE `tb_riwayat_diklat`
+  MODIFY `riwayat_diklat_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT untuk tabel `tb_rt`
 --
 ALTER TABLE `tb_rt`
@@ -1572,6 +1596,12 @@ ALTER TABLE `tb_anggota`
   ADD CONSTRAINT `tb_anggota_ibfk_7` FOREIGN KEY (`anggota_rt`) REFERENCES `tb_rt` (`rt_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `tb_anggota_ibfk_8` FOREIGN KEY (`anggota_rw`) REFERENCES `tb_rw` (`rw_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `tb_anggota_ibfk_9` FOREIGN KEY (`anggota_domisili_des`) REFERENCES `tb_villages` (`villages_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ketidakleluasaan untuk tabel `tb_users`
+--
+ALTER TABLE `tb_users`
+  ADD CONSTRAINT `tb_users_ibfk_1` FOREIGN KEY (`anggota_id`) REFERENCES `tb_anggota` (`anggota_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
