@@ -141,6 +141,16 @@
                                     <div id="dataAnggota" class="collapse show">
                                         <div class="card-body">
                                             <div class="form-group">
+                                                <label class="required-label" for="fotoDiri">Foto Diri</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" name="fotoDiri" id="fotoDiri" accept="image/*" required>
+                                                        <label class="custom-file-label" for="fotoDiri">Pilih file</label>
+                                                    </div>
+                                                </div>
+                                                <div class="invalid-feedback">Harap pilih file foto diri.</div>
+                                            </div>
+                                            <div class="form-group">
                                                 <label class="required-label" for="email">Alamat Email</label>
                                                 <input type="email" class="form-control" name="email" id="email" placeholder="Masukkan Alamat Email" required>
                                                 <div class="invalid-feedback">Harap masukkan email yang valid.</div>
@@ -253,29 +263,52 @@
                                                 </div>
                                             </div>
 
+                                            <!-- NPWP -->
                                             <div class="form-group">
                                                 <label class="required-label">Kepemilikan NPWP</label>
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-outline-primary">
-                                                        <input type="radio" name="npwp" value="1" required> Sudah Memiliki
+                                                        <input type="radio" name="npwp" value="1" required onclick="toggleUploadSection('npwp', true)"> Sudah Memiliki
                                                     </label>
                                                     <label class="btn btn-outline-secondary">
-                                                        <input type="radio" name="npwp" value="0" required checked> Belum Memiliki
+                                                        <input type="radio" name="npwp" value="0" required checked onclick="toggleUploadSection('npwp', false)"> Belum Memiliki
                                                     </label>
+                                                </div>
+                                                <br>
+
+                                                <!-- NPWP Upload -->
+                                                <div id="npwpUpload" class="upload-section" style="display: none;">
+                                                    <label class="required-label" for="npwpFile">Upload Foto NPWP</label>
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="npwpFile" name="npwpFile" accept="image/*">
+                                                        <label class="custom-file-label" for="npwpFile">Pilih file</label>
+                                                    </div>
                                                 </div>
                                             </div>
 
+                                            <!-- BPJS -->
                                             <div class="form-group">
                                                 <label class="required-label">BPJS Kesehatan</label>
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-outline-primary">
-                                                        <input type="radio" name="bpjs" value="1" required> Sudah Memiliki
+                                                        <input type="radio" name="bpjs" value="1" required onclick="toggleUploadSection('bpjs', true)"> Sudah Memiliki
                                                     </label>
                                                     <label class="btn btn-outline-secondary">
-                                                        <input type="radio" name="bpjs" value="0" required checked> Belum Memiliki
+                                                        <input type="radio" name="bpjs" value="0" required checked onclick="toggleUploadSection('bpjs', false)"> Belum Memiliki
                                                     </label>
                                                 </div>
+                                                <br>
+
+                                                <!-- BPJS Upload -->
+                                                <div id="bpjsUpload" class="upload-section" style="display: none;">
+                                                    <label class="required-label" for="bpjsFile">Upload Foto BPJS</label>
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="bpjsFile" name="bpjsFile" accept="image/*">
+                                                        <label class="custom-file-label" for="bpjsFile">Pilih file</label>
+                                                    </div>
+                                                </div>
                                             </div>
+
                                             <button type="button" class="btn btn-primary" onclick="nextStep('dataAnggota', 'dataAlamat')">Lanjut</button>
                                         </div>
                                     </div>
@@ -759,7 +792,7 @@
                                     <div id="dataPelatihanKaderisasi" class="collapse">
                                         <div class="card-body">
 
-                                            <div class="row">
+                                            <div class="row align-items-center">
                                                 <!-- A. Pendidikan Kader -->
                                                 <div class="col-md-6">
                                                     <h6>A. Pendidikan Kader</h6>
@@ -1265,6 +1298,22 @@
             $('#' + prev).collapse('show');
         }
 
+        // Upload NPWP & BPJS
+        function toggleUploadSection(field, show) {
+            const uploadSection = document.getElementById(field + 'Upload');
+            const fileInput = document.getElementById(field + 'File');
+
+            // Tampilkan atau sembunyikan bagian upload
+            uploadSection.style.display = show ? 'block' : 'none';
+
+            // Tambahkan atau hapus atribut required berdasarkan pilihan
+            if (show) {
+                fileInput.setAttribute('required', 'required');
+            } else {
+                fileInput.removeAttribute('required');
+            }
+        }
+
         // FIeld Data Anggota & Pekerjaan Istri
         function toggleMarriageFields() {
             const marriageDetails = document.getElementById('marriageDetails');
@@ -1328,8 +1377,9 @@
             }
         }
 
-        // Initialize the form on page load to check if a status is already selected
-        document.addEventListener('DOMContentLoaded', toggleMarriageFields);
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleMarriageFields(); // Panggil saat DOM sudah siap
+        });
 
         // Field Alamat
         document.addEventListener('DOMContentLoaded', function() {
@@ -1691,7 +1741,7 @@
         $(document).ready(function() {
             // Inisialisasi Select2 pada semua elemen dengan kelas 'select2'
             $('.select2').select2({
-                placeholder: "Pilih",
+                // placeholder: "Pilih",
                 allowClear: true,
                 width: '100%'
             });
