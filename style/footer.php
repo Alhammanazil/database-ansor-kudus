@@ -158,7 +158,13 @@
                 </button>
             </div>
             <div class="modal-body text-center">
-                <img id="cardPreview" src="" alt="Preview Kartu Anggota" class="img-fluid">
+                <!-- Preview Kartu Anggota -->
+                <img id="cardPreview" src="" alt="Preview Kartu Anggota" class="img-fluid mb-3">
+
+                <!-- Tombol Download Kartu Anggota -->
+                <a id="downloadButton" href="#" class="btn btn-primary mt-2">
+                    Download Kartu Anggota
+                </a>
             </div>
         </div>
     </div>
@@ -167,7 +173,15 @@
 <script>
     function previewCard(id) {
         // Set URL gambar di modal
-        document.getElementById('cardPreview').src = `../kartu/card.php?id=${id}`;
+        const previewImage = document.getElementById('cardPreview');
+        const downloadButton = document.getElementById('downloadButton');
+
+        // Atur URL untuk gambar pratinjau
+        previewImage.src = `../kartu/card.php?id=${id}`;
+
+        // Atur URL untuk unduhan dengan parameter `download=true`
+        downloadButton.href = `../kartu/card.php?id=${id}&download=true`;
+
         // Tampilkan modal
         $('#previewModal').modal('show');
     }
@@ -521,6 +535,19 @@
             }
         });
     });
+
+    // Akhir Halaman Form Pendaftaran
+
+    // Halaman Data Pribadi
+    function loadMemberCard(id) {
+        document.getElementById('memberCardImage').src = `../kartu/card.php?id=${id}`;
+    }
+
+    <?php if ($anggota_id): ?>
+        loadMemberCard(<?php echo $anggota_id; ?>);
+    <?php endif; ?>
+
+    // Akhir Halaman Data Pribadi
 
     // Validasi form
     document.addEventListener('DOMContentLoaded', function() {

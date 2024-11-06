@@ -10,6 +10,32 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 
 $id = $_GET['id'];
 
+// Query untuk mengambil nama anggota berdasarkan ID
+$query = "SELECT anggota_nama FROM tb_anggota WHERE anggota_id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param('i', $id);
+$stmt->execute();
+$result = $stmt->get_result();
+$data = $result->fetch_assoc();
+
+if (!$data) {
+    die("Data anggota tidak ditemukan.");
+}
+
+// Ambil nama anggota dan format menjadi slug (untuk menghindari karakter spesial dalam nama file)
+$anggota_nama = preg_replace('/[^A-Za-z0-9_\-]/', '_', $data['anggota_nama']); // Ganti spasi dan karakter khusus dengan '_'
+
+// Jika ada parameter 'download', tambahkan header untuk memaksa unduhan dengan nama file dinamis
+if (isset($_GET['download'])) {
+    header('Content-Type: image/png');
+    header('Content-Disposition: attachment; filename="KTR_' . $anggota_nama . '.png"');
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+    header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
+    header('Pragma: no-cache');
+} else {
+    header('Content-Type: image/png');
+}
+
 // Query untuk mengambil data anggota berdasarkan ID
 $query = "
 SELECT a.*, d.districts_name AS kecamatan, v.villages_name AS desa
@@ -94,12 +120,15 @@ imagecopy($image, $template, 0, 0, 0, 0, $canvas_width, $canvas_height);
 // Tentukan warna teks
 $color = imagecolorallocate($image, 0, 0, 0); // Hitam
 
+// Membuat anggota_id menjadi 4 digit
+$formatted_id = str_pad($data['anggota_id'], 4, '0', STR_PAD_LEFT);
+
 // Tentukan data anggota
 $nama = ": " . format_name($data['anggota_nama']);
-$no_registrasi = ": 0186/X-11-06-07/KTR/2024"; // Data dummy
+$no_registrasi = ": " . ($formatted_id . '/' . $data['anggota_no_registrasi'] . '/KTR/2024');
 $kecamatan = ": " . ($data['kecamatan'] ?? 'Undefined');
 $desa = ": " . ($data['desa'] ?? 'Undefined');
-$keanggotaan = ": Undefined"; // Data dummy
+$keanggotaan = ": Anggota"; // Data dummy
 $line_spacing = 120; // Jarak antar baris teks
 
 // Koordinat untuk posisi teks
