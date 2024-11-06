@@ -8,7 +8,6 @@ if ($conn->connect_error) {
         "status" => "error",
         "message" => "Connection failed: " . $conn->connect_error
     ]));
-    exit();
 }
 
 // Dapatkan districts_id dari parameter GET
