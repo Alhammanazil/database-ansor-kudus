@@ -131,7 +131,7 @@
                     <!-- Form with step-by-step collapsible cards -->
                     <div class="row">
                         <div class="col-md-12 col-sm-12">
-                            <form id="formPendaftaran" action="config/pendaftaran.php" method="POST" novalidate>
+                            <form id="formPendaftaran" action="config/pendaftaran.php" method="POST" enctype="multipart/form-data" novalidate>
 
                                 <!-- Step 1: Data Anggota -->
                                 <div class="card card-outline card-primary mt-4">
