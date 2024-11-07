@@ -40,6 +40,32 @@ function sendUserCredentials($no_hp, $nama, $username, $plain_password)
     }
 }
 
+// Fungsi untuk mengunggah file dengan pengkondisian format nama
+function uploadFileWithFormat($fileInput, $subfolder, $prefix, $anggota_id)
+{
+    if (!empty($_FILES[$fileInput]['name'])) {
+        // Tentukan direktori tujuan dalam folder `file/[subfolder]`
+        $targetDir = "../file/$subfolder/";
+
+        // Buat folder jika belum ada
+        if (!is_dir($targetDir)) {
+            mkdir($targetDir, 0777, true);
+        }
+
+        $fileTmp = $_FILES[$fileInput]['tmp_name'];
+        $fileExtension = pathinfo($_FILES[$fileInput]['name'], PATHINFO_EXTENSION);
+        $randomNumber = rand(1000, 9999); // 4 angka acak
+        $fileName = "$prefix-$anggota_id-$randomNumber.$fileExtension";
+        $targetFile = $targetDir . $fileName;
+
+        // Pindahkan file yang diunggah ke folder tujuan
+        if (move_uploaded_file($fileTmp, $targetFile)) {
+            // Kembalikan path relatif dari file yang diunggah
+            return $fileName;
+        }
+    }
+    return null;
+}
 
 // Ambil data dari form
 $email = mysqli_real_escape_string($conn, $_POST['email']);
@@ -158,27 +184,38 @@ if ($conn->query($sql) === TRUE) {
     // Ambil ID tb_anggota yang baru saja dimasukkan
     $anggota_id = $conn->insert_id;
 
-    // Generate password acak 6 digit
-    $plain_password = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+    // Unggah file foto diri, foto NPWP, dan foto BPJS dengan format nama khusus
+    $fotoDiriPath = uploadFileWithFormat('fotoDiri', 'foto', 'fotodiri', $anggota_id);
+    $npwpPath = uploadFileWithFormat('npwpFile', 'npwp', 'npwp', $anggota_id);
+    $bpjsPath = uploadFileWithFormat('bpjsFile', 'bpjs', 'bpjs', $anggota_id);
 
-    // Hash password sebelum disimpan di database
-    $hashed_password = password_hash($plain_password, PASSWORD_DEFAULT);
+    // Update tabel tb_anggota untuk menambahkan path file foto
+    $sql_update = "UPDATE tb_anggota SET
+        anggota_foto = " . ($fotoDiriPath ? "'$fotoDiriPath'" : "NULL") . ",
+        anggota_foto_npwp = " . ($npwpPath ? "'$npwpPath'" : "NULL") . ",
+        anggota_foto_bpjs = " . ($bpjsPath ? "'$bpjsPath'" : "NULL") . "
+        WHERE anggota_id = $anggota_id";
 
-    // Masukkan data ke tb_users dengan nomor HP sebagai username dan password yang di-hash
-    $sql_user = "INSERT INTO tb_users (anggota_id, nama_lengkap, username, password, akses, role, created_at, updated_at) VALUES (
-        '$anggota_id', '$nama', '$no_telp', '$hashed_password', 1, 'user', NOW(), NOW()
-    )";
+    if ($conn->query($sql_update) === TRUE) {
+        // Generate password acak 6 digit
+        $plain_password = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+        $hashed_password = password_hash($plain_password, PASSWORD_DEFAULT);
 
-    // Eksekusi 2 - tb_users
-    if ($conn->query($sql_user) === TRUE) {
-        // Panggil fungsi untuk mengirim pesan via Fonnte
-        sendUserCredentials($no_telp, $nama, $no_telp, $plain_password);
+        // Masukkan data ke tb_users dengan nomor HP sebagai username dan password yang di-hash
+        $sql_user = "INSERT INTO tb_users (anggota_id, nama_lengkap, username, password, akses, role, created_at, updated_at) VALUES (
+                '$anggota_id', '$nama', '$no_telp', '$hashed_password', 1, 'user', NOW(), NOW()
+            )";
 
-        // Redirect ke halaman sukses
-        header("Location: ../index.php?form_success=true");
-        exit();
+        if ($conn->query($sql_user) === TRUE) {
+            // Panggil fungsi untuk mengirim pesan via Fonnte
+            sendUserCredentials($no_telp, $nama, $no_telp, $plain_password);
+            header("Location: ../index.php?form_success=true");
+            exit();
+        } else {
+            echo "Error pada tb_users: " . $sql_user . "<br>" . $conn->error;
+        }
     } else {
-        echo "Error pada tb_users: " . $sql_user . "<br>" . $conn->error;
+        echo "Error pada update tb_anggota: " . $sql_update . "<br>" . $conn->error;
     }
 } else {
     echo "Error pada tb_anggota: " . $sql . "<br>" . $conn->error;
