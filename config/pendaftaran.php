@@ -1,5 +1,7 @@
 <?php
 include 'config.php';
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 // Fungsi untuk mengirim pesan via Fonnte
 function sendUserCredentials($no_hp, $nama, $username, $plain_password)
@@ -43,29 +45,135 @@ function sendUserCredentials($no_hp, $nama, $username, $plain_password)
 // Fungsi untuk mengunggah file dengan pengkondisian format nama
 function uploadFileWithFormat($fileInput, $subfolder, $prefix, $anggota_id)
 {
+    // Cek apakah file input tersedia
     if (!empty($_FILES[$fileInput]['name'])) {
-        // Tentukan direktori tujuan dalam folder `file/[subfolder]`
-        $targetDir = "../file/$subfolder/";
+        // Debugging
+        error_log("File input tersedia untuk $fileInput");
 
-        // Buat folder jika belum ada
+        // Define the target directory and ensure it exists
+        $targetDir = "../file/$subfolder/";
         if (!is_dir($targetDir)) {
-            mkdir($targetDir, 0777, true);
+            if (mkdir($targetDir, 0777, true)) {
+                error_log("Direktori $targetDir berhasil dibuat.");
+            } else {
+                error_log("Gagal membuat direktori $targetDir");
+            }
         }
 
+        // Generate file name with prefix and random number
         $fileTmp = $_FILES[$fileInput]['tmp_name'];
         $fileExtension = pathinfo($_FILES[$fileInput]['name'], PATHINFO_EXTENSION);
-        $randomNumber = rand(1000, 9999); // 4 angka acak
+        $randomNumber = rand(1000, 9999); // 4 random digits
         $fileName = "$prefix-$anggota_id-$randomNumber.$fileExtension";
         $targetFile = $targetDir . $fileName;
 
-        // Pindahkan file yang diunggah ke folder tujuan
+        // Attempt to move the uploaded file
         if (move_uploaded_file($fileTmp, $targetFile)) {
-            // Kembalikan path relatif dari file yang diunggah
+            error_log("File berhasil diunggah ke $targetFile");
+            // Return the relative file path if successful
             return $fileName;
+        } else {
+            error_log("Gagal memindahkan file yang diunggah untuk $fileInput ke $targetFile");
         }
+    } else {
+        error_log("Tidak ada file yang diunggah untuk $fileInput");
     }
     return null;
 }
+
+
+function getFileInputName($item)
+{
+    // Konversi untuk Latihan Instruktur (LI)
+    if (strpos($item, 'LI') === 0) {
+        $number = trim(str_replace('LI', '', $item));
+        // Konversi Roman numerals ke angka
+        $romanToNum = [
+            'I' => '1',
+            'II' => '2',
+            'III' => '3'
+        ];
+        $number = $romanToNum[$number] ?? $number;
+        return 'li' . $number . 'Certificate';
+    }
+
+    // Konversi untuk Dirosah (menghapus spasi dan menggunakan huruf kecil)
+    if (strpos($item, 'Dirosah') === 0) {
+        $itemSlug = strtolower(str_replace(' ', '', $item));
+        return $itemSlug . 'Certificate';
+    }
+
+    // Konversi untuk Pendidikan & Latihan (Diklatsar, Susbalan, Susbanpim)
+    if (in_array($item, ['Diklatsar', 'SUSBALAN', 'SUSBANPIM'])) {
+        return strtolower($item) . 'Certificate';
+    }
+
+    // Konversi untuk Kursus Kepelatihan (SUSPELAT I, SUSPELAT II, SUSPELAT III)
+    if (strpos($item, 'SUSPELAT') === 0) {
+        $number = trim(str_replace('SUSPELAT', '', $item));
+        return 'suspelat' . $number . 'Certificate';
+    }
+
+    // Konversi nama file untuk jenis pelatihan lainnya (default)
+    $itemSlug = strtolower(str_replace([' ', '-'], '', $item));
+    return $itemSlug . 'Certificate';
+}
+
+
+function simpanRiwayatPelatihan($conn, $anggota_id, $diklatItem, $subfolder)
+{
+    // Dapatkan nama file input yang sesuai
+    $fileInput = getFileInputName($diklatItem);
+
+    // Debug
+    error_log("Processing $diklatItem with file input $fileInput");
+
+    // Cek apakah file diupload
+    if (isset($_FILES[$fileInput]) && $_FILES[$fileInput]['error'] !== UPLOAD_ERR_NO_FILE) {
+        // Upload file
+        $fileName = uploadFileWithFormat($fileInput, $subfolder, strtolower(str_replace(' ', '-', $diklatItem)), $anggota_id);
+
+        if ($fileName) {
+            // Simpan ke database
+            $sql_pelatihan = "INSERT INTO tb_riwayat_diklat (
+                anggota_id, 
+                riwayat_diklat_item, 
+                riwayat_diklat_file, 
+                created_at
+            ) VALUES (
+                '$anggota_id', 
+                '$diklatItem', 
+                '$fileName', 
+                NOW()
+            )";
+
+            if ($conn->query($sql_pelatihan) !== TRUE) {
+                error_log("Database Error for $diklatItem: " . $conn->error);
+                return false;
+            }
+            return true;
+        }
+    }
+    return false;
+}
+
+// Ambil data desa
+$desa_id = mysqli_real_escape_string($conn, $_POST['desa']);
+
+// Ambil villages_code berdasarkan villages_id (desa_id) yang dipilih
+$query = "SELECT villages_code FROM tb_villages WHERE villages_id = '$desa_id'";
+$result = $conn->query($query);
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $anggota_no_registrasi = $row['villages_code'];
+} else {
+    // Beri nilai default jika tidak ditemukan
+    $anggota_no_registrasi = 'Unknown';
+}
+
+// Set nilai default untuk anggota_keanggotaan
+$anggota_keanggotaan = 'anggota';
 
 // Ambil data dari form
 $email = mysqli_real_escape_string($conn, $_POST['email']);
@@ -126,11 +234,11 @@ $masa_pac = isset($_POST['masaPAC']) ? mysqli_real_escape_string($conn, $_POST['
 $jabatan_pc = isset($_POST['jabatanPC']) ? mysqli_real_escape_string($conn, $_POST['jabatanPC']) : null;
 $masa_pc = isset($_POST['masaPC']) ? mysqli_real_escape_string($conn, $_POST['masaPC']) : null;
 
-$pendidikan_kader = isset($_POST['pendidikanKader']) ? mysqli_real_escape_string($conn, $_POST['pendidikanKader']) : null;
-$instruktur = isset($_POST['instruktur']) ? mysqli_real_escape_string($conn, $_POST['instruktur']) : null;
-$dirosah = isset($_POST['dirosah']) ? mysqli_real_escape_string($conn, $_POST['dirosah']) : null;
-$pendidikan_latihan = isset($_POST['pendidikanLatihan']) ? mysqli_real_escape_string($conn, $_POST['pendidikanLatihan']) : null;
-$kursus = isset($_POST['kursus']) ? mysqli_real_escape_string($conn, $_POST['kursus']) : null;
+$pendidikan_kader = isset($_POST['pendidikanKader']) ? $_POST['pendidikanKader'] : [];
+$instruktur = isset($_POST['instruktur']) ? $_POST['instruktur'] : [];
+$dirosah = isset($_POST['dirosah']) ? $_POST['dirosah'] : [];
+$pendidikan_latihan = isset($_POST['pendidikanLatihan']) ? $_POST['pendidikanLatihan'] : [];
+$kursus = isset($_POST['kursus']) ? $_POST['kursus'] : [];
 
 // SQL untuk menyimpan data ke tabel tb_anggota
 $sql = "INSERT INTO tb_anggota (
@@ -142,7 +250,9 @@ $sql = "INSERT INTO tb_anggota (
 
     anggota_pendidikan, anggota_jurusan_smk, anggota_bidang_studi, anggota_nama_pendidikan, anggota_nama_pesantren, anggota_nama_madin, anggota_ipnu, anggota_pmii, anggota_dema_bem, anggota_organisasi_lain, anggota_parpol,
 
-    anggota_pr_kec, anggota_pr_des, anggota_pr_jabatan, anggota_pr_mk, anggota_pac_kec, anggota_pac_jabatan, anggota_pac_mk, anggota_pc_jabatan, anggota_pc_mk
+    anggota_pr_kec, anggota_pr_des, anggota_pr_jabatan, anggota_pr_mk, anggota_pac_kec, anggota_pac_jabatan, anggota_pac_mk, anggota_pc_jabatan, anggota_pc_mk,
+
+    anggota_no_registrasi, anggota_keanggotaan
 ) 
 
 VALUES (
@@ -176,26 +286,73 @@ VALUES (
     " . ($jabatan_pac ? "'$jabatan_pac'" : "NULL") . ", 
     " . ($masa_pac ? "'$masa_pac'" : "NULL") . ", 
     " . ($jabatan_pc ? "'$jabatan_pc'" : "NULL") . ", 
-    " . ($masa_pc ? "'$masa_pc'" : "NULL") . "
+    " . ($masa_pc ? "'$masa_pc'" : "NULL") . ",
+
+    '$anggota_no_registrasi', '$anggota_keanggotaan'
 )";
 
-// Eksekusi 1 - tb_anggota
+// Eksekusi penyimpanan data ke tb_anggota
 if ($conn->query($sql) === TRUE) {
-    // Ambil ID tb_anggota yang baru saja dimasukkan
+    // Ambil ID anggota yang baru saja dimasukkan
     $anggota_id = $conn->insert_id;
 
-    // Unggah file foto diri, foto NPWP, dan foto BPJS dengan format nama khusus
+    // Unggah file foto diri, NPWP, dan BPJS dengan format nama khusus
     $fotoDiriPath = uploadFileWithFormat('fotoDiri', 'foto', 'fotodiri', $anggota_id);
     $npwpPath = uploadFileWithFormat('npwpFile', 'npwp', 'npwp', $anggota_id);
     $bpjsPath = uploadFileWithFormat('bpjsFile', 'bpjs', 'bpjs', $anggota_id);
 
-    // Update tabel tb_anggota untuk menambahkan path file foto
+    // Update tb_anggota dengan path file yang diunggah
     $sql_update = "UPDATE tb_anggota SET
         anggota_foto = " . ($fotoDiriPath ? "'$fotoDiriPath'" : "NULL") . ",
         anggota_foto_npwp = " . ($npwpPath ? "'$npwpPath'" : "NULL") . ",
         anggota_foto_bpjs = " . ($bpjsPath ? "'$bpjsPath'" : "NULL") . "
         WHERE anggota_id = $anggota_id";
 
+    // Simpan Riwayat Pelatihan
+    // A. Pendidikan Kader
+    if (isset($_POST['pendidikanKader'])) {
+        foreach ($_POST['pendidikanKader'] as $diklatItem) {
+            simpanRiwayatPelatihan($conn, $anggota_id, $diklatItem, 'a.pendidikan_kader');
+        }
+    }
+
+    // B. Latihan Instruktur
+    if (isset($_POST['instruktur'])) {
+        foreach ($_POST['instruktur'] as $diklatItem) {
+            simpanRiwayatPelatihan($conn, $anggota_id, $diklatItem, 'b.instruktur');
+        }
+    }
+
+    // C. Dirosah
+    if (isset($_POST['dirosah'])) {
+        foreach ($_POST['dirosah'] as $diklatItem) {
+            simpanRiwayatPelatihan($conn, $anggota_id, $diklatItem, 'c.' . getFileInputName($diklatItem));
+        }
+    }
+
+    // D. Pendidikan & Latihan
+    if (isset($_POST['pendidikanLatihan'])) {
+        foreach ($_POST['pendidikanLatihan'] as $diklatItem) {
+            simpanRiwayatPelatihan($conn, $anggota_id, $diklatItem, 'd.pendidikan_latihan');
+        }
+    }
+
+    // E. Kursus Kepelatihan
+    if (isset($_POST['kursus'])) {
+        foreach ($_POST['kursus'] as $diklatItem) {
+            simpanRiwayatPelatihan($conn, $anggota_id, $diklatItem, 'e.kursus');
+        }
+    }
+
+    // F. Pendidikan & Latihan Khusus
+    if (isset($_POST['pendidikanLatihanKhusus'])) {
+        foreach ($_POST['pendidikanLatihanKhusus'] as $diklatItem) {
+            simpanRiwayatPelatihan($conn, $anggota_id, $diklatItem, 'f.pendidikan_latihan_khusus');
+        }
+    }
+
+
+    // Update tb_anggota jika berhasil, dan simpan password pengguna
     if ($conn->query($sql_update) === TRUE) {
         // Generate password acak 6 digit
         $plain_password = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
@@ -203,11 +360,11 @@ if ($conn->query($sql) === TRUE) {
 
         // Masukkan data ke tb_users dengan nomor HP sebagai username dan password yang di-hash
         $sql_user = "INSERT INTO tb_users (anggota_id, nama_lengkap, username, password, akses, role, created_at, updated_at) VALUES (
-                '$anggota_id', '$nama', '$no_telp', '$hashed_password', 1, 'user', NOW(), NOW()
-            )";
+            '$anggota_id', '$nama', '$no_telp', '$hashed_password', 1, 'user', NOW(), NOW()
+        )";
 
         if ($conn->query($sql_user) === TRUE) {
-            // Panggil fungsi untuk mengirim pesan via Fonnte
+            // Kirim kredensial pengguna via Fonnte
             sendUserCredentials($no_telp, $nama, $no_telp, $plain_password);
             header("Location: ../index.php?form_success=true");
             exit();
