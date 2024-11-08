@@ -819,7 +819,7 @@
                                                             <label>Upload Sertifikat PKD</label>
                                                             <div class="input-group">
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="pkdCertificate" accept="image/*,application/pdf">
+                                                                    <input type="file" class="custom-file-input" id="pkdCertificate" name="pkdCertificate" accept="image/*,application/pdf">
                                                                     <label class="custom-file-label" for="pkdCertificate">Pilih file</label>
                                                                 </div>
                                                             </div>
@@ -831,7 +831,7 @@
                                                             <label>Upload Sertifikat PKL</label>
                                                             <div class="input-group">
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="pklCertificate" accept="image/*,application/pdf">
+                                                                    <input type="file" class="custom-file-input" id="pklCertificate" name="pklCertificate" accept="image/*,application/pdf">
                                                                     <label class="custom-file-label" for="pklCertificate">Pilih file</label>
                                                                 </div>
                                                             </div>
@@ -843,7 +843,7 @@
                                                             <label>Upload Sertifikat PKN</label>
                                                             <div class="input-group">
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="pknCertificate" accept="image/*,application/pdf">
+                                                                    <input type="file" class="custom-file-input" id="pknCertificate" name="pknCertificate" accept="image/*,application/pdf">
                                                                     <label class="custom-file-label" for="pknCertificate">Pilih file</label>
                                                                 </div>
                                                             </div>
@@ -880,7 +880,7 @@
                                                             <label>Upload Sertifikat LI I</label>
                                                             <div class="input-group">
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="li1Certificate" accept="image/*,application/pdf">
+                                                                    <input type="file" class="custom-file-input" id="li1Certificate" name="li1Certificate" accept="image/*,application/pdf">
                                                                     <label class="custom-file-label" for="li1Certificate">Pilih file</label>
                                                                 </div>
                                                             </div>
@@ -892,7 +892,7 @@
                                                             <label>Upload Sertifikat LI II</label>
                                                             <div class="input-group">
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="li2Certificate" accept="image/*,application/pdf">
+                                                                    <input type="file" class="custom-file-input" id="li2Certificate" name="li2Certificate" accept="image/*,application/pdf">
                                                                     <label class="custom-file-label" for="li2Certificate">Pilih file</label>
                                                                 </div>
                                                             </div>
@@ -904,7 +904,7 @@
                                                             <label>Upload Sertifikat LI III</label>
                                                             <div class="input-group">
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="li3Certificate" accept="image/*,application/pdf">
+                                                                    <input type="file" class="custom-file-input" id="li3Certificate" name="li3Certificate" accept="image/*,application/pdf">
                                                                     <label class="custom-file-label" for="li3Certificate">Pilih file</label>
                                                                 </div>
                                                             </div>
@@ -920,15 +920,15 @@
                                                     <h6>C. Dirosah</h6>
                                                     <div class="form-group">
                                                         <div class="icheck-primary d-block">
-                                                            <input type="checkbox" id="dirosahUla" name="dirosah[]" value="Dirosah Ula" onchange="toggleUploadDirosah()">
+                                                            <input type="checkbox" id="dirosahUla" name="dirosah[]" value="Dirosah-Ula" onchange="toggleUploadDirosah()">
                                                             <label for="dirosahUla">Dirosah Ula</label>
                                                         </div>
                                                         <div class="icheck-primary d-block">
-                                                            <input type="checkbox" id="dirosahWustho" name="dirosah[]" value="Dirosah Wustho" onchange="toggleUploadDirosah()">
+                                                            <input type="checkbox" id="dirosahWustho" name="dirosah[]" value="Dirosah-Wustho" onchange="toggleUploadDirosah()">
                                                             <label for="dirosahWustho">Dirosah Wustho</label>
                                                         </div>
                                                         <div class="icheck-primary d-block">
-                                                            <input type="checkbox" id="dirosahUlya" name="dirosah[]" value="Dirosah Ulya" onchange="toggleUploadDirosah()">
+                                                            <input type="checkbox" id="dirosahUlya" name="dirosah[]" value="Dirosah-Ulya" onchange="toggleUploadDirosah()">
                                                             <label for="dirosahUlya">Dirosah Ulya</label>
                                                         </div>
                                                     </div>
@@ -941,7 +941,7 @@
                                                             <label>Upload Sertifikat Dirosah Ula</label>
                                                             <div class="input-group">
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="dirosahUlaCertificate" accept="image/*,application/pdf">
+                                                                    <input type="file" class="custom-file-input" id="dirosahUlaCertificate" name="dirosahUlaCertificate" accept="image/*,application/pdf">
                                                                     <label class="custom-file-label" for="dirosahUlaCertificate">Pilih file</label>
                                                                 </div>
                                                             </div>
@@ -953,7 +953,7 @@
                                                             <label>Upload Sertifikat Dirosah Wustho</label>
                                                             <div class="input-group">
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="dirosahWusthoCertificate" accept="image/*,application/pdf">
+                                                                    <input type="file" class="custom-file-input" id="dirosahWusthoCertificate" name="dirosahWusthoCertificate" accept="image/*,application/pdf">
                                                                     <label class="custom-file-label" for="dirosahWusthoCertificate">Pilih file</label>
                                                                 </div>
                                                             </div>
@@ -965,7 +965,7 @@
                                                             <label>Upload Sertifikat Dirosah Ulya</label>
                                                             <div class="input-group">
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="dirosahUlyaCertificate" accept="image/*,application/pdf">
+                                                                    <input type="file" class="custom-file-input" id="dirosahUlyaCertificate" name="dirosahUlyaCertificate" accept="image/*,application/pdf">
                                                                     <label class="custom-file-label" for="dirosahUlyaCertificate">Pilih file</label>
                                                                 </div>
                                                             </div>
@@ -1002,7 +1002,7 @@
                                                             <label>Upload Sertifikat Diklatsar</label>
                                                             <div class="input-group">
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="diklatsarCertificate" accept="image/*,application/pdf">
+                                                                    <input type="file" class="custom-file-input" id="diklatsarCertificate" name="diklatsarCertificate" accept="image/*,application/pdf">
                                                                     <label class="custom-file-label" for="diklatsarCertificate">Pilih file</label>
                                                                 </div>
                                                             </div>
@@ -1014,7 +1014,7 @@
                                                             <label>Upload Sertifikat SUSBALAN</label>
                                                             <div class="input-group">
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="susbalanCertificate" accept="image/*,application/pdf">
+                                                                    <input type="file" class="custom-file-input" id="susbalanCertificate" name="susbalanCertificate" accept="image/*,application/pdf">
                                                                     <label class="custom-file-label" for="susbalanCertificate">Pilih file</label>
                                                                 </div>
                                                             </div>
@@ -1026,7 +1026,7 @@
                                                             <label>Upload Sertifikat SUSBANPIM</label>
                                                             <div class="input-group">
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="susbanpimCertificate" accept="image/*,application/pdf">
+                                                                    <input type="file" class="custom-file-input" id="susbanpimCertificate" name="susbanpimCertificate" accept="image/*,application/pdf">
                                                                     <label class="custom-file-label" for="susbanpimCertificate">Pilih file</label>
                                                                 </div>
                                                             </div>
@@ -1063,7 +1063,7 @@
                                                             <label>Upload Sertifikat SUSPELAT I</label>
                                                             <div class="input-group">
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="suspelat1Certificate" accept="image/*,application/pdf">
+                                                                    <input type="file" class="custom-file-input" id="suspelat1Certificate" name="suspelat1Certificate" accept="image/*,application/pdf">
                                                                     <label class="custom-file-label" for="suspelat1Certificate">Pilih file</label>
                                                                 </div>
                                                             </div>
@@ -1075,7 +1075,7 @@
                                                             <label>Upload Sertifikat SUSPELAT II</label>
                                                             <div class="input-group">
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="suspelat2Certificate" accept="image/*,application/pdf">
+                                                                    <input type="file" class="custom-file-input" id="suspelat2Certificate" name="suspelat2Certificate" accept="image/*,application/pdf">
                                                                     <label class="custom-file-label" for="suspelat2Certificate">Pilih file</label>
                                                                 </div>
                                                             </div>
@@ -1087,7 +1087,7 @@
                                                             <label>Upload Sertifikat SUSPELAT III</label>
                                                             <div class="input-group">
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="suspelat3Certificate" accept="image/*,application/pdf">
+                                                                    <input type="file" class="custom-file-input" id="suspelat3Certificate" name="suspelat3Certificate" accept="image/*,application/pdf">
                                                                     <label class="custom-file-label" for="suspelat3Certificate">Pilih file</label>
                                                                 </div>
                                                             </div>
@@ -1141,7 +1141,7 @@
                                                             <label>Upload Sertifikat DIKLATSUS BAGANA</label>
                                                             <div class="input-group">
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="diklatsusBaganaCertificate" accept="image/*,application/pdf">
+                                                                    <input type="file" class="custom-file-input" id="diklatsusBaganaCertificate" name="diklatsusBaganaCertificate" accept="image/*,application/pdf">
                                                                     <label class="custom-file-label" for="diklatsusBaganaCertificate">Pilih file</label>
                                                                 </div>
                                                             </div>
@@ -1154,7 +1154,7 @@
                                                             <label>Upload Sertifikat DIKLATSUS PROTOKOLER</label>
                                                             <div class="input-group">
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="diklatsusProtokolerCertificate" accept="image/*,application/pdf">
+                                                                    <input type="file" class="custom-file-input" id="diklatsusProtokolerCertificate" name="diklatsusProtokolerCertificate" accept="image/*,application/pdf">
                                                                     <label class="custom-file-label" for="diklatsusProtokolerCertificate">Pilih file</label>
                                                                 </div>
                                                             </div>
@@ -1167,7 +1167,7 @@
                                                             <label>Upload Sertifikat DIKLATSUS BALAKAR</label>
                                                             <div class="input-group">
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="diklatsusBalakarCertificate" accept="image/*,application/pdf">
+                                                                    <input type="file" class="custom-file-input" id="diklatsusBalakarCertificate" name="diklatsusBalakarCertificate" accept="image/*,application/pdf">
                                                                     <label class="custom-file-label" for="diklatsusBalakarCertificate">Pilih file</label>
                                                                 </div>
                                                             </div>
@@ -1180,7 +1180,7 @@
                                                             <label>Upload Sertifikat DIKLATSUS BALANTAS</label>
                                                             <div class="input-group">
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="diklatsusBalantasCertificate" accept="image/*,application/pdf">
+                                                                    <input type="file" class="custom-file-input" id="diklatsusBalantasCertificate" name="diklatsusBalantasCertificate" accept="image/*,application/pdf">
                                                                     <label class="custom-file-label" for="diklatsusBalantasCertificate">Pilih file</label>
                                                                 </div>
                                                             </div>
@@ -1193,7 +1193,7 @@
                                                             <label>Upload Sertifikat DIKLATSUS BARITIM</label>
                                                             <div class="input-group">
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="diklatsusBaritimCertificate" accept="image/*,application/pdf">
+                                                                    <input type="file" class="custom-file-input" id="diklatsusBaritimCertificate" name="diklatsusBaritimCertificate" accept="image/*,application/pdf">
                                                                     <label class="custom-file-label" for="diklatsusBaritimCertificate">Pilih file</label>
                                                                 </div>
                                                             </div>
@@ -1206,7 +1206,7 @@
                                                             <label>Upload Sertifikat DIKLATSUS DENSUS 99</label>
                                                             <div class="input-group">
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="diklatsusDensusCertificate" accept="image/*,application/pdf">
+                                                                    <input type="file" class="custom-file-input" id="diklatsusDensusCertificate" name="diklatsusDensusCertificate" accept="image/*,application/pdf">
                                                                     <label class="custom-file-label" for="diklatsusDensusCertificate">Pilih file</label>
                                                                 </div>
                                                             </div>
@@ -1219,7 +1219,7 @@
                                                             <label>Upload Sertifikat DIKLATSUS PROVOST</label>
                                                             <div class="input-group">
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="diklatsusProvostCertificate" accept="image/*,application/pdf">
+                                                                    <input type="file" class="custom-file-input" id="diklatsusProvostCertificate" name="diklatsusProvostCertificate" accept="image/*,application/pdf">
                                                                     <label class="custom-file-label" for="diklatsusProvostCertificate">Pilih file</label>
                                                                 </div>
                                                             </div>
@@ -1589,6 +1589,42 @@
             document.getElementById('kursusKepelatihanSection').style.display = susbalan.checked ? 'block' : 'none';
             document.getElementById('pendidikanLatihanKhususSection').style.display = diklatsar.checked ? 'block' : 'none';
         }
+
+        // Tambahkan fungsi ini ke bagian JavaScript
+        function toggleUploadInstruktur() {
+            // Toggle untuk setiap checkbox Latihan Instruktur
+            ['li1', 'li2', 'li3'].forEach(id => {
+                const checkbox = document.getElementById(id);
+                const uploadDiv = document.getElementById(id + 'Upload');
+                const fileInput = document.getElementById(id + 'Certificate');
+
+                if (checkbox && uploadDiv && fileInput) {
+                    uploadDiv.style.display = checkbox.checked ? 'block' : 'none';
+                    if (checkbox.checked) {
+                        fileInput.setAttribute('required', 'required');
+                    } else {
+                        fileInput.removeAttribute('required');
+                    }
+                }
+            });
+        }
+
+        // Event listener untuk checkbox pendidikan kader
+        document.querySelectorAll('input[name="pendidikanKader[]"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const uploadId = this.id + 'Upload';
+                const uploadDiv = document.getElementById(uploadId);
+                const fileInput = uploadDiv.querySelector('input[type="file"]');
+
+                if (this.checked) {
+                    uploadDiv.style.display = 'block';
+                    fileInput.setAttribute('required', 'required');
+                } else {
+                    uploadDiv.style.display = 'none';
+                    fileInput.removeAttribute('required');
+                }
+            });
+        });
 
         // Fungsi untuk inisialisasi toggle pada setiap bagian checkbox
         function initializeToggleForSection(sectionName) {
