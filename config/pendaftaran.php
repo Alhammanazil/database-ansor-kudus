@@ -97,24 +97,21 @@ function getFileInputName($item)
         return 'li' . $number . 'Certificate';
     }
 
-    // Konversi untuk Dirosah (menghapus spasi dan menggunakan huruf kecil)
-    if (strpos($item, 'Dirosah') === 0) {
-        $itemSlug = strtolower(str_replace(' ', '', $item));
-        return $itemSlug . 'Certificate';
-    }
-
-    // Konversi untuk Pendidikan & Latihan (Diklatsar, Susbalan, Susbanpim)
-    if (in_array($item, ['Diklatsar', 'SUSBALAN', 'SUSBANPIM'])) {
-        return strtolower($item) . 'Certificate';
-    }
-
-    // Konversi untuk Kursus Kepelatihan (SUSPELAT I, SUSPELAT II, SUSPELAT III)
+    // Konversi untuk Kursus Kepelatihan (SUSPELAT)
     if (strpos($item, 'SUSPELAT') === 0) {
         $number = trim(str_replace('SUSPELAT', '', $item));
+        // Konversi Roman numerals ke angka
+        $romanToNum = [
+            'I' => '1',
+            'II' => '2',
+            'III' => '3'
+        ];
+        $number = $romanToNum[$number] ?? $number;
         return 'suspelat' . $number . 'Certificate';
     }
 
-    // Konversi nama file untuk jenis pelatihan lainnya (default)
+
+    // Default
     $itemSlug = strtolower(str_replace([' ', '-'], '', $item));
     return $itemSlug . 'Certificate';
 }
@@ -326,7 +323,7 @@ if ($conn->query($sql) === TRUE) {
     // C. Dirosah
     if (isset($_POST['dirosah'])) {
         foreach ($_POST['dirosah'] as $diklatItem) {
-            simpanRiwayatPelatihan($conn, $anggota_id, $diklatItem, 'c.' . getFileInputName($diklatItem));
+            simpanRiwayatPelatihan($conn, $anggota_id, $diklatItem, 'c.dirosah');
         }
     }
 
@@ -345,11 +342,18 @@ if ($conn->query($sql) === TRUE) {
     }
 
     // F. Pendidikan & Latihan Khusus
-    if (isset($_POST['pendidikanLatihanKhusus'])) {
-        foreach ($_POST['pendidikanLatihanKhusus'] as $diklatItem) {
+    if (isset($_POST['latihanKhusus'])) {
+        foreach ($_POST['latihanKhusus'] as $diklatItem) {
             simpanRiwayatPelatihan($conn, $anggota_id, $diklatItem, 'f.pendidikan_latihan_khusus');
         }
     }
+
+    if (isset($_POST['latihanKhusus'])) {
+        error_log("Data latihanKhusus diterima: " . print_r($_POST['latihanKhusus'], true));
+    } else {
+        error_log("Data latihanKhusus tidak diterima.");
+    }
+
 
 
     // Update tb_anggota jika berhasil, dan simpan password pengguna

@@ -1,5 +1,6 @@
 <?php
 require_once '../style/header.php';
+$anggota_id = $_SESSION['id'] ?? null;
 ?>
 
 <div class="content-wrapper">
@@ -12,7 +13,7 @@ require_once '../style/header.php';
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">User</a></li>
+                            <li class="breadcrumb-item"><a href="#">Master</a></li>
                             <li class="breadcrumb-item active">Data Pribadi</li>
                         </ol>
                     </div>
@@ -138,7 +139,7 @@ require_once '../style/header.php';
                 </div>
             </div>
 
-            <div class="col-md-6 col-sm-12">
+            <div class="col-md-4 col-sm-12">
                 <!-- Kartu Riwayat Kepengurusan Ansor -->
                 <div class="card card-outline card-primary mt-4">
                     <div class="card-header">
@@ -175,8 +176,8 @@ require_once '../style/header.php';
                 </div>
             </div>
 
-            <div class="col-md-6 col-sm-12">
-                <!-- Kartu Riwayat Pelatihan Kaderisasi -->
+            <!-- Kartu Riwayat Pelatihan Kaderisasi -->
+            <div class="col-md-4 col-sm-12">
                 <div class="card card-outline card-primary mt-4">
                     <div class="card-header">
                         <h3 class="card-title">Riwayat Pelatihan Kaderisasi</h3>
@@ -207,6 +208,34 @@ require_once '../style/header.php';
 
                 </div>
             </div>
+
+            <!-- Kartu Tanda Anggota -->
+            <div class="col-md-4 col-sm-12">
+                <div class="card card-outline card-primary mt-4">
+                    <div class="card-header">
+                        <h3 class="card-title">Kartu Tanda Registrasi</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-toggle="collapse" data-target="#dataTanda" aria-expanded="false">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="dataTanda" class="collapse">
+                        <div class="card-body text-center">
+                            <?php if ($anggota_id): ?>
+                                <img id="memberCardImage" src="../kartu/card.php?id=<?php echo $anggota_id; ?>" alt="Kartu Anggota" class="img-fluid mb-3">
+                                <!-- Tombol Download -->
+                                <a href="../kartu/card.php?id=<?php echo $anggota_id; ?>&download=true" class="btn btn-primary mt-2">
+                                    Download Kartu
+                                </a>
+                            <?php else: ?>
+                                <p>Anda belum login atau ID anggota tidak ditemukan.</p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <?php
