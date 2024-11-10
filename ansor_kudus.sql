@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 07 Nov 2024 pada 05.48
--- Versi server: 10.4.28-MariaDB
--- Versi PHP: 8.2.4
+-- Waktu pembuatan: 10 Nov 2024 pada 14.05
+-- Versi server: 10.4.32-MariaDB
+-- Versi PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -88,14 +88,6 @@ CREATE TABLE `tb_anggota` (
   `anggota_no_registrasi` varchar(64) NOT NULL,
   `anggota_keanggotaan` varchar(64) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data untuk tabel `tb_anggota`
---
-
-INSERT INTO `tb_anggota` (`anggota_id`, `anggota_foto`, `anggota_email`, `anggota_nama`, `anggota_nik`, `anggota_tempat_lahir`, `anggota_tanggal_lahir`, `anggota_golongan_darah`, `anggota_tinggi_badan`, `anggota_berat_badan`, `anggota_ayah`, `anggota_ibu`, `anggota_pernikahan`, `anggota_istri`, `anggota_anak_lk`, `anggota_anak_pr`, `anggota_npwp`, `anggota_foto_npwp`, `anggota_bpjs`, `anggota_foto_bpjs`, `anggota_domisili_kec`, `anggota_domisili_des`, `anggota_rt`, `anggota_rw`, `anggota_hp`, `anggota_fb`, `anggota_ig`, `anggota_tiktok`, `anggota_yt`, `anggota_twitter`, `anggota_pekerjaan`, `anggota_sistem_kerja`, `anggota_nama_tempat_kerja`, `anggota_alamat_tempat_kerja`, `anggota_pekerjaan_istri`, `anggota_pendapatan`, `anggota_pendapatan_istri`, `anggota_pendidikan`, `anggota_jurusan_smk`, `anggota_bidang_studi`, `anggota_nama_pendidikan`, `anggota_nama_pesantren`, `anggota_nama_madin`, `anggota_ipnu`, `anggota_pmii`, `anggota_dema_bem`, `anggota_organisasi_lain`, `anggota_parpol`, `anggota_pr_kec`, `anggota_pr_des`, `anggota_pr_jabatan`, `anggota_pr_mk`, `anggota_pac_kec`, `anggota_pac_jabatan`, `anggota_pac_mk`, `anggota_pc_jabatan`, `anggota_pc_mk`, `anggota_no_registrasi`, `anggota_keanggotaan`) VALUES
-(1, 'fotodiri-1-2105.png', 'test@gmail.com', 'test', '3319030382103820', 1101, '2024-11-01', 1, 1, 1, 'Test', 'Test', 1, '', 0, 0, 1, 'npwp-1-1630.jpg', 1, 'bpjs-1-1403.jpg', 3319030, 3319030005, 1, 1, '08988335639', 0, 0, 0, 0, 0, 21, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, 'Test', NULL, NULL, 0, 0, 0, NULL, 13, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', ''),
-(2, 'fotodiri-2-4013.png', 'test@gmail.com', 'test', '3319030382103820', 1101, '2024-11-01', 1, 1, 1, 'Test', 'Test', 1, '', 0, 0, 1, 'npwp-2-6992.jpg', 1, 'bpjs-2-3661.jpg', 3319030, 3319030005, 1, 1, '089883356399', 0, 0, 0, 0, 0, 21, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, 'Test', NULL, NULL, 0, 0, 0, NULL, 13, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '');
 
 -- --------------------------------------------------------
 
@@ -1008,7 +1000,8 @@ CREATE TABLE `tb_riwayat_diklat` (
   `riwayat_diklat_id` int(11) NOT NULL,
   `anggota_id` int(11) NOT NULL,
   `riwayat_diklat_item` varchar(64) NOT NULL,
-  `riwayat_diklat_file` varchar(128) NOT NULL
+  `riwayat_diklat_file` varchar(128) NOT NULL,
+  `created_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -1143,14 +1136,6 @@ CREATE TABLE `tb_users` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data untuk tabel `tb_users`
---
-
-INSERT INTO `tb_users` (`id`, `anggota_id`, `nama_lengkap`, `username`, `password`, `akses`, `role`, `created_at`, `updated_at`) VALUES
-(1, 1, 'test', '08988335639', '$2y$10$dL.4zVVqUscrTyQwvo7GcefWVgtZ0SBdlaN5GHjHMo2JgjzIgfIUm', 1, 'user', '2024-11-07 04:29:20', '2024-11-07 04:29:20'),
-(2, 2, 'test', '089883356399', '$2y$10$2UJxloNoanf/LzAJmA/mGuNhCo382nRroXqf7iyB1got0mI8fWTr6', 1, 'user', '2024-11-07 04:35:23', '2024-11-07 04:35:23');
 
 -- --------------------------------------------------------
 
@@ -1437,7 +1422,8 @@ ALTER TABLE `tb_regencies`
 -- Indeks untuk tabel `tb_riwayat_diklat`
 --
 ALTER TABLE `tb_riwayat_diklat`
-  ADD PRIMARY KEY (`riwayat_diklat_id`);
+  ADD PRIMARY KEY (`riwayat_diklat_id`),
+  ADD KEY `anggota_id` (`anggota_id`);
 
 --
 -- Indeks untuk tabel `tb_rt`
@@ -1478,7 +1464,7 @@ ALTER TABLE `tb_villages`
 -- AUTO_INCREMENT untuk tabel `tb_anggota`
 --
 ALTER TABLE `tb_anggota`
-  MODIFY `anggota_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `anggota_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_berat_badan`
@@ -1580,7 +1566,7 @@ ALTER TABLE `tb_tinggi_badan`
 -- AUTO_INCREMENT untuk tabel `tb_users`
 --
 ALTER TABLE `tb_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
@@ -1615,6 +1601,12 @@ ALTER TABLE `tb_anggota`
   ADD CONSTRAINT `tb_anggota_ibfk_7` FOREIGN KEY (`anggota_rt`) REFERENCES `tb_rt` (`rt_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `tb_anggota_ibfk_8` FOREIGN KEY (`anggota_rw`) REFERENCES `tb_rw` (`rw_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `tb_anggota_ibfk_9` FOREIGN KEY (`anggota_domisili_des`) REFERENCES `tb_villages` (`villages_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ketidakleluasaan untuk tabel `tb_riwayat_diklat`
+--
+ALTER TABLE `tb_riwayat_diklat`
+  ADD CONSTRAINT `tb_riwayat_diklat_ibfk_1` FOREIGN KEY (`anggota_id`) REFERENCES `tb_anggota` (`anggota_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ketidakleluasaan untuk tabel `tb_users`
