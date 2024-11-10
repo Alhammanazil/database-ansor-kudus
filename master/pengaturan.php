@@ -45,8 +45,16 @@ $hasil = $conn->query($sql);
         <div class="card">
           <div class="row justify-content-center my-4">
             <div class="col-12 col-md-4 mb-4 mb-md-0">
-              <div class="card mx-auto" style="width: 75%;">
-                <img src="../assets/photo.jpg" class="card-img-top" alt="gambar pengguna">
+              <div class="card mx-auto" style="width: 50%;">
+                <?php
+                $fotoFileName = $data['anggota_foto'];
+                $fotoFilePath = "../file/foto/" . $fotoFileName;
+                if ($fotoFileName && file_exists($fotoFilePath)) {
+                  echo '<img src="' . $fotoFilePath . '" class="card-img-top" alt="gambar pengguna">';
+                } else {
+                  echo '<img src="../assets/photo.jpg" class="card-img-top" alt="gambar pengguna">';
+                }
+                ?>
                 <div class="card-body text-center">
                   <h5 class="card-title">
                     <?php
@@ -63,7 +71,7 @@ $hasil = $conn->query($sql);
           <!-- Data User -->
           <div class="table-responsive my-3 mr-3">
             <h2 class="text-center">Data User</h2>
-            <table id="usersTable" class="table table-bordered table-hover table-striped" style="margin: 20px;">
+            <table id="usersTable" class="table table-bordered table-hover table-striped" style="margin: 10px;">
               <thead class="table-dark">
                 <tr>
                   <th class="text-center align-middle">No</th>
