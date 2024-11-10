@@ -211,6 +211,47 @@ while ($row = $resultDesa->fetch_assoc()) {
         'total_pendaftar' => $row['total_pendaftar']
     ];
 }
+
+// Fetch training data related to the current user
+$anggota_id = $_SESSION['id'] ?? null;
+$trainings = [];
+
+if ($anggota_id) {
+    // Query to fetch training data from tb_riwayat_diklat
+    $query_trainings = "SELECT riwayat_diklat_item, riwayat_diklat_file FROM tb_riwayat_diklat WHERE anggota_id = ?";
+    $stmt = $conn->prepare($query_trainings);
+    $stmt->bind_param("i", $anggota_id);
+    $stmt->execute();
+    $trainings = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+}
+
+// Define section-based mapping with folder paths
+$sections = [
+    'A. Pendidikan Kader' => [
+        'items' => ['PKD', 'PKL', 'PKN'],
+        'folder' => 'a.pendidikan_kader',
+    ],
+    'B. Latihan Instruktur' => [
+        'items' => ['LI I', 'LI II', 'LI III'],
+        'folder' => 'b.instruktur',
+    ],
+    'C. Dirosah' => [
+        'items' => ['Dirosah Ula', 'Dirosah Wustho', 'Dirosah Ulya'],
+        'folder' => 'c.dirosah',
+    ],
+    'D. Pendidikan & Latihan' => [
+        'items' => ['Diklatsar', 'SUSBALAN', 'SUSBANPIM'],
+        'folder' => 'd.pendidikan_latihan',
+    ],
+    'E. Kursus Kepelatihan' => [
+        'items' => ['SUSPELAT I', 'SUSPELAT II', 'SUSPELAT III'],
+        'folder' => 'e.kursus',
+    ],
+    'F. Pendidikan & Latihan Khusus' => [
+        'items' => ['DIKLATSUS BAGANA', 'DIKLATSUS PROTOKOLER', 'DIKLATSUS BALAKAR', 'DIKLATSUS BALANTAS', 'DIKLATSUS BARITIM', 'DIKLATSUS DENSUS 99', 'DIKLATSUS PROVOST'],
+        'folder' => 'f.pendidikan_latihan_khusus',
+    ],
+];
 ?>
 
 
