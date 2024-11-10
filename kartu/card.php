@@ -21,23 +21,23 @@ if (!$data) {
     die("Data anggota tidak ditemukan.");
 }
 
-// Format member name for file slug
-$anggota_nama = preg_replace('/[^A-Za-z0-9_\-]/', '_', $data['anggota_nama']); // Replace spaces and special characters with '_'
+$anggota_nama = $data['anggota_nama'];
+$formatted_id = str_pad($data['anggota_id'], 4, '0', STR_PAD_LEFT);
+$no_registrasi = $formatted_id . '/' . $data['anggota_no_registrasi'] . '/KTR/2024';
 
-// Get the file name for the photo
-$fotoFileName = $data['anggota_foto'];
-$fotoFilePath = "../file/foto/" . $fotoFileName;
+// Generate QR code URL with QRServer API using the required format
+$qr_data = urlencode($no_registrasi . '|' . $anggota_nama);
+$qrcode_url = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=$qr_data";
+
+// Load template
+$template = imagecreatefrompng('template.png');
 
 // Check if the photo file exists and is readable
+$fotoFileName = $data['anggota_foto'];
+$fotoFilePath = "../file/foto/" . $fotoFileName;
 if ($fotoFileName && file_exists($fotoFilePath)) {
     $fileExtension = strtolower(pathinfo($fotoFilePath, PATHINFO_EXTENSION));
-    if ($fileExtension === 'png') {
-        $pass_foto = imagecreatefrompng($fotoFilePath);
-    } elseif (in_array($fileExtension, ['jpg', 'jpeg'])) {
-        $pass_foto = imagecreatefromjpeg($fotoFilePath);
-    } else {
-        die("Format file foto tidak didukung.");
-    }
+    $pass_foto = ($fileExtension === 'png') ? imagecreatefrompng($fotoFilePath) : imagecreatefromjpeg($fotoFilePath);
 } else {
     die("Foto anggota tidak ditemukan atau tidak dapat dibaca.");
 }
@@ -46,19 +46,17 @@ if ($fotoFileName && file_exists($fotoFilePath)) {
 if (isset($_GET['download'])) {
     header('Content-Disposition: attachment; filename="KTR_' . $anggota_nama . '.png"');
     header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
-    header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
-    header('Pragma: no-cache');
 }
 
-// Load template and QR code
-$template = imagecreatefrompng('template.png');
-$qrcode = imagecreatefrompng('qrcode.png'); // Static QR code
+// Fetch the QR code image from the URL and load it
+$qrcode_content = file_get_contents($qrcode_url);
+$qrcode = imagecreatefromstring($qrcode_content);
 
 if (!$template || !$pass_foto || !$qrcode) {
     die("Error: Gagal memuat gambar yang diperlukan.");
 }
 
-// Create the main canvas
+// Create the main canvas and other image processing logic
 $canvas_width = imagesx($template);
 $canvas_height = imagesy($template);
 $image = imagecreatetruecolor($canvas_width, $canvas_height);
@@ -66,7 +64,10 @@ imagesavealpha($image, true);
 $transparent_color = imagecolorallocatealpha($image, 0, 0, 0, 127);
 imagefill($image, 0, 0, $transparent_color);
 
-// Maintain aspect ratio for the photo
+// Copy the template onto the main image
+imagecopy($image, $template, 0, 0, 0, 0, $canvas_width, $canvas_height);
+
+// Copy the member's photo with aspect ratio
 $original_width = imagesx($pass_foto);
 $original_height = imagesy($pass_foto);
 $scale = min(730 / $original_width, 975 / $original_height);
@@ -88,19 +89,21 @@ imagecopyresampled(
     $original_height
 );
 
-// Overlay the template
-imagecopy($image, $template, 0, 0, 0, 0, $canvas_width, $canvas_height);
+// Add QR code to the canvas
+$qrcode_x = 1875;
+$qrcode_y = 1400;
+$qrcode_width = 300;
+$qrcode_height = 300;
+imagecopyresampled($image, $qrcode, $qrcode_x, $qrcode_y, 0, 0, $qrcode_width, $qrcode_height, imagesx($qrcode), imagesy($qrcode));
 
 // Set text color
 $color = imagecolorallocate($image, 0, 0, 0); // Black
 
-// Format and position text
+// Font and position text
 $fontPathRegular = 'font/Poppins-SemiBold.ttf';
 $fontSize = 45;
-if (!file_exists($fontPathRegular)) {
-    die("Error: File font Poppins-SemiBold.ttf tidak ditemukan.");
-}
 
+// Format text
 function format_name($full_name)
 {
     $name = preg_replace('/, [A-Za-z.]+$/', '', $full_name);
@@ -118,9 +121,8 @@ function format_name($full_name)
     return $formatted_name;
 }
 
-$formatted_id = str_pad($data['anggota_id'], 4, '0', STR_PAD_LEFT);
 $nama = ": " . format_name($data['anggota_nama']);
-$no_registrasi = ": " . ($formatted_id . '/' . $data['anggota_no_registrasi'] . '/KTR/2024');
+$no_registrasi_text = ": " . $no_registrasi;
 $kecamatan = ": " . ($data['anggota_domisili_kec'] ?? 'Undefined');
 $desa = ": " . ($data['anggota_domisili_des'] ?? 'Undefined');
 $keanggotaan = ": Anggota";
@@ -136,7 +138,7 @@ imagettftext($image, $fontSize, 0, $x_data, $y_position, $color, $fontPathRegula
 
 $y_position += $line_spacing;
 imagettftext($image, $fontSize, 0, $x_field, $y_position, $color, $fontPathRegular, "No. Registrasi");
-imagettftext($image, $fontSize, 0, $x_data, $y_position, $color, $fontPathRegular, $no_registrasi);
+imagettftext($image, $fontSize, 0, $x_data, $y_position, $color, $fontPathRegular, $no_registrasi_text);
 
 $y_position += $line_spacing;
 imagettftext($image, $fontSize, 0, $x_field, $y_position, $color, $fontPathRegular, "Kecamatan");
@@ -149,13 +151,6 @@ imagettftext($image, $fontSize, 0, $x_data, $y_position, $color, $fontPathRegula
 $y_position += $line_spacing;
 imagettftext($image, $fontSize, 0, $x_field, $y_position, $color, $fontPathRegular, "Keanggotaan");
 imagettftext($image, $fontSize, 0, $x_data, $y_position, $color, $fontPathRegular, $keanggotaan);
-
-// Add QR code
-$qrcode_x = 1875;
-$qrcode_y = 1400;
-$qrcode_width = 300;
-$qrcode_height = 300;
-imagecopyresampled($image, $qrcode, $qrcode_x, $qrcode_y, 0, 0, $qrcode_width, $qrcode_height, imagesx($qrcode), imagesy($qrcode));
 
 // Output the image
 imagepng($image);
