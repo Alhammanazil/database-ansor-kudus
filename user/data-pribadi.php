@@ -55,31 +55,44 @@ require_once '../style/header.php';
                             <p><b>Nama Ayah</b>: <?php echo htmlspecialchars($data['anggota_ayah']); ?></p>
                             <p><b>Nama Ibu</b>: <?php echo htmlspecialchars($data['anggota_ibu']); ?></p>
                             <p><b>Status Pernikahan</b>: <?php echo htmlspecialchars($data['status_pernikahan']); ?></p>
-                            <p><b>NPWP</b>:
-                            <?php
-                            if ($data['anggota_npwp'] == '1') {
-                                $fotoFileName = $data['anggota_foto_npwp'];
-                                $fotoFilePath = "../file/npwp/" . $fotoFileName;
-                                if ($fotoFileName && file_exists($fotoFilePath)) {
-                                    echo '<br><img src="' . $fotoFilePath . '" width="150px" class="rounded" alt="npwp">';
+                            <p><b>KTP</b>:
+                                <?php
+                                $fotoFileName = $data['anggota_foto_ktp'];
+                                if (!empty($fotoFileName)) {
+                                    $fotoFilePath = "../file/ktp/" . $fotoFileName;
+                                    if (file_exists($fotoFilePath)) {
+                                        echo '<br><img src="' . $fotoFilePath . '" width="150px" class="rounded" alt="ktp">';
+                                    }
+                                } else {
+                                    echo '-';
                                 }
-                            } else {
-                                echo '-';
-                            }
-                            ?>
+                                ?>
+                            </p>
+                            <p><b>NPWP</b>:
+                                <?php
+                                if ($data['anggota_npwp'] == '1') {
+                                    $fotoFileName = $data['anggota_foto_npwp'];
+                                    $fotoFilePath = "../file/npwp/" . $fotoFileName;
+                                    if ($fotoFileName && file_exists($fotoFilePath)) {
+                                        echo '<br><img src="' . $fotoFilePath . '" width="150px" class="rounded" alt="npwp">';
+                                    }
+                                } else {
+                                    echo '-';
+                                }
+                                ?>
                             </p>
                             <p><b>Bpjs Kesehatan</b>:
-                            <?php
-                            if ($data['anggota_bpjs'] == '1') {
-                                $fotoFileName = $data['anggota_foto_bpjs'];
-                                $fotoFilePath = "../file/bpjs/" . $fotoFileName;
-                                if ($fotoFileName && file_exists($fotoFilePath)) {
-                                    echo '<br><img src="' . $fotoFilePath . '" width="150px" class="rounded" alt="bpjs">';
+                                <?php
+                                if ($data['anggota_bpjs'] == '1') {
+                                    $fotoFileName = $data['anggota_foto_bpjs'];
+                                    $fotoFilePath = "../file/bpjs/" . $fotoFileName;
+                                    if ($fotoFileName && file_exists($fotoFilePath)) {
+                                        echo '<br><img src="' . $fotoFilePath . '" width="150px" class="rounded" alt="bpjs">';
+                                    }
+                                } else {
+                                    echo '-';
                                 }
-                            } else {
-                                echo '-';
-                            }
-                            ?>
+                                ?>
                             </p>
                         </div>
                     </div>
