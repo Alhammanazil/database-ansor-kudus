@@ -151,6 +151,16 @@
                                                 <div class="invalid-feedback">Harap pilih file foto diri.</div>
                                             </div>
                                             <div class="form-group">
+                                                <label class="required-label" for="fotoKTP">Upload Foto KTP</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" name="fotoKTP" id="fotoKTP" accept="image/*" required>
+                                                        <label class="custom-file-label" for="fotoKTP">Pilih file</label>
+                                                    </div>
+                                                </div>
+                                                <div class="invalid-feedback">Harap pilih file foto KTP.</div>
+                                            </div>
+                                            <div class="form-group">
                                                 <label class="required-label" for="email">Alamat Email</label>
                                                 <input type="email" class="form-control" name="email" id="email" placeholder="Masukkan Alamat Email" required>
                                                 <div class="invalid-feedback">Harap masukkan email yang valid.</div>

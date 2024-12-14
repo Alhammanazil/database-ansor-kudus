@@ -294,12 +294,14 @@ if ($conn->query($sql) === TRUE) {
     $anggota_id = $conn->insert_id;
 
     // Unggah file foto diri, NPWP, dan BPJS dengan format nama khusus
+    $fotoKTPPath = uploadFileWithFormat('fotoKTP', 'ktp', 'ktp', $anggota_id);
     $fotoDiriPath = uploadFileWithFormat('fotoDiri', 'foto', 'fotodiri', $anggota_id);
     $npwpPath = uploadFileWithFormat('npwpFile', 'npwp', 'npwp', $anggota_id);
     $bpjsPath = uploadFileWithFormat('bpjsFile', 'bpjs', 'bpjs', $anggota_id);
 
     // Update tb_anggota dengan path file yang diunggah
     $sql_update = "UPDATE tb_anggota SET
+        anggota_foto_ktp = " . ($fotoKTPPath ? "'$fotoKTPPath'" : "NULL") . ",
         anggota_foto = " . ($fotoDiriPath ? "'$fotoDiriPath'" : "NULL") . ",
         anggota_foto_npwp = " . ($npwpPath ? "'$npwpPath'" : "NULL") . ",
         anggota_foto_bpjs = " . ($bpjsPath ? "'$bpjsPath'" : "NULL") . "
