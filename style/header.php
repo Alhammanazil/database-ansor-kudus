@@ -20,7 +20,7 @@ $role_access = [
 
     'admin kecamatan' => ['dashboard.php', 'data-ansor.php', 'form.php', 'data-pribadi.php'],
 
-    'user' => ['dashboard.php', 'data-pribadi.php']
+    'user' => ['dashboard.php', 'data-ansor.php', 'data-pribadi.php', 'edit-anggota.php']
 ];
 
 // Cek apakah user berhak mengakses halaman ini
@@ -393,19 +393,21 @@ $sections = [
                                 </a>
                             </li>
 
-                            <!-- Data Anggota -->
-                            <li class="nav-item">
-                                <a href="data-ansor.php" class="nav-link <?php echo ($current_page == 'data-ansor.php') ? 'active' : ''; ?>">
-                                    <i class="nav-icon fas fa-users"></i>
-                                    <p>Data Anggota</p>
-                                </a>
-                            </li>
-
                             <!-- Form Pendaftaran -->
                             <li class="nav-item">
                                 <a href="form.php" class="nav-link <?php echo ($current_page == 'form.php') ? 'active' : ''; ?>">
                                     <i class="nav-icon fas fa-user-plus"></i>
                                     <p>Form Pendaftaran</p>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+
+                        <?php if ($user_level == 'admin desa' || $user_level == 'admin kecamatan' || $user_level == 'master' || $user_level == 'user'): ?>
+                            <!-- Data Anggota -->
+                            <li class="nav-item">
+                                <a href="data-ansor.php" class="nav-link <?php echo ($current_page == 'data-ansor.php') ? 'active' : ''; ?>">
+                                    <i class="nav-icon fas fa-users"></i>
+                                    <p>Data Anggota</p>
                                 </a>
                             </li>
                         <?php endif; ?>

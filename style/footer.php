@@ -93,7 +93,7 @@
 </script>
 
 <script>
-    // Fungsi untuk generate pratinjau gambar dengan barcode
+    // Fungsi untuk generate pratinjau gambar dengan qrcode
     function generatePreview(noPeserta, namaOperator, imagePath) {
         const canvas = document.getElementById('cardCanvas');
         const context = canvas.getContext('2d');

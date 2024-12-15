@@ -77,7 +77,7 @@ $result = $stmt->get_result();
                                             <tr>
                                                 <td><?php echo $no++; ?></td>
                                                 <td><?php echo htmlspecialchars($row['anggota_nama']); ?></td>
-                                                <td><?php echo htmlspecialchars($row['alamat']); ?></td>
+                                                <td><?php echo strtoupper(htmlspecialchars($row['alamat'])); ?></td>
                                                 <td><?php echo htmlspecialchars($row['pekerjaan']); ?></td>
                                                 <td><?php echo htmlspecialchars($row['pendidikan']); ?></td>
                                                 <td style="text-align: center;">
