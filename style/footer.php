@@ -271,39 +271,18 @@
     // Initialize the form on page load to check if a status is already selected
     document.addEventListener('DOMContentLoaded', toggleMarriageFields);
 
-    // Field Alamat
     document.addEventListener('DOMContentLoaded', function() {
-        // Fetch data kecamatan saat halaman dimuat
-        fetch('../config/districts.php')
-            .then(response => response.json())
-            .then(data => {
-                const kecamatanSelect = document.getElementById('kecamatan');
-                kecamatanSelect.innerHTML = '<option value="" disabled selected>Pilih Kecamatan</option>';
+        const kecamatanSelect = document.getElementById('kecamatan');
+        const desaSelect = document.getElementById('desa');
 
-                if (data.status === "success") {
-                    data.data.forEach(district => {
-                        const option = document.createElement('option');
-                        option.value = district.districts_id;
-                        option.textContent = district.districts_name;
-                        kecamatanSelect.appendChild(option);
-                    });
-                } else {
-                    alert('Tidak ada data kecamatan ditemukan.');
-                }
-            })
-            .catch(error => console.error('Error:', error));
-
-        // Fetch data desa saat kecamatan berubah
-        document.getElementById('kecamatan').addEventListener('change', function() {
-            const districtsId = this.value;
-            const desaSelect = document.getElementById('desa');
-
+        // Fungsi untuk memuat desa berdasarkan kecamatan
+        function loadDesa(districtsId, selectedDesaId = null) {
             if (!districtsId) {
                 desaSelect.innerHTML = '<option value="" disabled selected>Pilih Desa</option>';
                 return;
             }
 
-            // Fetch desa berdasarkan kecamatan yang dipilih
+            // Fetch desa berdasarkan districts_id
             fetch(`../config/villages.php?districts_id=${districtsId}`)
                 .then(response => response.json())
                 .then(data => {
@@ -314,6 +293,11 @@
                             const option = document.createElement('option');
                             option.value = village.villages_id;
                             option.textContent = village.villages_name;
+
+                            // Tandai desa yang sudah dipilih sebelumnya
+                            if (village.villages_id === selectedDesaId) {
+                                option.selected = true;
+                            }
                             desaSelect.appendChild(option);
                         });
                     } else {
@@ -321,9 +305,44 @@
                     }
                 })
                 .catch(error => console.error('Error:', error));
+        }
+
+        // Fetch kecamatan saat halaman dimuat
+        fetch('../config/districts.php')
+            .then(response => response.json())
+            .then(data => {
+                kecamatanSelect.innerHTML = '<option value="" disabled selected>Pilih Kecamatan</option>';
+
+                if (data.status === "success") {
+                    data.data.forEach(district => {
+                        const option = document.createElement('option');
+                        option.value = district.districts_id;
+                        option.textContent = district.districts_name;
+
+                        // Tandai kecamatan yang sudah dipilih sebelumnya
+                        if (district.districts_id === kecamatanSelect.getAttribute('data-selected')) {
+                            option.selected = true;
+                        }
+                        kecamatanSelect.appendChild(option);
+                    });
+
+                    // Jika kecamatan sudah dipilih sebelumnya, muat desa
+                    const selectedDistrict = kecamatanSelect.getAttribute('data-selected');
+                    if (selectedDistrict) {
+                        const selectedVillage = desaSelect.getAttribute('data-selected');
+                        loadDesa(selectedDistrict, selectedVillage);
+                    }
+                } else {
+                    alert('Tidak ada data kecamatan ditemukan.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+
+        // Load desa saat kecamatan diubah
+        kecamatanSelect.addEventListener('change', function() {
+            loadDesa(this.value);
         });
     });
-
 
     // Field Kepengurusan Ranting
     document.addEventListener('DOMContentLoaded', function() {
@@ -375,6 +394,49 @@
                     }
                 })
                 .catch(error => console.error('Error:', error));
+        });
+    });
+
+    // Load Data Desa
+    document.addEventListener('DOMContentLoaded', function() {
+        const kecamatanSelect = document.getElementById('kecamatan');
+        const desaSelect = document.getElementById('desa');
+
+        // Fungsi untuk load data desa berdasarkan districts_id
+        function loadDesa(districtsId, selectedDesaId = null) {
+            fetch(`../config/villages.php?districts_id=${districtsId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        desaSelect.innerHTML = '<option value="" disabled>Pilih Desa</option>';
+                        data.data.forEach(village => {
+                            const option = document.createElement('option');
+                            option.value = village.villages_id;
+                            option.textContent = village.villages_name;
+
+                            // Tandai desa yang sudah dipilih sebelumnya
+                            if (village.villages_id === selectedDesaId) {
+                                option.selected = true;
+                            }
+                            desaSelect.appendChild(option);
+                        });
+                    } else {
+                        desaSelect.innerHTML = '<option value="">Tidak ada data desa</option>';
+                    }
+                });
+        }
+
+        // Cek jika ada data kecamatan yang sudah dipilih
+        const selectedDistrict = kecamatanSelect.getAttribute('data-selected');
+        const selectedVillage = desaSelect.getAttribute('data-selected');
+
+        if (selectedDistrict) {
+            loadDesa(selectedDistrict, selectedVillage);
+        }
+
+        // Reload desa jika kecamatan berubah
+        kecamatanSelect.addEventListener('change', function() {
+            loadDesa(this.value);
         });
     });
 

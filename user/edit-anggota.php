@@ -92,6 +92,29 @@ require_once '../style/header.php';
                     </div>
                     <div id="dataAnggota" class="collapse show">
                         <div class="card-body">
+                            <!-- Upload Foto KTP -->
+                            <div class="form-group">
+                                <label class="required-label" for="fotoKTP">Foto KTP</label>
+                                <!-- File Saat Ini -->
+                                <?php if (!empty($anggota['anggota_foto_ktp'])): ?>
+                                    <p>
+                                        File saat ini:
+                                        <a href="javascript:void(0);" onclick="previewImage('../file/ktp/<?= htmlspecialchars($anggota['anggota_foto_ktp']) ?>')">
+                                            <?= htmlspecialchars($anggota['anggota_foto_ktp']) ?>
+                                        </a>
+                                    </p>
+                                <?php endif; ?>
+
+                                <!-- Field Upload -->
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" name="fotoKTP" id="fotoKTP" accept="image/*">
+                                        <label class="custom-file-label" for="fotoKTP">Upload file baru jika ingin mengganti</label>
+                                    </div>
+                                </div>
+                            </div>
+
+
                             <!-- Alamat Email -->
                             <div class="form-group">
                                 <label class="required-label" for="email">Alamat Email</label>
@@ -218,31 +241,26 @@ require_once '../style/header.php';
                         <div class="card-body">
                             <!-- Kecamatan -->
                             <div class="form-group">
-                                <label class="required-label">Kecamatan</label>
-                                <select class="form-control select2" id="edit-kecamatan" name="edit-kecamatan" required>
+                                <label for="kecamatan" class="required-label">Kecamatan</label>
+                                <select id="kecamatan" name="kecamatan" class="form-control" data-selected="<?= $anggota['anggota_domisili_kec'] ?>" required>
                                     <option value="" disabled>Pilih Kecamatan</option>
-                                    <?php foreach ($kecamatan as $item) { ?>
-                                        <option value="<?= $item['districts_id'] ?>" <?= $item['districts_id'] == $anggota['anggota_domisili_kec'] ? 'selected' : '' ?>>
-                                            <?= $item['districts_name'] ?>
-                                        </option>
-                                    <?php } ?>
                                 </select>
-                                <div class="invalid-feedback">Harap pilih Kecamatan.</div>
+                                <div class="invalid-feedback">Silakan pilih Kecamatan.</div>
                             </div>
 
                             <!-- Desa -->
                             <div class="form-group">
-                                <label class="required-label">Desa</label>
-                                <select class="form-control select2" id="edit-desa" name="edit-desa" required>
-                                    <option value="" disabled selected>Pilih Desa</option>
-                                    <?php foreach ($desa as $item) { ?>
+                                <label for="desa" class="required-label">Desa</label>
+                                <select id="desa" name="desa" class="form-control" required>
+                                    <option value="" disabled>Pilih Desa</option>
+                                    <?php foreach ($desa as $item): ?>
                                         <option value="<?= $item['villages_id'] ?>" <?= $item['villages_id'] == $anggota['anggota_domisili_des'] ? 'selected' : '' ?>>
-                                            <?= $item['villages_name'] ?>
+                                            <?= htmlspecialchars($item['villages_name']); ?>
                                         </option>
-                                    <?php } ?>
+                                    <?php endforeach; ?>
                                 </select>
-                                <div class="invalid-feedback">Harap pilih Desa.</div>
                             </div>
+
 
                             <!-- RT -->
                             <div class="form-group">
@@ -605,22 +623,22 @@ require_once '../style/header.php';
                         <div class="card-body">
                             <!-- Tingkat Pimpinan Ranting -->
                             <h6>A. Tingkat Pimpinan Ranting</h6>
+                            <!-- Kecamatan Ranting -->
                             <div class="form-group">
                                 <label for="namaKecamatanRanting">Kecamatan</label>
-                                <select class="form-control select2" id="namaKecamatanRanting" name="namaKecamatanRanting">
-                                    <option value="">Pilih Kecamatan</option>
-                                    <?php foreach ($kecamatan as $item) { ?>
-                                        <option value="<?= $item['districts_id'] ?>"
-                                            <?= $item['districts_id'] == $anggota['anggota_pr_kec'] ? 'selected' : '' ?>>
+                                <select class="form-control" id="namaKecamatanRanting" name="namaKecamatanRanting">
+                                    <option value="" disabled selected>Pilih Kecamatan</option>
+                                    <?php foreach ($kecamatan as $item): ?>
+                                        <option value="<?= $item['districts_id'] ?>" <?= $item['districts_id'] == $anggota['anggota_pr_kec'] ? 'selected' : '' ?>>
                                             <?= $item['districts_name'] ?>
                                         </option>
-                                    <?php } ?>
+                                    <?php endforeach; ?>
                                 </select>
-                                <div class="invalid-feedback">Harap pilih Kecamatan.</div>
                             </div>
+
                             <div class="form-group">
                                 <label for="namaDesaRanting">Desa</label>
-                                <select class="form-control select2" id="namaDesaRanting" name="namaDesaRanting">
+                                <select class="form-control" id="namaDesaRanting" name="namaDesaRanting">
                                     <option value="">Pilih Desa</option>
                                     <?php foreach ($desa as $item) { ?>
                                         <option value="<?= $item['villages_id'] ?>"

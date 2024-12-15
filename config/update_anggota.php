@@ -46,22 +46,42 @@ function getFileInputName($item)
 }
 
 /**
- * Fungsi untuk menyimpan riwayat pelatihan ke database.
+ * Fungsi untuk menyimpan atau memperbarui riwayat pelatihan ke database.
  */
 function simpanRiwayatPelatihan($conn, $anggota_id, $diklatItem, $subfolder)
 {
     $fileInput = getFileInputName($diklatItem);
+    $fileName = null;
 
+    // Jika ada file baru yang diunggah
     if (isset($_FILES[$fileInput]) && $_FILES[$fileInput]['error'] !== UPLOAD_ERR_NO_FILE) {
         $fileName = uploadFileWithFormat($fileInput, $subfolder, strtolower(str_replace(' ', '-', $diklatItem)), $anggota_id);
+    }
 
+    // Cek apakah data riwayat pelatihan sudah ada
+    $checkQuery = "SELECT * FROM tb_riwayat_diklat WHERE anggota_id = ? AND riwayat_diklat_item = ?";
+    $stmt = $conn->prepare($checkQuery);
+    $stmt->bind_param("is", $anggota_id, $diklatItem);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        // Jika data sudah ada, lakukan update
         if ($fileName) {
-            $sql = "INSERT INTO tb_riwayat_diklat (anggota_id, riwayat_diklat_item, riwayat_diklat_file, created_at)
-                    VALUES ('$anggota_id', '$diklatItem', '$fileName', NOW())";
-
-            if (!$conn->query($sql)) {
-                error_log("Error saving $diklatItem: " . $conn->error);
-            }
+            $updateQuery = "UPDATE tb_riwayat_diklat SET riwayat_diklat_file = ?, updated_at = NOW() 
+                            WHERE anggota_id = ? AND riwayat_diklat_item = ?";
+            $stmt = $conn->prepare($updateQuery);
+            $stmt->bind_param("sis", $fileName, $anggota_id, $diklatItem);
+            $stmt->execute();
+        }
+    } else {
+        // Jika data belum ada, lakukan insert
+        if ($fileName) {
+            $insertQuery = "INSERT INTO tb_riwayat_diklat (anggota_id, riwayat_diklat_item, riwayat_diklat_file, created_at) 
+                            VALUES (?, ?, ?, NOW())";
+            $stmt = $conn->prepare($insertQuery);
+            $stmt->bind_param("iss", $anggota_id, $diklatItem, $fileName);
+            $stmt->execute();
         }
     }
 }
@@ -82,8 +102,8 @@ $fieldsToUpdate = [
     'anggota_pernikahan' => $_POST['status_pernikahan'],
     'anggota_npwp' => $_POST['npwp'],
     'anggota_bpjs' => $_POST['bpjs'],
-    'anggota_domisili_kec' => $_POST['edit-kecamatan'],
-    'anggota_domisili_des' => $_POST['edit-desa'],
+    'anggota_domisili_kec' => $_POST['kecamatan'],
+    'anggota_domisili_des' => $_POST['desa'],
     'anggota_rt' => $_POST['rt'],
     'anggota_rw' => $_POST['rw'],
     'anggota_hp' => $_POST['no_telp'],
@@ -91,19 +111,57 @@ $fieldsToUpdate = [
     'anggota_ig' => $_POST['instagram'],
     'anggota_tiktok' => $_POST['tiktok'],
     'anggota_yt' => $_POST['youtube'],
-    'anggota_twitter' => $_POST['twitter']
+    'anggota_twitter' => $_POST['twitter'],
+    'anggota_pr_kec' => $_POST['namaKecamatanRanting'] ?? $_POST['namaKecamatanRanting'],
+    'anggota_pr_des' => $_POST['namaDesaRanting'],
+    'anggota_pr_jabatan' => $_POST['jabatanRanting'],
+    'anggota_pr_mk' => $_POST['masaRanting'],
+    'anggota_pac_kec' => $_POST['kecamatanPAC'],
+    'anggota_pac_jabatan' => $_POST['jabatanPAC'],
+    'anggota_pac_mk' => $_POST['masaPAC'],
+    'anggota_pc_jabatan' => $_POST['jabatanPC'],
+    'anggota_pc_mk' => $_POST['masaPC']
 ];
+
+
+// Cek villages_code berdasarkan anggota_domisili_des
+$anggota_domisili_des = isset($_POST['edit-desa']) ? $_POST['edit-desa'] : null;
+if ($anggota_domisili_des) {
+    $villagesQuery = "SELECT villages_code FROM tb_villages WHERE villages_id = ?";
+    $stmt = $conn->prepare($villagesQuery);
+    $stmt->bind_param("s", $anggota_domisili_des);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $anggota_no_registrasi = $row['villages_code'];
+    } else {
+        // Nilai default jika tidak ditemukan
+        $anggota_no_registrasi = 'Unknown';
+    }
+
+    // Tambahkan ke dalam daftar field untuk diperbarui
+    $fieldsToUpdate['anggota_no_registrasi'] = $anggota_no_registrasi;
+}
 
 // Siapkan query pembaruan anggota
 $sql_update = "UPDATE tb_anggota SET ";
 foreach ($fieldsToUpdate as $field => $value) {
-    $escapedValue = mysqli_real_escape_string($conn, $value);
+    $escapedValue = $value !== null ? mysqli_real_escape_string($conn, $value) : ''; // Gunakan string kosong jika null
     $sql_update .= "$field = '$escapedValue', ";
 }
 $sql_update = rtrim($sql_update, ', ') . " WHERE anggota_id = '$anggota_id'";
 
 // Eksekusi pembaruan data anggota
 if ($conn->query($sql_update) === TRUE) {
+    // Sinkronisasi nama_lengkap di tb_users
+    $nama_lengkap = mysqli_real_escape_string($conn, $_POST['nama']); // Ambil nama yang di-update
+    $sync_users_query = "UPDATE tb_users SET nama_lengkap = '$nama_lengkap' WHERE anggota_id = '$anggota_id'";
+    if (!$conn->query($sync_users_query)) {
+        echo "Error sinkronisasi nama_lengkap di tb_users: " . $conn->error;
+    }
+
     // Perbarui file jika ada
     $fileUpdates = [
         'anggota_foto_ktp' => uploadFileWithFormat('fotoKTP', 'ktp', 'ktp', $anggota_id),
@@ -124,18 +182,7 @@ if ($conn->query($sql_update) === TRUE) {
         $conn->query($sql_file_update);
     }
 
-    // Perbarui nama di tabel tb_users
-    $anggota_nama = mysqli_real_escape_string($conn, $_POST['nama']);
-    $sql_update_user = "UPDATE tb_users SET nama_lengkap = '$anggota_nama' WHERE anggota_id = '$anggota_id'";
-
-    if (!$conn->query($sql_update_user)) {
-        echo "Error updating tb_users: " . $conn->error;
-    }
-
-    // Hapus riwayat pelatihan lama
-    $conn->query("DELETE FROM tb_riwayat_diklat WHERE anggota_id = '$anggota_id'");
-
-    // Simpan riwayat pelatihan baru
+    // Simpan riwayat pelatihan baru tanpa menghapus data lama
     $riwayatPelatihan = [
         'a.pendidikan_kader' => $_POST['pendidikanKader'] ?? [],
         'b.instruktur' => $_POST['latihanInstruktur'] ?? [],
@@ -153,21 +200,7 @@ if ($conn->query($sql_update) === TRUE) {
 
     // Redirect berdasarkan user role
     $user_role = $_SESSION['user_role'] ?? 'user';
-    switch ($user_role) {
-        case 'master':
-            header("Location: ../master/data-pribadi.php?anggota_id=$anggota_id");
-            break;
-        case 'admin_kecamatan':
-            header("Location: ../admin_kecamatan/data-pribadi.php?anggota_id=$anggota_id");
-            break;
-        case 'admin_desa':
-            header("Location: ../admin_desa/data-pribadi.php?anggota_id=$anggota_id");
-            break;
-        case 'user':
-        default:
-            header("Location: ../user/data-pribadi.php?anggota_id=$anggota_id");
-            break;
-    }
+    header("Location: ../$user_role/data-pribadi.php?anggota_id=$anggota_id");
     exit();
 } else {
     echo "Error: " . $sql_update . "<br>" . $conn->error;
