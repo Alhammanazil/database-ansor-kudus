@@ -17,6 +17,15 @@ require_once '../style/header.php';
                         </ol>
                     </div>
                 </div>
+
+                <!-- Tambahkan tombol Edit di sini -->
+                <div class="row">
+                    <div class="col-12 text-right mt-3">
+                        <a href="edit-anggota.php?id=<?php echo $anggota_id; ?>" class="btn btn-primary">
+                            <i class="fas fa-edit"></i> Edit Data
+                        </a>
+                    </div>
+                </div>
             </div>
         </section>
 
