@@ -1,5 +1,7 @@
 <?php
 require_once '../style/header.php';
+
+$token = generateToken($anggota_id);
 ?>
 
 <div class="content-wrapper">
@@ -15,6 +17,15 @@ require_once '../style/header.php';
                             <li class="breadcrumb-item"><a href="#">Master</a></li>
                             <li class="breadcrumb-item active">Data Pribadi</li>
                         </ol>
+                    </div>
+                </div>
+
+                <!-- Tambahkan tombol Edit di sini -->
+                <div class="row">
+                    <div class="col-12 text-right mt-3">
+                        <a href="edit-anggota.php?token=<?php echo urlencode($token); ?>" class="btn btn-primary">
+                            <i class="fas fa-edit"></i> Edit Data
+                        </a>
                     </div>
                 </div>
             </div>
@@ -55,6 +66,12 @@ require_once '../style/header.php';
                             <p><b>Nama Ayah</b>: <?php echo htmlspecialchars($data['anggota_ayah']); ?></p>
                             <p><b>Nama Ibu</b>: <?php echo htmlspecialchars($data['anggota_ibu']); ?></p>
                             <p><b>Status Pernikahan</b>: <?php echo htmlspecialchars($data['status_pernikahan']); ?></p>
+
+                            <?php if (strtolower($data['status_pernikahan']) === 'menikah'): ?>
+                                <p><b>Nama Istri</b>: <?php echo !empty($data['anggota_istri']) ? htmlspecialchars($data['anggota_istri']) : 'N/A'; ?></p>
+                                <p><b>Anak Laki-laki</b>: <?php echo !empty($data['anggota_anak_lk']) ? htmlspecialchars($data['anggota_anak_lk']) . ' anak' : 'N/A'; ?></p>
+                                <p><b>Anak Perempuan</b>: <?php echo !empty($data['anggota_anak_pr']) ? htmlspecialchars($data['anggota_anak_pr']) . ' anak' : 'N/A'; ?></p>
+                            <?php endif; ?>
                             <p><b>KTP</b>:
                                 <?php
                                 $fotoFileName = $data['anggota_foto_ktp'];
@@ -145,9 +162,12 @@ require_once '../style/header.php';
                             <p><strong>Sistem Kerja:</strong> <?php echo htmlspecialchars($data['anggota_sistem_kerja'] === null ? '-' : ($data['anggota_sistem_kerja'] == 0 ? 'Non Shift' : 'Shift')); ?></p>
                             <p><strong>Perusahaan:</strong> <?php echo htmlspecialchars($data['anggota_nama_tempat_kerja'] ?? '-'); ?></p>
                             <p><strong>Alamat Perusahaan:</strong> <?php echo htmlspecialchars($data['anggota_alamat_tempat_kerja'] ?? '-'); ?></p>
-                            <p><strong>Pekerjaan Istri:</strong> <?php echo htmlspecialchars($data['pekerjaan_istri'] ?? '-'); ?></p>
-                            <p><strong>Pendapatan Suami:</strong> <?php echo htmlspecialchars($data['pendapatan'] ?? '-'); ?></p>
-                            <p><strong>Pendapatan Istri:</strong> <?php echo htmlspecialchars($data['pendapatan_istri'] ?? '-'); ?></p>
+                            <?php if (strtolower($data['status_pernikahan']) === 'menikah'): ?>
+                                <p><strong>Pekerjaan Istri:</strong> <?php echo htmlspecialchars($data['pekerjaan_istri'] ?? '-'); ?></p>
+                                <p><strong>Pendapatan Istri:</strong> <?php echo htmlspecialchars($data['pendapatan_istri'] ?? '-'); ?></p>
+                            <?php endif; ?>
+
+                            <p><strong>Pendapatan:</strong> <?php echo htmlspecialchars($data['pendapatan'] ?? '-'); ?></p>
                         </div>
                     </div>
                 </div>
