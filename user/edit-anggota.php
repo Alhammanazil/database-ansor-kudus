@@ -1,10 +1,25 @@
 <?php
 require_once '../config/config.php';
 
-$id = $_GET['id'];
+// Validasi token
+if (!isset($_GET['token'])) {
+    echo "Akses tidak sah.";
+    exit();
+}
+
+$token = $_GET['token'];
+$id = validateToken($token); // Dekripsi token untuk mendapatkan ID
+
+// Cek apakah token valid
+if (!$id || !is_numeric($id)) {
+    echo "Token tidak valid.";
+    exit();
+}
+
+// Query untuk mendapatkan data anggota
 $query = "SELECT * FROM tb_anggota WHERE anggota_id = ?";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("s", $id);
+$stmt->bind_param("i", $id);
 $stmt->execute();
 $result = $stmt->get_result();
 $anggota = $result->fetch_assoc();
@@ -28,17 +43,19 @@ if ($result_kecamatan) {
 // Memuat desa awal berdasarkan kecamatan yang dipilih anggota
 $desa = [];
 if (!empty($anggota['anggota_domisili_kec'])) {
-    $result_desa = $conn->query("SELECT * FROM tb_villages WHERE districts_id = '" . $anggota['anggota_domisili_kec'] . "'");
-    if ($result_desa) {
-        $desa = $result_desa->fetch_all(MYSQLI_ASSOC);
-    }
+    $query_desa = "SELECT * FROM tb_villages WHERE districts_id = ?";
+    $stmt_desa = $conn->prepare($query_desa);
+    $stmt_desa->bind_param("s", $anggota['anggota_domisili_kec']);
+    $stmt_desa->execute();
+    $result_desa = $stmt_desa->get_result();
+    $desa = $result_desa->fetch_all(MYSQLI_ASSOC);
 }
 
 // Query untuk mendapatkan data riwayat pelatihan kaderisasi
 $riwayat_diklat = [];
 $query_riwayat_diklat = "SELECT * FROM tb_riwayat_diklat WHERE anggota_id = ?";
 $stmt_diklat = $conn->prepare($query_riwayat_diklat);
-$stmt_diklat->bind_param("s", $id);
+$stmt_diklat->bind_param("i", $id);
 $stmt_diklat->execute();
 $result_diklat = $stmt_diklat->get_result();
 
@@ -54,12 +71,12 @@ function isDiklatChecked($diklatItem, $riwayat_diklat)
     return isset($riwayat_diklat[$diklatItem]);
 }
 
-// Helper function untuk mendapatkan file terkait diklat
 function getDiklatFile($diklatItem, $riwayat_diklat)
 {
     return isset($riwayat_diklat[$diklatItem]) ? $riwayat_diklat[$diklatItem]['riwayat_diklat_file'] : null;
 }
 
+// Tampilkan halaman
 require_once '../style/header.php';
 ?>
 
@@ -92,6 +109,29 @@ require_once '../style/header.php';
                     </div>
                     <div id="dataAnggota" class="collapse show">
                         <div class="card-body">
+                            <!-- Upload Foto Diri -->
+                            <div class="form-group">
+                                <label class="required-label" for="fotoDiri">Foto Diri</label>
+
+                                <!-- File Saat Ini -->
+                                <?php if (!empty($anggota['anggota_foto'])): ?>
+                                    <p>
+                                        File saat ini:
+                                        <a href="javascript:void(0);" onclick="previewImage('../file/foto/<?= htmlspecialchars($anggota['anggota_foto']) ?>')">
+                                            <?= htmlspecialchars($anggota['anggota_foto']) ?>
+                                        </a>
+                                    </p>
+                                <?php endif; ?>
+
+                                <!-- Field Upload -->
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" name="fotoDiri" id="fotoDiri" accept="image/*">
+                                        <label class="custom-file-label" for="fotoDiri">Upload file baru jika ingin mengganti</label>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Upload Foto KTP -->
                             <div class="form-group">
                                 <label class="required-label" for="fotoKTP">Foto KTP</label>
@@ -113,7 +153,6 @@ require_once '../style/header.php';
                                     </div>
                                 </div>
                             </div>
-
 
                             <!-- Alamat Email -->
                             <div class="form-group">
@@ -200,37 +239,111 @@ require_once '../style/header.php';
                                     </label>
                                 </div>
                             </div>
-                            <!-- kepemilikan npwp -->
+
+                            <!-- Wrapper for Marriage Details (Hanya tampil jika sudah menikah) -->
+                            <div id="marriageDetails" style="display: <?= $anggota['anggota_pernikahan'] == '2' ? 'block' : 'none' ?>;">
+                                <!-- Nama Istri -->
+                                <div class="form-group">
+                                    <label for="nama_istri" id="nama_istriLabel" class="<?= !empty($anggota['anggota_istri']) ? 'required-label' : '' ?>">Nama Istri</label>
+                                    <input type="text" class="form-control" name="nama_istri" id="nama_istri" placeholder="Masukkan Nama Istri" value="<?= $anggota['anggota_istri'] ?? '' ?>" <?= $anggota['anggota_pernikahan'] == '2' ? 'required' : '' ?>>
+                                    <div class="invalid-feedback">Harap masukkan Nama Istri.</div>
+                                </div>
+
+                                <!-- Jumlah Anak Laki-laki -->
+                                <div class="form-group">
+                                    <label for="anak_laki" id="anak_lakiLabel" class="<?= isset($anggota['anggota_anak_lk']) ? 'required-label' : '' ?>">Jumlah Anak Laki-laki</label>
+                                    <input type="number" class="form-control" name="anak_laki" id="anak_laki" placeholder="Masukkan Jumlah Anak Laki-laki" value="<?= $anggota['anggota_anak_lk'] ?? '' ?>" <?= $anggota['anggota_pernikahan'] == '2' ? 'required' : '' ?>>
+                                    <div class="invalid-feedback">Harap masukkan Jumlah Anak Laki-laki.</div>
+                                </div>
+
+                                <!-- Jumlah Anak Perempuan -->
+                                <div class="form-group">
+                                    <label for="anak_perempuan" id="anak_perempuanLabel" class="<?= isset($anggota['anggota_anak_pr']) ? 'required-label' : '' ?>">Jumlah Anak Perempuan</label>
+                                    <input type="number" class="form-control" name="anak_perempuan" id="anak_perempuan" placeholder="Masukkan Jumlah Anak Perempuan" value="<?= $anggota['anggota_anak_pr'] ?? '' ?>" <?= $anggota['anggota_pernikahan'] == '2' ? 'required' : '' ?>>
+                                    <div class="invalid-feedback">Harap masukkan Jumlah Anak Perempuan.</div>
+                                </div>
+                            </div>
+
+                            <!-- NPWP -->
                             <div class="form-group">
                                 <label class="required-label">Kepemilikan NPWP</label>
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     <label class="btn btn-outline-primary <?= $anggota['anggota_npwp'] == '1' ? 'active' : '' ?>">
-                                        <input type="radio" name="npwp" value="1" <?= $anggota['anggota_npwp'] == '1' ? 'checked' : '' ?> required> Sudah Memiliki
+                                        <input type="radio" name="npwp" value="1" <?= $anggota['anggota_npwp'] == '1' ? 'checked' : '' ?> onclick="toggleUploadSection('npwp', true)"> Sudah Memiliki
                                     </label>
                                     <label class="btn btn-outline-secondary <?= $anggota['anggota_npwp'] == '0' ? 'active' : '' ?>">
-                                        <input type="radio" name="npwp" value="0" <?= $anggota['anggota_npwp'] == '0' ? 'checked' : '' ?> required> Belum Memiliki
+                                        <input type="radio" name="npwp" value="0" <?= $anggota['anggota_npwp'] == '0' ? 'checked' : '' ?> onclick="toggleUploadSection('npwp', false)"> Belum Memiliki
                                     </label>
                                 </div>
                             </div>
-                            <!-- bpjs kesehatan -->
+                            <br>
+
+                            <!-- NPWP Upload -->
+                            <div class="form-group">
+                                <label class="required-label" for="fotoNPWP">Foto NPWP</label>
+
+                                <!-- File Saat Ini -->
+                                <?php if (!empty($anggota['anggota_foto_npwp'])): ?>
+                                    <p>
+                                        File saat ini:
+                                        <a href="javascript:void(0);" onclick="previewImage('../file/npwp/<?= htmlspecialchars($anggota['anggota_foto_npwp']) ?>')">
+                                            <?= htmlspecialchars($anggota['anggota_foto_npwp']) ?>
+                                        </a>
+                                    </p>
+                                <?php endif; ?>
+
+                                <!-- Field Upload -->
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" name="fotoNPWP" id="fotoNPWP" accept="image/*" <?= empty($anggota['anggota_foto_npwp']) ? 'required' : '' ?>>
+                                        <label class="custom-file-label" for="fotoNPWP">Upload file baru jika ingin mengganti</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+
+                            <!-- BPJS -->
                             <div class="form-group">
                                 <label class="required-label">BPJS Kesehatan</label>
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     <label class="btn btn-outline-primary <?= $anggota['anggota_bpjs'] == '1' ? 'active' : '' ?>">
-                                        <input type="radio" name="bpjs" value="1" <?= $anggota['anggota_bpjs'] == '1' ? 'checked' : '' ?> required> Sudah Memiliki
+                                        <input type="radio" name="bpjs" value="1" <?= $anggota['anggota_bpjs'] == '1' ? 'checked' : '' ?> onclick="toggleUploadSection('bpjs', true)"> Sudah Memiliki
                                     </label>
                                     <label class="btn btn-outline-secondary <?= $anggota['anggota_bpjs'] == '0' ? 'active' : '' ?>">
-                                        <input type="radio" name="bpjs" value="0" <?= $anggota['anggota_bpjs'] == '0' ? 'checked' : '' ?> required> Belum Memiliki
+                                        <input type="radio" name="bpjs" value="0" <?= $anggota['anggota_bpjs'] == '0' ? 'checked' : '' ?> onclick="toggleUploadSection('bpjs', false)"> Belum Memiliki
                                     </label>
                                 </div>
-                            </div>
+                                <br>
 
-                            <!-- button -->
-                            <button type="button" class="btn btn-primary" onclick="nextStep('dataAnggota', 'dataPekerjaan')">Lanjut</button>
+                                <!-- BPJS Upload -->
+                                <div class="form-group">
+                                    <label class="required-label" for="fotoBPJS">Foto BPJS</label>
+
+                                    <!-- File Saat Ini -->
+                                    <?php if (!empty($anggota['anggota_foto_bpjs'])): ?>
+                                        <p>
+                                            File saat ini:
+                                            <a href="javascript:void(0);" onclick="previewImage('../file/bpjs/<?= htmlspecialchars($anggota['anggota_foto_bpjs']) ?>')">
+                                                <?= htmlspecialchars($anggota['anggota_foto_bpjs']) ?>
+                                            </a>
+                                        </p>
+                                    <?php endif; ?>
+
+                                    <!-- Field Upload -->
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" name="fotoBPJS" id="fotoBPJS" accept="image/*" <?= empty($anggota['anggota_foto_bpjs']) ? 'required' : '' ?>>
+                                            <label class="custom-file-label" for="fotoBPJS">Upload file baru jika ingin mengganti</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- button -->
+                                <button type="button" class="btn btn-primary" onclick="nextStep('dataAnggota', 'dataPekerjaan')">Lanjut</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-
 
                 <!-- Step 2: Alamat dan Media Sosial -->
                 <div class="card card-outline card-primary mt-4">
@@ -251,7 +364,7 @@ require_once '../style/header.php';
                             <!-- Desa -->
                             <div class="form-group">
                                 <label for="desa" class="required-label">Desa</label>
-                                <select id="desa" name="desa" class="form-control" required>
+                                <select id="desa" name="desa" class="form-control" data-selected="<?= $anggota['anggota_domisili_des'] ?>" required>
                                     <option value="" disabled>Pilih Desa</option>
                                     <?php foreach ($desa as $item): ?>
                                         <option value="<?= $item['villages_id'] ?>" <?= $item['villages_id'] == $anggota['anggota_domisili_des'] ? 'selected' : '' ?>>
@@ -259,8 +372,9 @@ require_once '../style/header.php';
                                         </option>
                                     <?php endforeach; ?>
                                 </select>
-                            </div>
 
+                                <div class="invalid-feedback">Silakan pilih Desa.</div>
+                            </div>
 
                             <!-- RT -->
                             <div class="form-group">
@@ -368,20 +482,20 @@ require_once '../style/header.php';
                     </div>
                 </div>
 
-
-                <!-- Step 3: Data Pekerjaan -->
+                <!-- Step 3: Pekerjaan -->
                 <div class="card card-outline card-primary mt-4">
                     <div class="card-header" data-toggle="collapse" data-target="#dataPekerjaan">
                         <h5>3. Data Pekerjaan</h5>
                     </div>
                     <div id="dataPekerjaan" class="collapse">
                         <div class="card-body">
+                            <!-- Jenis Pekerjaan Suami -->
                             <div class="form-group">
                                 <label class="required-label" for="jenisPekerjaan">Jenis Pekerjaan</label>
                                 <select class="form-control select2" id="jenisPekerjaan" name="jenisPekerjaan" required>
-                                    <option value="" disabled>Pilih Jenis Pekerjaan</option>
+                                    <option value="" disabled selected>Pilih Jenis Pekerjaan</option>
                                     <?php foreach ($pekerjaan as $job) { ?>
-                                        <option value="<?= $job['pekerjaan_id'] ?>" <?= $job['pekerjaan_id'] == $anggota['anggota_pekerjaan'] ? 'selected' : '' ?>>
+                                        <option value="<?= $job['pekerjaan_id'] ?>" <?= $anggota['anggota_pekerjaan'] == $job['pekerjaan_id'] ? 'selected' : '' ?>>
                                             <?= $job['pekerjaan_name'] ?>
                                         </option>
                                     <?php } ?>
@@ -389,13 +503,14 @@ require_once '../style/header.php';
                                 <div class="invalid-feedback">Harap pilih Jenis Pekerjaan.</div>
                             </div>
 
-                            <div id="jobFields" style="display: none;">
+                            <!-- Fields pekerjaan jika bekerja -->
+                            <div id="jobFields" style="display: <?= $anggota['anggota_pekerjaan'] ? 'block' : 'none' ?>;">
                                 <div class="form-group">
                                     <label id="pendapatanSuamiLabel">Pendapatan Perbulan</label>
                                     <select name="pendapatanSuami" class="form-control select2" id="pendapatanSuami">
-                                        <option value="" disabled>Pilih Pendapatan</option>
+                                        <option value="" disabled selected>Pilih Pendapatan</option>
                                         <?php foreach ($pendapatan as $item) { ?>
-                                            <option value="<?= $item['pendapatan_id'] ?>" <?= $item['pendapatan_id'] == $anggota['anggota_pendapatan'] ? 'selected' : '' ?>>
+                                            <option value="<?= $item['pendapatan_id'] ?>" <?= $anggota['anggota_pendapatan'] == $item['pendapatan_id'] ? 'selected' : '' ?>>
                                                 <?= $item['pendapatan_name'] ?>
                                             </option>
                                         <?php } ?>
@@ -406,11 +521,11 @@ require_once '../style/header.php';
                                 <div class="form-group">
                                     <label id="sistemKerjaLabel">Sistem Kerja</label>
                                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                        <label class="btn btn-outline-primary <?= $anggota['anggota_sistem_kerja'] == 0 ? 'active' : '' ?>">
-                                            <input type="radio" name="sistemKerja" value="0" <?= $anggota['anggota_sistem_kerja'] == 0 ? 'checked' : '' ?>> Non Shift
+                                        <label class="btn btn-outline-primary">
+                                            <input type="radio" name="sistemKerja" value="0" autocomplete="off" <?= $anggota['anggota_sistem_kerja'] == '0' ? 'checked' : '' ?>> Non Shift
                                         </label>
-                                        <label class="btn btn-outline-primary <?= $anggota['anggota_sistem_kerja'] == 1 ? 'active' : '' ?>">
-                                            <input type="radio" name="sistemKerja" value="1" <?= $anggota['anggota_sistem_kerja'] == 1 ? 'checked' : '' ?>> Shift
+                                        <label class="btn btn-outline-primary">
+                                            <input type="radio" name="sistemKerja" value="1" autocomplete="off" <?= $anggota['anggota_sistem_kerja'] == '1' ? 'checked' : '' ?>> Shift
                                         </label>
                                     </div>
                                     <div class="invalid-feedback">Harap pilih Sistem Kerja.</div>
@@ -418,24 +533,25 @@ require_once '../style/header.php';
 
                                 <div class="form-group">
                                     <label for="namaInstansi" id="namaInstansiLabel">Nama Instansi / Tempat Bekerja</label>
-                                    <input type="text" class="form-control" id="namaInstansi" name="namaInstansi" placeholder="Masukkan Nama Instansi" value="<?php echo htmlspecialchars($anggota['anggota_nama_tempat_kerja']); ?>">
+                                    <input type="text" class="form-control" id="namaInstansi" name="namaInstansi" placeholder="Masukkan Nama Instansi" value="<?= $anggota['anggota_nama_tempat_kerja'] ?? '' ?>">
                                     <div class="invalid-feedback">Harap isi Nama Instansi.</div>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="alamatInstansi" id="alamatInstansiLabel">Alamat Instansi / Tempat Bekerja</label>
-                                    <input type="text" class="form-control" id="alamatInstansi" name="alamatInstansi" placeholder="Masukkan Alamat Instansi" value="<?php echo htmlspecialchars($anggota['anggota_alamat_tempat_kerja']); ?>">
+                                    <input type="text" class="form-control" id="alamatInstansi" name="alamatInstansi" placeholder="Masukkan Alamat Instansi" value="<?= $anggota['anggota_alamat_tempat_kerja'] ?? '' ?>">
                                     <div class="invalid-feedback">Harap isi Alamat Instansi.</div>
                                 </div>
                             </div>
 
-                            <div id="pekerjaanIstriFields" style="display: none;">
+                            <!-- Pekerjaan Istri (Menampilkan jika status pernikahan sudah menikah) -->
+                            <div id="pekerjaanIstriFields" style="display: <?= $anggota['anggota_pernikahan'] == '2' && $anggota['anggota_pekerjaan_istri'] ? 'block' : 'none' ?>;">
                                 <div class="form-group">
                                     <label id="pekerjaanIstriLabel" for="jenisPekerjaanIstri">Jenis Pekerjaan Istri</label>
                                     <select class="form-control select2" id="pekerjaanIstri" name="jenisPekerjaanIstri">
-                                        <option value="" disabled>Pilih Jenis Pekerjaan</option>
+                                        <option value="" disabled selected>Pilih Jenis Pekerjaan</option>
                                         <?php foreach ($pekerjaan as $job) { ?>
-                                            <option value="<?= $job['pekerjaan_id'] ?>" <?= $job['pekerjaan_id'] == $anggota['anggota_pekerjaan_istri'] ? 'selected' : '' ?>>
+                                            <option value="<?= $job['pekerjaan_id'] ?>" <?= $anggota['anggota_pekerjaan_istri'] == $job['pekerjaan_id'] ? 'selected' : '' ?>>
                                                 <?= $job['pekerjaan_name'] ?>
                                             </option>
                                         <?php } ?>
@@ -444,13 +560,14 @@ require_once '../style/header.php';
                                 </div>
                             </div>
 
-                            <div id="pendapatanIstriFields" style="display: none;">
+                            <!-- Pendapatan Istri -->
+                            <div id="pendapatanIstriFields" style="display: <?= $anggota['anggota_pernikahan'] == '2' && $anggota['anggota_pendapatan_istri'] ? 'block' : 'none' ?>;">
                                 <div class="form-group">
                                     <label for="pendapatanIstri" id="pendapatanIstriLabel">Pendapatan Perbulan Istri</label>
                                     <select name="pendapatanIstri" class="form-control select2" id="pendapatanIstri">
-                                        <option value="" disabled>Pilih Pendapatan</option>
+                                        <option value="" disabled selected>Pilih Pendapatan</option>
                                         <?php foreach ($pendapatan as $item) { ?>
-                                            <option value="<?= $item['pendapatan_id'] ?>" <?= $item['pendapatan_id'] == $anggota['anggota_pendapatan_istri'] ? 'selected' : '' ?>>
+                                            <option value="<?= $item['pendapatan_id'] ?>" <?= $anggota['anggota_pendapatan_istri'] == $item['pendapatan_id'] ? 'selected' : '' ?>>
                                                 <?= $item['pendapatan_name'] ?>
                                             </option>
                                         <?php } ?>
@@ -500,6 +617,7 @@ require_once '../style/header.php';
                                             </option>
                                         <?php } ?>
                                     </select>
+
                                     <div class="invalid-feedback">Harap pilih Jurusan SMK.</div>
                                 </div>
                             </div>
@@ -613,7 +731,6 @@ require_once '../style/header.php';
                     </div>
                 </div>
 
-
                 <!-- Step 5: Riwayat Kepengurusan di Ansor -->
                 <div class="card card-outline card-primary mt-4">
                     <div class="card-header" data-toggle="collapse" data-target="#dataKepengurusan">
@@ -626,29 +743,19 @@ require_once '../style/header.php';
                             <!-- Kecamatan Ranting -->
                             <div class="form-group">
                                 <label for="namaKecamatanRanting">Kecamatan</label>
-                                <select class="form-control" id="namaKecamatanRanting" name="namaKecamatanRanting">
+                                <select class="form-control" id="namaKecamatanRanting" name="namaKecamatanRanting" data-selected="<?= $anggota['anggota_pr_kec'] ?>">
                                     <option value="" disabled selected>Pilih Kecamatan</option>
-                                    <?php foreach ($kecamatan as $item): ?>
-                                        <option value="<?= $item['districts_id'] ?>" <?= $item['districts_id'] == $anggota['anggota_pr_kec'] ? 'selected' : '' ?>>
-                                            <?= $item['districts_name'] ?>
-                                        </option>
-                                    <?php endforeach; ?>
                                 </select>
                             </div>
-
+                            <!-- Desa Ranting -->
                             <div class="form-group">
                                 <label for="namaDesaRanting">Desa</label>
-                                <select class="form-control" id="namaDesaRanting" name="namaDesaRanting">
-                                    <option value="">Pilih Desa</option>
-                                    <?php foreach ($desa as $item) { ?>
-                                        <option value="<?= $item['villages_id'] ?>"
-                                            <?= $item['villages_id'] == $anggota['anggota_pr_des'] ? 'selected' : '' ?>>
-                                            <?= $item['villages_name'] ?>
-                                        </option>
-                                    <?php } ?>
+                                <select class="form-control" id="namaDesaRanting" name="namaDesaRanting" data-selected="<?= $anggota['anggota_pr_des'] ?>">
+                                    <option value="" disabled selected>Pilih Desa</option>
                                 </select>
                                 <div class="invalid-feedback">Harap pilih Desa.</div>
                             </div>
+                            <!-- Jabatan -->
                             <div class="form-group">
                                 <label for="jabatanRanting">Jabatan Tertinggi di Ranting</label>
                                 <select name="jabatanRanting" class="form-control select2">
@@ -1020,13 +1127,13 @@ require_once '../style/header.php';
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="previewModalLabel">Preview Gambar Sertifikat</h5>
+                <h5 class="modal-title" id="previewModalLabel">Preview Gambar</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body text-center">
-                <img id="modalPreviewImage" src="" alt="Gambar Sertifikat" class="img-fluid">
+                <img id="modalPreviewImage" src="" alt="Gambar" class="img-fluid">
             </div>
         </div>
     </div>
