@@ -1,4 +1,5 @@
 <?php
+require_once '../config/config.php';
 require_once '../style/header.php';
 
 // Query untuk mengambil semua data anggota tanpa filter berdasarkan kecamatan atau desa
@@ -28,9 +29,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 ?>
 
-<!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -44,10 +43,9 @@ $result = $stmt->get_result();
                     </ol>
                 </div>
             </div>
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
 
-    <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -56,7 +54,6 @@ $result = $stmt->get_result();
                         <div class="card-header">
                             <h3 class="card-title">Tabel List Anggota Ansor</h3>
                         </div>
-                        <!-- /.card-header -->
                         <div class="card-body">
                             <table id="data-ansor" class="table-bordered table-striped table-hover table-responsive">
                                 <thead class="text-center btn-dark">
@@ -73,7 +70,10 @@ $result = $stmt->get_result();
                                 <tbody>
                                     <?php if ($result->num_rows > 0): ?>
                                         <?php $no = 1; ?>
-                                        <?php while ($row = $result->fetch_assoc()): ?>
+                                        <?php while ($row = $result->fetch_assoc()):
+                                            // Generate token untuk setiap anggota ID
+                                            $token = generateToken($row['anggota_id']);
+                                        ?>
                                             <tr>
                                                 <td><?php echo $no++; ?></td>
                                                 <td><?php echo htmlspecialchars($row['anggota_nama']); ?></td>
@@ -81,36 +81,35 @@ $result = $stmt->get_result();
                                                 <td><?php echo htmlspecialchars($row['pekerjaan']); ?></td>
                                                 <td><?php echo htmlspecialchars($row['pendidikan']); ?></td>
                                                 <td style="text-align: center;">
-                                                    <button onclick="previewCard(<?php echo $row['anggota_id']; ?>)" class="btn btn-primary btn-sm">
+                                                    <button onclick="previewCard('<?php echo $token; ?>')" class="btn btn-primary btn-sm">
                                                         <i class="fas fa-eye"></i> Preview
                                                     </button>
                                                 </td>
 
                                                 <td>
-                                                    <a href="edit-anggota.php?id=<?php echo $row['anggota_id']; ?>" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Edit</a>
-                                                    <a href="hapus-anggota.php?id=<?php echo $row['anggota_id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus data anggota?')"><i class="fas fa-trash"></i> Delete</a>
+                                                    <a href="edit-anggota.php?token=<?php echo urlencode($token); ?>" class="btn btn-warning btn-sm">
+                                                        <i class="fas fa-edit"></i> Edit
+                                                    </a>
+                                                    <a href="hapus-anggota.php?token=<?php echo urlencode($token); ?>" class="btn btn-danger btn-sm"
+                                                        onclick="return confirm('Yakin ingin menghapus data anggota?')">
+                                                        <i class="fas fa-trash"></i> Delete
+                                                    </a>
                                                 </td>
                                             </tr>
                                         <?php endwhile; ?>
                                     <?php else: ?>
                                         <tr>
-                                            <td colspan="6" class="text-center">Tidak ada data anggota.</td>
+                                            <td colspan="7" class="text-center">Tidak ada data anggota.</td>
                                         </tr>
                                     <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>
-                        <!-- /.card-body -->
                     </div>
-                    <!-- /.card -->
                 </div>
-                <!-- /.col -->
             </div>
-            <!-- /.row -->
         </div>
-        <!-- /.container-fluid -->
     </section>
-    <!-- /.content -->
 </div>
 
 <?php

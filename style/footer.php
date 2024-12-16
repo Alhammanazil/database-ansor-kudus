@@ -205,71 +205,73 @@
         $('#' + prev).collapse('show');
     }
 
-    // Field Data Anggota & Pekerjaan Istri
-    function toggleMarriageFields() {
-        const marriageDetails = document.getElementById('marriageDetails');
-        const nama_istri = document.getElementById('nama_istri');
-        const anak_laki = document.getElementById('anak_laki');
-        const anak_perempuan = document.getElementById('anak_perempuan');
-        const nama_istriLabel = document.getElementById('nama_istriLabel');
-        const anak_lakiLabel = document.getElementById('anak_lakiLabel');
-        const anak_perempuanLabel = document.getElementById('anak_perempuanLabel');
+    // Upload NPWP & BPJS
+    document.addEventListener('DOMContentLoaded', function() {
+        // Cek status NPWP dan BPJS saat halaman dimuat
+        const npwp = document.querySelector('input[name="npwp"]:checked');
+        const bpjs = document.querySelector('input[name="bpjs"]:checked');
 
-        const pekerjaanIstriFields = document.getElementById('pekerjaanIstriFields');
-        const pekerjaanIstri = document.getElementById('pekerjaanIstri');
-        const pendapatanIstri = document.getElementById('pendapatanIstri');
-        const pekerjaanIstriLabel = document.getElementById('pekerjaanIstriLabel');
-        const pendapatanIstriLabel = document.getElementById('pendapatanIstriLabel');
-
-        const selectedStatusPernikahan = document.querySelector('input[name="status_pernikahan"]:checked').value;
-
-        document.getElementById('pekerjaanIstri').onchange = function() {
-            if (this.value !== '21') {
-                pendapatanIstriFields.style.display = 'block';
-                pendapatanIstri.required = true;
-                pendapatanIstriLabel.classList.add('required-label');
-            } else {
-                pendapatanIstriFields.style.display = 'none';
-                pendapatanIstri.required = false;
-                pendapatanIstriLabel.classList.remove('required-label');
-            }
+        if (npwp && npwp.value === '1') {
+            toggleUploadSection('npwp', true);
         }
 
-        // Show fields and mark as required if "Menikah" is selected
-        if (selectedStatusPernikahan === '2') {
-            marriageDetails.style.display = 'block';
-            pekerjaanIstriFields.style.display = 'block';
-            nama_istri.required = true;
-            anak_laki.required = true;
-            anak_perempuan.required = true;
-            pekerjaanIstri.required = true;
+        if (bpjs && bpjs.value === '1') {
+            toggleUploadSection('bpjs', true);
+        }
+    });
 
-            // Add red asterisk to labels
-            nama_istriLabel.classList.add('required-label');
-            anak_lakiLabel.classList.add('required-label');
-            anak_perempuanLabel.classList.add('required-label');
-            pekerjaanIstriLabel.classList.add('required-label');
+    function toggleUploadSection(field, show) {
+        const uploadSection = document.getElementById(field + 'Upload');
+        const fileInput = document.getElementById(field + 'File');
+
+        // Tampilkan atau sembunyikan bagian upload
+        uploadSection.style.display = show ? 'block' : 'none';
+
+        // Tambahkan atau hapus atribut required berdasarkan pilihan
+        if (show) {
+            fileInput.setAttribute('required', 'required');
         } else {
-            // Hide fields and remove required attribute
-            marriageDetails.style.display = 'none';
-            pekerjaanIstriFields.style.display = 'none';
-            nama_istri.required = false;
-            anak_laki.required = false;
-            anak_perempuan.required = false;
-            pekerjaanIstri.required = false;
-            pendapatanIstri.required = false;
-
-            // Remove red asterisk from labels
-            nama_istriLabel.classList.remove('required-label');
-            anak_lakiLabel.classList.remove('required-label');
-            anak_perempuanLabel.classList.remove('required-label');
-            pekerjaanIstriLabel.classList.remove('required-label');
-            pendapatanIstriLabel.classList.remove('required-label');
+            fileInput.removeAttribute('required');
         }
     }
 
-    // Initialize the form on page load to check if a status is already selected
-    document.addEventListener('DOMContentLoaded', toggleMarriageFields);
+
+    // Field Data Anggota & Pekerjaan Istri
+    document.addEventListener('DOMContentLoaded', function() {
+        // Panggil fungsi untuk mengatur tampilan field sesuai data awal
+        toggleMarriageAndJobFields();
+
+        // Tambahkan event listener untuk perubahan status pernikahan dan pekerjaan
+        document.querySelectorAll('input[name="status_pernikahan"]').forEach(function(radioButton) {
+            radioButton.addEventListener('change', toggleMarriageAndJobFields);
+        });
+
+        document.getElementById('jenisPekerjaan').addEventListener('change', toggleMarriageAndJobFields);
+    });
+
+    function toggleMarriageAndJobFields() {
+        // Ambil status pernikahan yang dipilih
+        const selectedStatusPernikahan = document.querySelector('input[name="status_pernikahan"]:checked');
+        const marriageDetails = document.getElementById('marriageDetails'); // Div pembungkus nama istri dan anak
+        const pekerjaanIstriFields = document.getElementById('pekerjaanIstriFields');
+        const pendapatanIstriFields = document.getElementById('pendapatanIstriFields');
+
+        // Cek jika status pernikahan adalah "Sudah Menikah"
+        if (selectedStatusPernikahan && selectedStatusPernikahan.value === '2') {
+            marriageDetails.style.display = 'block'; // Tampilkan field nama istri dan anak
+            pekerjaanIstriFields.style.display = 'block'; // Tampilkan field pekerjaan istri
+            pendapatanIstriFields.style.display = 'block'; // Tampilkan pendapatan istri
+        } else {
+            marriageDetails.style.display = 'none';
+            pekerjaanIstriFields.style.display = 'none';
+            pendapatanIstriFields.style.display = 'none';
+        }
+
+        // Tampilkan pekerjaan suami jika jenis pekerjaan dipilih
+        const jobFields = document.getElementById('jobFields');
+        const jenisPekerjaan = document.getElementById('jenisPekerjaan').value;
+        jobFields.style.display = jenisPekerjaan ? 'block' : 'none';
+    }
 
     document.addEventListener('DOMContentLoaded', function() {
         const kecamatanSelect = document.getElementById('kecamatan');
@@ -277,6 +279,8 @@
 
         // Fungsi untuk memuat desa berdasarkan kecamatan
         function loadDesa(districtsId, selectedDesaId = null) {
+            console.log("Loading desa for districtsId:", districtsId, "selectedDesaId:", selectedDesaId);
+
             if (!districtsId) {
                 desaSelect.innerHTML = '<option value="" disabled selected>Pilih Desa</option>';
                 return;
@@ -286,6 +290,7 @@
             fetch(`../config/villages.php?districts_id=${districtsId}`)
                 .then(response => response.json())
                 .then(data => {
+                    console.log("Response from villages.php:", data);
                     desaSelect.innerHTML = '<option value="" disabled selected>Pilih Desa</option>';
 
                     if (data.status === "success") {
@@ -294,17 +299,20 @@
                             option.value = village.villages_id;
                             option.textContent = village.villages_name;
 
-                            // Tandai desa yang sudah dipilih sebelumnya
-                            if (village.villages_id === selectedDesaId) {
+                            // Menandai desa yang sudah dipilih sebelumnya
+                            if (village.villages_id == selectedDesaId) {
                                 option.selected = true;
                             }
+
                             desaSelect.appendChild(option);
                         });
                     } else {
                         alert('Tidak ada data desa ditemukan.');
                     }
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         }
 
         // Fetch kecamatan saat halaman dimuat
@@ -326,10 +334,10 @@
                         kecamatanSelect.appendChild(option);
                     });
 
-                    // Jika kecamatan sudah dipilih sebelumnya, muat desa
+                    // Muat desa berdasarkan kecamatan yang sudah dipilih sebelumnya
                     const selectedDistrict = kecamatanSelect.getAttribute('data-selected');
+                    const selectedVillage = desaSelect.getAttribute('data-selected');
                     if (selectedDistrict) {
-                        const selectedVillage = desaSelect.getAttribute('data-selected');
                         loadDesa(selectedDistrict, selectedVillage);
                     }
                 } else {
@@ -346,100 +354,72 @@
 
     // Field Kepengurusan Ranting
     document.addEventListener('DOMContentLoaded', function() {
-        // Fetch data kecamatan saat halaman dimuat
-        fetch('../config/districts.php')
-            .then(response => response.json())
-            .then(data => {
-                const kecamatanSelect = document.getElementById('namaKecamatanRanting');
-                kecamatanSelect.innerHTML = '<option value="" disabled selected>Pilih Kecamatan</option>';
+        const kecamatanSelect = document.getElementById('namaKecamatanRanting');
+        const desaSelect = document.getElementById('namaDesaRanting');
 
-                if (data.status === "success") {
-                    data.data.forEach(district => {
-                        const option = document.createElement('option');
-                        option.value = district.districts_id;
-                        option.textContent = district.districts_name;
-                        kecamatanSelect.appendChild(option);
-                    });
-                } else {
-                    alert('Tidak ada data kecamatan ditemukan.');
-                }
-            })
-            .catch(error => console.error('Error:', error));
+        // Ambil data-selected dari atribut HTML
+        const selectedDistrict = kecamatanSelect.getAttribute('data-selected');
+        const selectedVillage = desaSelect.getAttribute('data-selected');
 
-        // Fetch data desa saat kecamatan berubah
-        document.getElementById('namaKecamatanRanting').addEventListener('change', function() {
-            const districtsId = this.value;
-            const desaSelect = document.getElementById('namaDesaRanting');
-
-            if (!districtsId) {
-                desaSelect.innerHTML = '<option value="" disabled selected>Pilih Desa</option>';
-                return;
-            }
-
-            // Fetch desa berdasarkan kecamatan yang dipilih
-            fetch(`../config/villages.php?districts_id=${districtsId}`)
-                .then(response => response.json())
-                .then(data => {
-                    desaSelect.innerHTML = '<option value="" disabled selected>Pilih Desa</option>';
-
-                    if (data.status === "success") {
-                        data.data.forEach(village => {
-                            const option = document.createElement('option');
-                            option.value = village.villages_id;
-                            option.textContent = village.villages_name;
-                            desaSelect.appendChild(option);
-                        });
-                    } else {
-                        alert('Tidak ada data desa ditemukan.');
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        });
-    });
-
-    // Load Data Desa
-    document.addEventListener('DOMContentLoaded', function() {
-        const kecamatanSelect = document.getElementById('kecamatan');
-        const desaSelect = document.getElementById('desa');
-
-        // Fungsi untuk load data desa berdasarkan districts_id
+        // Fungsi untuk memuat desa berdasarkan districts_id
         function loadDesa(districtsId, selectedDesaId = null) {
             fetch(`../config/villages.php?districts_id=${districtsId}`)
                 .then(response => response.json())
                 .then(data => {
+                    desaSelect.innerHTML = '<option value="" disabled>Pilih Desa</option>';
+
                     if (data.status === "success") {
-                        desaSelect.innerHTML = '<option value="" disabled>Pilih Desa</option>';
                         data.data.forEach(village => {
                             const option = document.createElement('option');
                             option.value = village.villages_id;
                             option.textContent = village.villages_name;
 
                             // Tandai desa yang sudah dipilih sebelumnya
-                            if (village.villages_id === selectedDesaId) {
+                            if (village.villages_id == selectedDesaId) {
                                 option.selected = true;
                             }
                             desaSelect.appendChild(option);
                         });
                     } else {
-                        desaSelect.innerHTML = '<option value="">Tidak ada data desa</option>';
+                        console.error('Desa tidak ditemukan.');
                     }
-                });
+                })
+                .catch(error => console.error('Error fetching desa:', error));
         }
 
-        // Cek jika ada data kecamatan yang sudah dipilih
-        const selectedDistrict = kecamatanSelect.getAttribute('data-selected');
-        const selectedVillage = desaSelect.getAttribute('data-selected');
+        // Fetch kecamatan dan tandai kecamatan yang dipilih sebelumnya
+        fetch('../config/districts.php')
+            .then(response => response.json())
+            .then(data => {
+                kecamatanSelect.innerHTML = '<option value="" disabled>Pilih Kecamatan</option>';
 
-        if (selectedDistrict) {
-            loadDesa(selectedDistrict, selectedVillage);
-        }
+                if (data.status === "success") {
+                    data.data.forEach(district => {
+                        const option = document.createElement('option');
+                        option.value = district.districts_id;
+                        option.textContent = district.districts_name;
 
-        // Reload desa jika kecamatan berubah
+                        // Tandai kecamatan yang dipilih sebelumnya
+                        if (district.districts_id == selectedDistrict) {
+                            option.selected = true;
+
+                            // Muat desa berdasarkan kecamatan yang dipilih
+                            loadDesa(selectedDistrict, selectedVillage);
+                        }
+
+                        kecamatanSelect.appendChild(option);
+                    });
+                } else {
+                    console.error('Data kecamatan tidak ditemukan.');
+                }
+            })
+            .catch(error => console.error('Error fetching kecamatan:', error));
+
+        // Event listener untuk memuat desa saat kecamatan diubah
         kecamatanSelect.addEventListener('change', function() {
             loadDesa(this.value);
         });
     });
-
 
     // Field Pekerjaan Suami
     document.getElementById('jenisPekerjaan').onchange = function() {

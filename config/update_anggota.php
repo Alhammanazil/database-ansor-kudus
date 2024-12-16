@@ -89,6 +89,7 @@ function simpanRiwayatPelatihan($conn, $anggota_id, $diklatItem, $subfolder)
 // Ambil ID anggota dan data dari form
 $anggota_id = mysqli_real_escape_string($conn, $_POST['id']);
 $fieldsToUpdate = [
+    // Step 1: Data Anggota
     'anggota_email' => $_POST['email'],
     'anggota_nama' => $_POST['nama'],
     'anggota_nik' => $_POST['nik'],
@@ -100,8 +101,13 @@ $fieldsToUpdate = [
     'anggota_ayah' => $_POST['ayah'],
     'anggota_ibu' => $_POST['ibu'],
     'anggota_pernikahan' => $_POST['status_pernikahan'],
+    'anggota_istri' => $_POST['nama_istri'] ?? null,
+    'anggota_anak_lk' => $_POST['anak_laki'] ?? null,
+    'anggota_anak_pr' => $_POST['anak_perempuan'] ?? null,
     'anggota_npwp' => $_POST['npwp'],
     'anggota_bpjs' => $_POST['bpjs'],
+
+    // Step 2: Alamat dan Media Sosial
     'anggota_domisili_kec' => $_POST['kecamatan'],
     'anggota_domisili_des' => $_POST['desa'],
     'anggota_rt' => $_POST['rt'],
@@ -112,17 +118,40 @@ $fieldsToUpdate = [
     'anggota_tiktok' => $_POST['tiktok'],
     'anggota_yt' => $_POST['youtube'],
     'anggota_twitter' => $_POST['twitter'],
-    'anggota_pr_kec' => $_POST['namaKecamatanRanting'] ?? $_POST['namaKecamatanRanting'],
-    'anggota_pr_des' => $_POST['namaDesaRanting'],
-    'anggota_pr_jabatan' => $_POST['jabatanRanting'],
-    'anggota_pr_mk' => $_POST['masaRanting'],
-    'anggota_pac_kec' => $_POST['kecamatanPAC'],
-    'anggota_pac_jabatan' => $_POST['jabatanPAC'],
-    'anggota_pac_mk' => $_POST['masaPAC'],
-    'anggota_pc_jabatan' => $_POST['jabatanPC'],
-    'anggota_pc_mk' => $_POST['masaPC']
-];
 
+    // Step 3: Pekerjaan
+    'anggota_pekerjaan' => $_POST['jenisPekerjaan'] ?? null,
+    'anggota_sistem_kerja' => $_POST['sistemKerja'] ?? null,
+    'anggota_nama_tempat_kerja' => $_POST['namaInstansi'] ?? null,
+    'anggota_alamat_tempat_kerja' => $_POST['alamatInstansi'] ?? null,
+    'anggota_pendapatan' => $_POST['pendapatanSuami'] ?? null,
+    'anggota_pekerjaan_istri' => $_POST['jenisPekerjaanIstri'] ?? null,
+    'anggota_pendapatan_istri' => $_POST['pendapatanIstri'] ?? null,
+
+    // Step 4: Riwayat Pendidikan & Organisasi
+    'anggota_pendidikan' => $_POST['pendidikanTerakhir'],
+    'anggota_jurusan_smk' => $_POST['jurusanTerakhir'] ?? null,
+    'anggota_bidang_studi' => $_POST['bidangStudi'] ?? null,
+    'anggota_nama_pendidikan' => $_POST['lembagaPendidikan'],
+    'anggota_nama_pesantren' => $_POST['namaPesantren'] ?? null,
+    'anggota_nama_madin' => $_POST['madrasahDiniyah'] ?? null,
+    'anggota_ipnu' => $_POST['ipnu'],
+    'anggota_pmii' => $_POST['pmii'],
+    'anggota_dema_bem' => $_POST['dema'],
+    'anggota_organisasi_lain' => $_POST['organisasiLainnya'] ?? null,
+    'anggota_parpol' => $_POST['afiliasiPartai'],
+
+    // Step 5: Riwayat Kepengurusan Ansor
+    'anggota_pr_kec' => $_POST['namaKecamatanRanting'] ?? null,
+    'anggota_pr_des' => $_POST['namaDesaRanting'] ?? null,
+    'anggota_pr_jabatan' => $_POST['jabatanRanting'] ?? null,
+    'anggota_pr_mk' => $_POST['masaRanting'] ?? null,
+    'anggota_pac_kec' => $_POST['kecamatanPAC'] ?? null,
+    'anggota_pac_jabatan' => $_POST['jabatanPAC'] ?? null,
+    'anggota_pac_mk' => $_POST['masaPAC'] ?? null,
+    'anggota_pc_jabatan' => $_POST['jabatanPC'] ?? null,
+    'anggota_pc_mk' => $_POST['masaPC'] ?? null,
+];
 
 // Cek villages_code berdasarkan anggota_domisili_des
 $anggota_domisili_des = isset($_POST['edit-desa']) ? $_POST['edit-desa'] : null;
@@ -148,8 +177,8 @@ if ($anggota_domisili_des) {
 // Siapkan query pembaruan anggota
 $sql_update = "UPDATE tb_anggota SET ";
 foreach ($fieldsToUpdate as $field => $value) {
-    $escapedValue = $value !== null ? mysqli_real_escape_string($conn, $value) : ''; // Gunakan string kosong jika null
-    $sql_update .= "$field = '$escapedValue', ";
+    $escapedValue = $value !== null ? "'" . mysqli_real_escape_string($conn, $value) . "'" : "NULL";
+    $sql_update .= "$field = $escapedValue, ";
 }
 $sql_update = rtrim($sql_update, ', ') . " WHERE anggota_id = '$anggota_id'";
 
@@ -198,9 +227,23 @@ if ($conn->query($sql_update) === TRUE) {
         }
     }
 
-    // Redirect berdasarkan user role
-    $user_role = $_SESSION['user_role'] ?? 'user';
-    header("Location: ../$user_role/data-pribadi.php?anggota_id=$anggota_id");
+    // Ambil role user dari session
+    if (isset($_SESSION['user']['role'])) {
+        $user_role = $_SESSION['user']['role'];
+    } else {
+        $user_role = 'user';
+    }
+
+    // Redirect ke halaman data pribadi sesuai role
+    if ($user_role === 'master') {
+        header("Location: ../master/data-pribadi.php?anggota_id=$anggota_id");
+    } elseif ($user_role === 'admin kecamatan') {
+        header("Location: ../admin_kecamatan/data-pribadi.php?anggota_id=$anggota_id");
+    } elseif ($user_role === 'admin desa') {
+        header("Location: ../admin_desa/data-pribadi.php?anggota_id=$anggota_id");
+    } else {
+        header("Location: ../user/data-pribadi.php?anggota_id=$anggota_id");
+    }
     exit();
 } else {
     echo "Error: " . $sql_update . "<br>" . $conn->error;
