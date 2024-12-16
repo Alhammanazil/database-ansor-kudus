@@ -29,7 +29,7 @@ if ($result->num_rows === 1) {
                 $cookie_name = "user_login";
                 $cookie_value = base64_encode($username . ':' . $password);
                 $cookie_time = time() + (86400 * 30); // 30 hari
-                setcookie($cookie_name, $cookie_value, $cookie_time, "/");
+                setcookie($cookie_name, $cookie_value, $cookie_time, "/", "", true, true);
             }
 
             // Redirect berdasarkan role
