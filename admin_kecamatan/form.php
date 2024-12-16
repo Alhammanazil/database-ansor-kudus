@@ -33,6 +33,26 @@ require_once '../style/header.php';
                         <div id="dataAnggota" class="collapse show">
                             <div class="card-body">
                                 <div class="form-group">
+                                    <label class="required-label" for="fotoDiri">Foto Diri</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" name="fotoDiri" id="fotoDiri" accept="image/*" required>
+                                            <label class="custom-file-label" for="fotoDiri">Pilih file</label>
+                                        </div>
+                                    </div>
+                                    <div class="invalid-feedback">Harap pilih file foto diri.</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="required-label" for="fotoKTP">Upload Foto KTP</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" name="fotoKTP" id="fotoKTP" accept="image/*" required>
+                                            <label class="custom-file-label" for="fotoKTP">Pilih file</label>
+                                        </div>
+                                    </div>
+                                    <div class="invalid-feedback">Harap pilih file foto KTP.</div>
+                                </div>
+                                <div class="form-group">
                                     <label class="required-label" for="email">Alamat Email</label>
                                     <input type="email" class="form-control" name="email" id="email" placeholder="Masukkan Alamat Email" required>
                                     <div class="invalid-feedback">Harap masukkan email yang valid.</div>
@@ -145,29 +165,52 @@ require_once '../style/header.php';
                                     </div>
                                 </div>
 
+                                <!-- NPWP -->
                                 <div class="form-group">
                                     <label class="required-label">Kepemilikan NPWP</label>
                                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                         <label class="btn btn-outline-primary">
-                                            <input type="radio" name="npwp" value="1" required> Sudah Memiliki
+                                            <input type="radio" name="npwp" value="1" required onclick="toggleUploadSection('npwp', true)"> Sudah Memiliki
                                         </label>
                                         <label class="btn btn-outline-secondary">
-                                            <input type="radio" name="npwp" value="0" required checked> Belum Memiliki
+                                            <input type="radio" name="npwp" value="0" required checked onclick="toggleUploadSection('npwp', false)"> Belum Memiliki
                                         </label>
+                                    </div>
+                                    <br>
+
+                                    <!-- NPWP Upload -->
+                                    <div id="npwpUpload" class="upload-section" style="display: none;">
+                                        <label class="required-label" for="npwpFile">Upload Foto NPWP</label>
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="npwpFile" name="npwpFile" accept="image/*">
+                                            <label class="custom-file-label" for="npwpFile">Pilih file</label>
+                                        </div>
                                     </div>
                                 </div>
 
+                                <!-- BPJS -->
                                 <div class="form-group">
                                     <label class="required-label">BPJS Kesehatan</label>
                                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                         <label class="btn btn-outline-primary">
-                                            <input type="radio" name="bpjs" value="1" required> Sudah Memiliki
+                                            <input type="radio" name="bpjs" value="1" required onclick="toggleUploadSection('bpjs', true)"> Sudah Memiliki
                                         </label>
                                         <label class="btn btn-outline-secondary">
-                                            <input type="radio" name="bpjs" value="0" required checked> Belum Memiliki
+                                            <input type="radio" name="bpjs" value="0" required checked onclick="toggleUploadSection('bpjs', false)"> Belum Memiliki
                                         </label>
                                     </div>
+                                    <br>
+
+                                    <!-- BPJS Upload -->
+                                    <div id="bpjsUpload" class="upload-section" style="display: none;">
+                                        <label class="required-label" for="bpjsFile">Upload Foto BPJS</label>
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="bpjsFile" name="bpjsFile" accept="image/*">
+                                            <label class="custom-file-label" for="bpjsFile">Pilih file</label>
+                                        </div>
+                                    </div>
                                 </div>
+
                                 <button type="button" class="btn btn-primary" onclick="nextStep('dataAnggota', 'dataAlamat')">Lanjut</button>
                             </div>
                         </div>
@@ -651,283 +694,437 @@ require_once '../style/header.php';
                         <div id="dataPelatihanKaderisasi" class="collapse">
                             <div class="card-body">
 
-                                <!-- A. Pendidikan Kader -->
-                                <h6>A. Pendidikan Kader</h6>
-                                <div class="form-group">
-                                    <div class="icheck-primary d-inline">
-                                        <input type="radio" id="pkd" name="pendidikanKader" value="PKD" onchange="toggleUpload('pkdUpload', 'pendidikanKader')">
-                                        <label for="pkd">PKD</label>
-                                    </div>
-                                    <div class="icheck-primary d-inline">
-                                        <input type="radio" id="pkl" name="pendidikanKader" value="PKL" onchange="toggleUpload('pklUpload', 'pendidikanKader')">
-                                        <label for="pkl">PKL</label>
-                                    </div>
-                                    <div class="icheck-primary d-inline">
-                                        <input type="radio" id="pkn" name="pendidikanKader" value="PKN" onchange="toggleUpload('pknUpload', 'pendidikanKader')">
-                                        <label for="pkn">PKN</label>
-                                    </div>
-                                </div>
-
-                                <!-- Contoh -->
-                                <div id="pendidikanKaderUpload" class="upload-section pendidikanKader" style="display: none;">
-                                    <div class="form-group">
-                                        <label>Upload Sertifikat</label>
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="pendidikanKaderUpload" accept="image/*,application/pdf">
-                                                <label class="custom-file-label" for="pendidikanKaderUpload">Pilih file</label>
+                                <div class="row align-items-center">
+                                    <!-- A. Pendidikan Kader -->
+                                    <div class="col-md-6">
+                                        <h6>A. Pendidikan Kader</h6>
+                                        <div class="form-group">
+                                            <div class="icheck-primary d-block">
+                                                <input type="checkbox" id="pkd" name="pendidikanKader[]" value="PKD">
+                                                <label for="pkd">PKD</label>
+                                            </div>
+                                            <div class="icheck-primary d-block">
+                                                <input type="checkbox" id="pkl" name="pendidikanKader[]" value="PKL">
+                                                <label for="pkl">PKL</label>
+                                            </div>
+                                            <div class="icheck-primary d-block">
+                                                <input type="checkbox" id="pkn" name="pendidikanKader[]" value="PKN">
+                                                <label for="pkn">PKN</label>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div id="pkdUpload" class="upload-section pendidikanKader" style="display: none;">
-                                    <div class="form-group">
-                                        <label>Upload Sertifikat PKD</label>
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="pkdCertificate" accept="image/*,application/pdf">
-                                                <label class="custom-file-label" for="pkdCertificate">Pilih file</label>
+                                    <!-- Upload Sertifikat -->
+                                    <div class="col-md-6">
+                                        <div id="pkdUpload" class="upload-section pendidikanKader" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Upload Sertifikat PKD</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="pkdCertificate" name="pkdCertificate" accept="image/*,application/pdf">
+                                                        <label class="custom-file-label" for="pkdCertificate">Pilih file</label>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
 
-                                <div id="pklUpload" class="upload-section pendidikanKader" style="display: none;">
-                                    <div class="form-group">
-                                        <label>Upload Sertifikat PKL</label>
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="pklCertificate" accept="image/*,application/pdf">
-                                                <label class="custom-file-label" for="pklCertificate">Pilih file</label>
+                                        <div id="pklUpload" class="upload-section pendidikanKader" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Upload Sertifikat PKL</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="pklCertificate" name="pklCertificate" accept="image/*,application/pdf">
+                                                        <label class="custom-file-label" for="pklCertificate">Pilih file</label>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
 
-                                <div id="pknUpload" class="upload-section pendidikanKader" style="display: none;">
-                                    <div class="form-group">
-                                        <label>Upload Sertifikat PKN</label>
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="pknCertificate" accept="image/*,application/pdf">
-                                                <label class="custom-file-label" for="pknCertificate">Pilih file</label>
+                                        <div id="pknUpload" class="upload-section pendidikanKader" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Upload Sertifikat PKN</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="pknCertificate" name="pknCertificate" accept="image/*,application/pdf">
+                                                        <label class="custom-file-label" for="pknCertificate">Pilih file</label>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <br>
 
-                                <!-- B. Latihan Instruktur -->
-                                <h6>B. Latihan Instruktur</h6>
-                                <div class="form-group">
-                                    <div class="icheck-primary d-inline">
-                                        <input type="radio" id="li1" name="instruktur" value="LI I" onchange="toggleUpload('li1Upload', 'instruktur')">
-                                        <label for="li1">LI I</label>
-                                    </div>
-                                    <div class="icheck-primary d-inline">
-                                        <input type="radio" id="li2" name="instruktur" value="LI II" onchange="toggleUpload('li2Upload', 'instruktur')">
-                                        <label for="li2">LI II</label>
-                                    </div>
-                                    <div class="icheck-primary d-inline">
-                                        <input type="radio" id="li3" name="instruktur" value="LI III" onchange="toggleUpload('li3Upload', 'instruktur')">
-                                        <label for="li3">LI III</label>
-                                    </div>
-                                </div>
-
-                                <div id="li1Upload" class="upload-section instruktur" style="display: none;">
-                                    <div class="form-group">
-                                        <label>Upload Sertifikat LI I</label>
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="li1Certificate" accept="image/*,application/pdf">
-                                                <label class="custom-file-label" for="li1Certificate">Pilih file</label>
+                                <div class="row" id="latihanInstrukturSection" style="display: none;">
+                                    <!-- B. Latihan Instruktur -->
+                                    <div class="col-md-6">
+                                        <h6>B. Latihan Instruktur</h6>
+                                        <div class="form-group">
+                                            <div class="icheck-primary d-block">
+                                                <input type="checkbox" id="li1" name="instruktur[]" value="LI I" onchange="toggleUploadInstruktur()">
+                                                <label for="li1">LI I</label>
+                                            </div>
+                                            <div class="icheck-primary d-block">
+                                                <input type="checkbox" id="li2" name="instruktur[]" value="LI II" onchange="toggleUploadInstruktur()">
+                                                <label for="li2">LI II</label>
+                                            </div>
+                                            <div class="icheck-primary d-block">
+                                                <input type="checkbox" id="li3" name="instruktur[]" value="LI III" onchange="toggleUploadInstruktur()">
+                                                <label for="li3">LI III</label>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div id="li2Upload" class="upload-section instruktur" style="display: none;">
-                                    <div class="form-group">
-                                        <label>Upload Sertifikat LI II</label>
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="li2Certificate" accept="image/*,application/pdf">
-                                                <label class="custom-file-label" for="li2Certificate">Pilih file</label>
+                                    <!-- Upload Sertifikat untuk Latihan Instruktur -->
+                                    <div class="col-md-6">
+                                        <div id="li1Upload" class="upload-section instruktur" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Upload Sertifikat LI I</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="li1Certificate" name="li1Certificate" accept="image/*,application/pdf">
+                                                        <label class="custom-file-label" for="li1Certificate">Pilih file</label>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
 
-                                <div id="li3Upload" class="upload-section instruktur" style="display: none;">
-                                    <div class="form-group">
-                                        <label>Upload Sertifikat LI III</label>
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="li3Certificate" accept="image/*,application/pdf">
-                                                <label class="custom-file-label" for="li3Certificate">Pilih file</label>
+                                        <div id="li2Upload" class="upload-section instruktur" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Upload Sertifikat LI II</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="li2Certificate" name="li2Certificate" accept="image/*,application/pdf">
+                                                        <label class="custom-file-label" for="li2Certificate">Pilih file</label>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <br>
 
-                                <!-- C. Dirosah -->
-                                <h6>C. Dirosah</h6>
-                                <div class="form-group">
-                                    <div class="icheck-primary d-inline">
-                                        <input type="radio" id="dirosahUla" name="dirosah" value="Dirosah Ula" onchange="toggleUpload('dirosahUlaUpload', 'dirosah')">
-                                        <label for="dirosahUla">Dirosah Ula</label>
-                                    </div>
-                                    <div class="icheck-primary d-inline">
-                                        <input type="radio" id="dirosahWustho" name="dirosah" value="Dirosah Wustho" onchange="toggleUpload('dirosahWusthoUpload', 'dirosah')">
-                                        <label for="dirosahWustho">Dirosah Wustho</label>
-                                    </div>
-                                    <div class="icheck-primary d-inline">
-                                        <input type="radio" id="dirosahUlya" name="dirosah" value="Dirosah Ulya" onchange="toggleUpload('dirosahUlyaUpload', 'dirosah')">
-                                        <label for="dirosahUlya">Dirosah Ulya</label>
-                                    </div>
-                                </div>
-
-                                <div id="dirosahUlaUpload" class="upload-section dirosah" style="display: none;">
-                                    <div class="form-group">
-                                        <label>Upload Sertifikat Dirosah Ula</label>
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="dirosahUlaCertificate" accept="image/*,application/pdf">
-                                                <label class="custom-file-label" for="dirosahUlaCertificate">Pilih file</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div id="dirosahWusthoUpload" class="upload-section dirosah" style="display: none;">
-                                    <div class="form-group">
-                                        <label>Upload Sertifikat Dirosah Wustho</label>
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="dirosahWusthoCertificate" accept="image/*,application/pdf">
-                                                <label class="custom-file-label" for="dirosahWusthoCertificate">Pilih file</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div id="dirosahUlyaUpload" class="upload-section dirosah" style="display: none;">
-                                    <div class="form-group">
-                                        <label>Upload Sertifikat Dirosah Ulya</label>
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="dirosahUlyaCertificate" accept="image/*,application/pdf">
-                                                <label class="custom-file-label" for="dirosahUlyaCertificate">Pilih file</label>
+                                        <div id="li3Upload" class="upload-section instruktur" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Upload Sertifikat LI III</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="li3Certificate" name="li3Certificate" accept="image/*,application/pdf">
+                                                        <label class="custom-file-label" for="li3Certificate">Pilih file</label>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <br>
 
-                                <!-- D. Pendidikan & Latihan -->
-                                <h6>D. Pendidikan & Latihan</h6>
-                                <div class="form-group">
-                                    <div class="icheck-primary d-inline">
-                                        <input type="radio" id="diklatsar" name="pendidikanLatihan" value="Diklatsar" onchange="toggleUpload('diklatsarUpload', 'pendidikanLatihan')">
-                                        <label for="diklatsar">Diklatsar</label>
-                                    </div>
-                                    <div class="icheck-primary d-inline">
-                                        <input type="radio" id="susbalan" name="pendidikanLatihan" value="SUSBALAN" onchange="toggleUpload('susbalanUpload', 'pendidikanLatihan')">
-                                        <label for="susbalan">SUSBALAN</label>
-                                    </div>
-                                    <div class="icheck-primary d-inline">
-                                        <input type="radio" id="susbanpim" name="pendidikanLatihan" value="SUSBANPIM" onchange="toggleUpload('susbanpimUpload', 'pendidikanLatihan')">
-                                        <label for="susbanpim">SUSBANPIM</label>
-                                    </div>
-                                </div>
-
-                                <div id="diklatsarUpload" class="upload-section pendidikanLatihan" style="display: none;">
-                                    <div class="form-group">
-                                        <label>Upload Sertifikat Diklatsar</label>
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="diklatsarCertificate" accept="image/*,application/pdf">
-                                                <label class="custom-file-label" for="diklatsarCertificate">Pilih file</label>
+                                <div class="row" id="dirosahPendidikanLatihanSection" style="display: none;">
+                                    <!-- C. Dirosah -->
+                                    <div class="col-md-6">
+                                        <h6>C. Dirosah</h6>
+                                        <div class="form-group">
+                                            <div class="icheck-primary d-block">
+                                                <input type="checkbox" id="dirosahUla" name="dirosah[]" value="Dirosah Ula" onchange="toggleUploadDirosah()">
+                                                <label for="dirosahUla">Dirosah Ula</label>
+                                            </div>
+                                            <div class="icheck-primary d-block">
+                                                <input type="checkbox" id="dirosahWustho" name="dirosah[]" value="Dirosah Wustho" onchange="toggleUploadDirosah()">
+                                                <label for="dirosahWustho">Dirosah Wustho</label>
+                                            </div>
+                                            <div class="icheck-primary d-block">
+                                                <input type="checkbox" id="dirosahUlya" name="dirosah[]" value="Dirosah Ulya" onchange="toggleUploadDirosah()">
+                                                <label for="dirosahUlya">Dirosah Ulya</label>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div id="susbalanUpload" class="upload-section pendidikanLatihan" style="display: none;">
-                                    <div class="form-group">
-                                        <label>Upload Sertifikat SUSBALAN</label>
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="susbalanCertificate" accept="image/*,application/pdf">
-                                                <label class="custom-file-label" for="susbalanCertificate">Pilih file</label>
+                                    <!-- Upload Sertifikat untuk Dirosah -->
+                                    <div class="col-md-6">
+                                        <div id="dirosahUlaUpload" class="upload-section dirosah" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Upload Sertifikat Dirosah Ula</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="dirosahUlaCertificate" name="dirosahulaCertificate" accept="image/*,application/pdf">
+                                                        <label class="custom-file-label" for="dirosahUlaCertificate">Pilih file</label>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
 
-                                <div id="susbanpimUpload" class="upload-section pendidikanLatihan" style="display: none;">
-                                    <div class="form-group">
-                                        <label>Upload Sertifikat SUSBANPIM</label>
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="susbanpimCertificate" accept="image/*,application/pdf">
-                                                <label class="custom-file-label" for="susbanpimCertificate">Pilih file</label>
+                                        <div id="dirosahWusthoUpload" class="upload-section dirosah" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Upload Sertifikat Dirosah Wustho</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="dirosahWusthoCertificate" name="dirosahwusthoCertificate" accept="image/*,application/pdf">
+                                                        <label class="custom-file-label" for="dirosahWusthoCertificate">Pilih file</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div id="dirosahUlyaUpload" class="upload-section dirosah" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Upload Sertifikat Dirosah Ulya</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="dirosahUlyaCertificate" name="dirosahulyaCertificate" accept="image/*,application/pdf">
+                                                        <label class="custom-file-label" for="dirosahUlyaCertificate">Pilih file</label>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <br>
 
-                                <!-- E. Kursus Kepelatihan -->
-                                <h6>E. Kursus Kepelatihan</h6>
-                                <div class="form-group">
-                                    <div class="icheck-primary d-inline">
-                                        <input type="radio" id="suspelat1" name="kursus" value="SUSPELAT I" onchange="toggleUpload('suspelat1Upload', 'kursus')">
-                                        <label for="suspelat1">SUSPELAT I</label>
+                                <div class="row" id="diklatsarPendidikanLatihanSection" style="display: none;">
+                                    <!-- D. Pendidikan & Latihan -->
+                                    <div class="col-md-6">
+                                        <h6>D. Pendidikan & Latihan</h6>
+                                        <div class="form-group">
+                                            <div class="icheck-primary d-block">
+                                                <input type="checkbox" id="diklatsar" name="pendidikanLatihan[]" value="Diklatsar" onchange="toggleUploadLatihan()">
+                                                <label for="diklatsar">Diklatsar</label>
+                                            </div>
+                                            <div class="icheck-primary d-block">
+                                                <input type="checkbox" id="susbalan" name="pendidikanLatihan[]" value="SUSBALAN" onchange="toggleUploadLatihan()">
+                                                <label for="susbalan">SUSBALAN</label>
+                                            </div>
+                                            <div class="icheck-primary d-block">
+                                                <input type="checkbox" id="susbanpim" name="pendidikanLatihan[]" value="SUSBANPIM" onchange="toggleUploadLatihan()">
+                                                <label for="susbanpim">SUSBANPIM</label>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="icheck-primary d-inline">
-                                        <input type="radio" id="suspelat2" name="kursus" value="SUSPELAT II" onchange="toggleUpload('suspelat2Upload', 'kursus')">
-                                        <label for="suspelat2">SUSPELAT II</label>
-                                    </div>
-                                    <div class="icheck-primary d-inline">
-                                        <input type="radio" id="suspelat3" name="kursus" value="SUSPELAT III" onchange="toggleUpload('suspelat3Upload', 'kursus')">
-                                        <label for="suspelat3">SUSPELAT III</label>
-                                    </div>
-                                </div>
 
-                                <div id="suspelat1Upload" class="upload-section kursus" style="display: none;">
-                                    <div class="form-group">
-                                        <label>Upload Sertifikat SUSPELAT I</label>
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="suspelat1Certificate" accept="image/*,application/pdf">
-                                                <label class="custom-file-label" for="suspelat1Certificate">Pilih file</label>
+                                    <!-- Upload Sertifikat untuk Pendidikan & Latihan -->
+                                    <div class="col-md-6">
+                                        <div id="diklatsarUpload" class="upload-section pendidikanLatihan" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Upload Sertifikat Diklatsar</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="diklatsarCertificate" name="diklatsarCertificate" accept="image/*,application/pdf">
+                                                        <label class="custom-file-label" for="diklatsarCertificate">Pilih file</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div id="susbalanUpload" class="upload-section pendidikanLatihan" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Upload Sertifikat SUSBALAN</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="susbalanCertificate" name="susbalanCertificate" accept="image/*,application/pdf">
+                                                        <label class="custom-file-label" for="susbalanCertificate">Pilih file</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div id="susbanpimUpload" class="upload-section pendidikanLatihan" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Upload Sertifikat SUSBANPIM</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="susbanpimCertificate" name="susbanpimCertificate" accept="image/*,application/pdf">
+                                                        <label class="custom-file-label" for="susbanpimCertificate">Pilih file</label>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <br>
 
-                                <div id="suspelat2Upload" class="upload-section kursus" style="display: none;">
-                                    <div class="form-group">
-                                        <label>Upload Sertifikat SUSPELAT II</label>
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="suspelat2Certificate" accept="image/*,application/pdf">
-                                                <label class="custom-file-label" for="suspelat2Certificate">Pilih file</label>
+                                <div class="row" id="kursusKepelatihanSection" style="display: none;">
+                                    <!-- E. Kursus Kepelatihan -->
+                                    <div class="col-md-6">
+                                        <h6>E. Kursus Kepelatihan</h6>
+                                        <div class="form-group">
+                                            <div class="icheck-primary d-block">
+                                                <input type="checkbox" id="suspelat1" name="kursus[]" value="SUSPELAT I" onchange="toggleUploadKursus()">
+                                                <label for="suspelat1">SUSPELAT I</label>
+                                            </div>
+                                            <div class="icheck-primary d-block">
+                                                <input type="checkbox" id="suspelat2" name="kursus[]" value="SUSPELAT II" onchange="toggleUploadKursus()">
+                                                <label for="suspelat2">SUSPELAT II</label>
+                                            </div>
+                                            <div class="icheck-primary d-block">
+                                                <input type="checkbox" id="suspelat3" name="kursus[]" value="SUSPELAT III" onchange="toggleUploadKursus()">
+                                                <label for="suspelat3">SUSPELAT III</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Upload Sertifikat untuk Kursus Kepelatihan -->
+                                    <div class="col-md-6">
+                                        <div id="suspelat1Upload" class="upload-section kursus" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Upload Sertifikat SUSPELAT I</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="suspelat1Certificate" name="suspelat1Certificate" accept="image/*,application/pdf">
+                                                        <label class="custom-file-label" for="suspelat1Certificate">Pilih file</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div id="suspelat2Upload" class="upload-section kursus" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Upload Sertifikat SUSPELAT II</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="suspelat2Certificate" name="suspelat2Certificate" accept="image/*,application/pdf">
+                                                        <label class="custom-file-label" for="suspelat2Certificate">Pilih file</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div id="suspelat3Upload" class="upload-section kursus" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Upload Sertifikat SUSPELAT III</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="suspelat3Certificate" name="suspelat3Certificate" accept="image/*,application/pdf">
+                                                        <label class="custom-file-label" for="suspelat3Certificate">Pilih file</label>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <br>
 
-                                <div id="suspelat3Upload" class="upload-section kursus" style="display: none;">
-                                    <div class="form-group">
-                                        <label>Upload Sertifikat SUSPELAT III</label>
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="suspelat3Certificate" accept="image/*,application/pdf">
-                                                <label class="custom-file-label" for="suspelat3Certificate">Pilih file</label>
+                                <div class="row" id="pendidikanLatihanKhususSection" style="display: none;">
+                                    <!-- F. Pendidikan & Latihan Khusus -->
+                                    <div class="col-md-6">
+                                        <h6>F. Pendidikan & Latihan Khusus</h6>
+                                        <div class="form-group">
+                                            <div class="icheck-primary d-block">
+                                                <input type="checkbox" id="diklatsusBagana" name="latihanKhusus[]" value="DIKLATSUS BAGANA" onchange="toggleUpload('latihanKhusus')">
+                                                <label for="diklatsusBagana">DIKLATSUS BAGANA</label>
+                                            </div>
+                                            <div class="icheck-primary d-block">
+                                                <input type="checkbox" id="diklatsusProtokoler" name="latihanKhusus[]" value="DIKLATSUS PROTOKOLER" onchange="toggleUpload('latihanKhusus')">
+                                                <label for="diklatsusProtokoler">DIKLATSUS PROTOKOLER</label>
+                                            </div>
+                                            <div class="icheck-primary d-block">
+                                                <input type="checkbox" id="diklatsusBalakar" name="latihanKhusus[]" value="DIKLATSUS BALAKAR" onchange="toggleUpload('latihanKhusus')">
+                                                <label for="diklatsusBalakar">DIKLATSUS BALAKAR</label>
+                                            </div>
+                                            <div class="icheck-primary d-block">
+                                                <input type="checkbox" id="diklatsusBalantas" name="latihanKhusus[]" value="DIKLATSUS BALANTAS" onchange="toggleUpload('latihanKhusus')">
+                                                <label for="diklatsusBalantas">DIKLATSUS BALANTAS</label>
+                                            </div>
+                                            <div class="icheck-primary d-block">
+                                                <input type="checkbox" id="diklatsusBaritim" name="latihanKhusus[]" value="DIKLATSUS BARITIM" onchange="toggleUpload('latihanKhusus')">
+                                                <label for="diklatsusBaritim">DIKLATSUS BARITIM</label>
+                                            </div>
+                                            <div class="icheck-primary d-block">
+                                                <input type="checkbox" id="diklatsusDensus" name="latihanKhusus[]" value="DIKLATSUS DENSUS 99" onchange="toggleUpload('latihanKhusus')">
+                                                <label for="diklatsusDensus">DIKLATSUS DENSUS 99</label>
+                                            </div>
+                                            <div class="icheck-primary d-block">
+                                                <input type="checkbox" id="diklatsusProvost" name="latihanKhusus[]" value="DIKLATSUS PROVOST" onchange="toggleUpload('latihanKhusus')">
+                                                <label for="diklatsusProvost">DIKLATSUS PROVOST</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Upload Sertifikat untuk Pendidikan & Latihan Khusus -->
+                                    <div class="col-md-6">
+                                        <!-- Upload Section for DIKLATSUS BAGANA -->
+                                        <div id="diklatsusBaganaUpload" class="upload-section latihanKhusus" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Upload Sertifikat DIKLATSUS BAGANA</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="diklatsusBaganaCertificate" name="diklatsusbaganaCertificate" accept="image/*,application/pdf">
+                                                        <label class="custom-file-label" for="diklatsusBaganaCertificate">Pilih file</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Upload Section for DIKLATSUS PROTOKOLER -->
+                                        <div id="diklatsusProtokolerUpload" class="upload-section latihanKhusus" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Upload Sertifikat DIKLATSUS PROTOKOLER</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="diklatsusProtokolerCertificate" name="diklatsusprotokolerCertificate" accept="image/*,application/pdf">
+                                                        <label class="custom-file-label" for="diklatsusProtokolerCertificate">Pilih file</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Upload Section for DIKLATSUS BALAKAR -->
+                                        <div id="diklatsusBalakarUpload" class="upload-section latihanKhusus" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Upload Sertifikat DIKLATSUS BALAKAR</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="diklatsusBalakarCertificate" name="diklatsusbalakarCertificate" accept="image/*,application/pdf">
+                                                        <label class="custom-file-label" for="diklatsusBalakarCertificate">Pilih file</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Upload Section for DIKLATSUS BALANTAS -->
+                                        <div id="diklatsusBalantasUpload" class="upload-section latihanKhusus" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Upload Sertifikat DIKLATSUS BALANTAS</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="diklatsusBalantasCertificate" name="diklatsusbalantasCertificate" accept="image/*,application/pdf">
+                                                        <label class="custom-file-label" for="diklatsusBalantasCertificate">Pilih file</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Upload Section for DIKLATSUS BARITIM -->
+                                        <div id="diklatsusBaritimUpload" class="upload-section latihanKhusus" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Upload Sertifikat DIKLATSUS BARITIM</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="diklatsusBaritimCertificate" name="diklatsusbaritimCertificate" accept="image/*,application/pdf">
+                                                        <label class="custom-file-label" for="diklatsusBaritimCertificate">Pilih file</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Upload Section for DIKLATSUS DENSUS 99 -->
+                                        <div id="diklatsusDensusUpload" class="upload-section latihanKhusus" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Upload Sertifikat DIKLATSUS DENSUS 99</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="diklatsusDensusCertificate" name="diklatsusdensusCertificate" accept="image/*,application/pdf">
+                                                        <label class="custom-file-label" for="diklatsusDensusCertificate">Pilih file</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Upload Section for DIKLATSUS PROVOST -->
+                                        <div id="diklatsusProvostUpload" class="upload-section latihanKhusus" style="display: none;">
+                                            <div class="form-group">
+                                                <label>Upload Sertifikat DIKLATSUS PROVOST</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="diklatsusProvostCertificate" name="diklatsusprovostCertificate" accept="image/*,application/pdf">
+                                                        <label class="custom-file-label" for="diklatsusProvostCertificate">Pilih file</label>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
