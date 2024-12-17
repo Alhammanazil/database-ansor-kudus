@@ -1133,8 +1133,8 @@
                                                             <label for="diklatsusBaritim">DIKLATSUS BARITIM</label>
                                                         </div>
                                                         <div class="icheck-primary d-block">
-                                                            <input type="checkbox" id="diklatsusDensus" name="latihanKhusus[]" value="DIKLATSUS DENSUS 99" onchange="toggleUpload('latihanKhusus')">
-                                                            <label for="diklatsusDensus">DIKLATSUS DENSUS 99</label>
+                                                            <input type="checkbox" id="diklatsusDensus99" name="latihanKhusus[]" value="DIKLATSUS DENSUS 99" onchange="toggleUpload('latihanKhusus')">
+                                                            <label for="diklatsusDensus99">DIKLATSUS DENSUS 99</label>
                                                         </div>
                                                         <div class="icheck-primary d-block">
                                                             <input type="checkbox" id="diklatsusProvost" name="latihanKhusus[]" value="DIKLATSUS PROVOST" onchange="toggleUpload('latihanKhusus')">
@@ -1211,13 +1211,13 @@
                                                     </div>
 
                                                     <!-- Upload Section for DIKLATSUS DENSUS 99 -->
-                                                    <div id="diklatsusDensusUpload" class="upload-section latihanKhusus" style="display: none;">
+                                                    <div id="diklatsusDensus99Upload" class="upload-section latihanKhusus" style="display: none;">
                                                         <div class="form-group">
                                                             <label>Upload Sertifikat DIKLATSUS DENSUS 99</label>
                                                             <div class="input-group">
                                                                 <div class="custom-file">
-                                                                    <input type="file" class="custom-file-input" id="diklatsusDensusCertificate" name="diklatsusdensusCertificate" accept="image/*,application/pdf">
-                                                                    <label class="custom-file-label" for="diklatsusDensusCertificate">Pilih file</label>
+                                                                    <input type="file" class="custom-file-input" id="diklatsusDensus99Certificate" name="diklatsusdensus99Certificate" accept="image/*,application/pdf">
+                                                                    <label class="custom-file-label" for="diklatsusDensus99Certificate">Pilih file</label>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1693,7 +1693,6 @@
             // Inisialisasi tampilan input file untuk menyesuaikan tampilan custom
             bsCustomFileInput.init();
         });
-
 
         // Validasi duplikat nomor wa
         $(document).ready(function() {
