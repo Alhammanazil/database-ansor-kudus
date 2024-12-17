@@ -222,11 +222,7 @@
 
         // Tampilkan atau sembunyikan bagian upload
         if (show) {
-            formGroup.style.display = 'block'; // Tampilkan
-            // Cek apakah file lama ada menggunakan data-hasfile
-            if (fileInput.dataset.hasfile === 'false') {
-                fileInput.setAttribute('required', 'required'); // Tambahkan required jika tidak ada file lama
-            }
+            formGroup.style.display = 'block';
         } else {
             formGroup.style.display = 'none'; // Sembunyikan
             fileInput.removeAttribute('required'); // Hapus required
