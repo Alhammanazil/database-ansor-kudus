@@ -5,12 +5,11 @@ ini_set('display_errors', 1);
 
 session_start(); // Untuk mengakses session user role
 
-/**
- * Fungsi untuk mengunggah file dengan format nama tertentu.
- */
+// Fungsi untuk mengunggah file dengan pengkondisian format nama
 function uploadFileWithFormat($fileInput, $subfolder, $prefix, $anggota_id)
 {
     if (!empty($_FILES[$fileInput]['name'])) {
+        error_log("DEBUG: Mengunggah file: " . $_FILES[$fileInput]['name']);
         $targetDir = "../file/$subfolder/";
         if (!is_dir($targetDir)) {
             mkdir($targetDir, 0777, true);
@@ -18,36 +17,29 @@ function uploadFileWithFormat($fileInput, $subfolder, $prefix, $anggota_id)
 
         $fileTmp = $_FILES[$fileInput]['tmp_name'];
         $fileExtension = pathinfo($_FILES[$fileInput]['name'], PATHINFO_EXTENSION);
-        $randomNumber = rand(1000, 9999); // Generate random number
+        $randomNumber = rand(1000, 9999);
         $fileName = "$prefix-$anggota_id-$randomNumber.$fileExtension";
         $targetFile = $targetDir . $fileName;
 
         if (move_uploaded_file($fileTmp, $targetFile)) {
-            return $fileName; // Return the filename if successful
+            error_log("DEBUG: File berhasil dipindahkan ke $targetFile");
+            return $fileName;
+        } else {
+            error_log("ERROR: Gagal memindahkan file: $fileInput");
         }
     }
-    return null; // Return null if no file is uploaded
+    return null;
 }
 
-/**
- * Fungsi untuk mendapatkan nama file input berdasarkan tipe diklat.
- */
+// Fungsi untuk mendapatkan nama file input yang sesuai
 function getFileInputName($item)
 {
-    $romanToNum = ['I' => '1', 'II' => '2', 'III' => '3'];
-
-    if (strpos($item, 'LI') === 0 || strpos($item, 'SUSPELAT') === 0) {
-        $prefix = strtolower(explode(' ', $item)[0]);
-        $number = $romanToNum[str_replace($prefix, '', $item)] ?? '';
-        return $prefix . $number . 'Certificate';
-    }
-
-    return strtolower(str_replace([' ', '-'], '', $item)) . 'Certificate';
+    $inputName = strtolower(str_replace([' ', '.', '-'], '', $item)) . 'Certificate';
+    error_log("DEBUG: Input file name generated: $inputName"); // Tambahkan log ini
+    return $inputName;
 }
 
-/**
- * Fungsi untuk menyimpan atau memperbarui riwayat pelatihan ke database.
- */
+// Fungsi untuk menyimpan atau memperbarui riwayat pelatihan
 function simpanRiwayatPelatihan($conn, $anggota_id, $diklatItem, $subfolder)
 {
     $fileInput = getFileInputName($diklatItem);
@@ -56,26 +48,30 @@ function simpanRiwayatPelatihan($conn, $anggota_id, $diklatItem, $subfolder)
     // Jika ada file baru yang diunggah
     if (isset($_FILES[$fileInput]) && $_FILES[$fileInput]['error'] !== UPLOAD_ERR_NO_FILE) {
         $fileName = uploadFileWithFormat($fileInput, $subfolder, strtolower(str_replace(' ', '-', $diklatItem)), $anggota_id);
+    } else {
+        // Ambil file lama dari form jika tidak ada file baru
+        $fileName = $_POST[$fileInput . '_old'] ?? null;
     }
 
     // Cek apakah data riwayat pelatihan sudah ada
-    $checkQuery = "SELECT * FROM tb_riwayat_diklat WHERE anggota_id = ? AND riwayat_diklat_item = ?";
+    $checkQuery = "SELECT riwayat_diklat_file FROM tb_riwayat_diklat WHERE anggota_id = ? AND riwayat_diklat_item = ?";
     $stmt = $conn->prepare($checkQuery);
     $stmt->bind_param("is", $anggota_id, $diklatItem);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        // Jika data sudah ada, lakukan update
+        // Jika data sudah ada, lakukan update file jika ada file baru
         if ($fileName) {
-            $updateQuery = "UPDATE tb_riwayat_diklat SET riwayat_diklat_file = ?, updated_at = NOW() 
+            $updateQuery = "UPDATE tb_riwayat_diklat 
+                            SET riwayat_diklat_file = ?, updated_at = NOW()
                             WHERE anggota_id = ? AND riwayat_diklat_item = ?";
             $stmt = $conn->prepare($updateQuery);
             $stmt->bind_param("sis", $fileName, $anggota_id, $diklatItem);
             $stmt->execute();
         }
     } else {
-        // Jika data belum ada, lakukan insert
+        // Jika data belum ada, lakukan insert data baru
         if ($fileName) {
             $insertQuery = "INSERT INTO tb_riwayat_diklat (anggota_id, riwayat_diklat_item, riwayat_diklat_file, created_at) 
                             VALUES (?, ?, ?, NOW())";
@@ -83,6 +79,14 @@ function simpanRiwayatPelatihan($conn, $anggota_id, $diklatItem, $subfolder)
             $stmt->bind_param("iss", $anggota_id, $diklatItem, $fileName);
             $stmt->execute();
         }
+    }
+
+    // Debugging log untuk memeriksa status
+    error_log("DEBUG: File input yang dicari: $fileInput");
+    if ($fileName) {
+        error_log("DEBUG: File berhasil diproses untuk item: $diklatItem, nama file: $fileName");
+    } else {
+        error_log("DEBUG: Tidak ada file baru atau lama untuk item: $diklatItem.");
     }
 }
 
@@ -212,14 +216,8 @@ if ($conn->query($sql_update) === TRUE) {
     }
 
     // Simpan riwayat pelatihan baru tanpa menghapus data lama
-    $riwayatPelatihan = [
-        'a.pendidikan_kader' => $_POST['pendidikanKader'] ?? [],
-        'b.instruktur' => $_POST['latihanInstruktur'] ?? [],
-        'c.dirosah' => $_POST['dirosah'] ?? [],
-        'd.pendidikan_latihan' => $_POST['pendidikanLatihan'] ?? [],
-        'e.kursus' => $_POST['kursus'] ?? [],
-        'f.pendidikan_latihan_khusus' => $_POST['pendidikanKhusus'] ?? []
-    ];
+    $riwayatPelatihan = $_POST['diklat'] ?? [];
+
 
     foreach ($riwayatPelatihan as $subfolder => $items) {
         foreach ($items as $item) {
