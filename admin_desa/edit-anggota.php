@@ -862,254 +862,81 @@ require_once '../style/header.php';
                     </div>
                     <div id="dataPelatihanKaderisasi" class="collapse">
                         <div class="card-body">
-                            <!-- A. Pendidikan Kader -->
-                            <h5 style="font-weight: bold;">A. Pendidikan Kader</h5>
-                            <div class="form-group">
-                                <?php
-                                $pendidikanKaderItems = ['PKD', 'PKL', 'PKN'];
-                                foreach ($pendidikanKaderItems as $item):
-                                    $isChecked = isDiklatChecked($item, $riwayat_diklat);
-                                    $diklatFile = getDiklatFile($item, $riwayat_diklat);
-                                ?>
-                                    <div class="row mb-3">
-                                        <div class="col-md-4">
-                                            <div class="icheck-primary d-block">
-                                                <input type="checkbox" id="<?= strtolower($item) ?>" name="pendidikanKader[]" value="<?= $item ?>" <?= $isChecked ? 'checked' : '' ?>>
-                                                <label for="<?= strtolower($item) ?>"><?= $item ?></label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <?php if ($isChecked && $diklatFile): ?>
-                                                <p>
-                                                    File saat ini:
-                                                    <a href="javascript:void(0);" onclick="previewImage('../file/a.pendidikan_kader/<?= $diklatFile ?>')">
-                                                        <?= $diklatFile ?>
-                                                    </a>
-                                                </p>
-                                            <?php endif; ?>
+                            <?php
+                            $sections = [
+                                'a.pendidikan_kader' => ['PKD', 'PKL', 'PKN'],
+                                'b.instruktur' => ['LI I', 'LI II', 'LI III'],
+                                'c.dirosah' => ['Dirosah Ula', 'Dirosah Wustho', 'Dirosah Ulya'],
+                                'd.pendidikan_latihan' => ['Diklatsar', 'SUSBALAN', 'SUSBANPIM'],
+                                'e.kursus' => ['SUSPELAT I', 'SUSPELAT II', 'SUSPELAT III'],
+                                'f.pendidikan_latihan_khusus' => ['DIKLATSUS BAGANA', 'DIKLATSUS PROTOKOLER', 'DIKLATSUS BALAKAR', 'DIKLATSUS BALANTAS', 'DIKLATSUS BARITIM', 'DIKLATSUS DENSUS 99', 'DIKLATSUS PROVOST']
+                            ];
 
-                                            <div class="form-group">
-                                                <label>Upload Ulang Sertifikat <?= $item ?> (Opsional)</label>
+                            foreach ($sections as $subfolder => $items): ?>
+                                <h5 style="font-weight: bold;"><?= strtoupper(str_replace('_', ' ', $subfolder)) ?></h5>
+                                <div class="form-group">
+                                    <?php foreach ($items as $item):
+                                        $inputName = strtolower(str_replace([' ', '.', '-'], '', $item)) . 'Certificate';
+                                        $inputId = strtolower(str_replace([' ', '.', '-'], '_', $item));
+                                        $folder = $subfolder; // Nama folder sesuai dengan array $sections
+                                        $diklatFile = getDiklatFile($item, $riwayat_diklat); // Ambil file yang tersimpan di database
+                                        $isChecked = isDiklatChecked($item, $riwayat_diklat); // Cek apakah checkbox tercentang
+                                        $filePath = "../file/$folder/" . htmlspecialchars($diklatFile);
+                                    ?>
+                                        <div class="row mb-3">
+                                            <div class="col-md-4">
+                                                <div class="icheck-primary d-block">
+                                                    <input type="checkbox" id="<?= $inputId ?>" name="diklat[<?= strtolower($subfolder) ?>][]" value="<?= $item ?>" <?= $isChecked ? 'checked' : '' ?>>
+                                                    <label for="<?= $inputId ?>"><?= $item ?></label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <?php if ($isChecked && $diklatFile): ?>
+                                                    <input type="hidden" name="<?= $inputName ?>_old" value="<?= htmlspecialchars($diklatFile) ?>">
+                                                    <p>
+                                                        File saat ini:
+                                                        <?php if (file_exists($filePath)): ?>
+                                                            <!-- Preview menggunakan modal -->
+                                                            <a href="javascript:void(0);" onclick="previewImage('<?= $filePath ?>')">
+                                                                <img src="<?= $filePath ?>" width="100px" class="rounded" alt="Preview">
+                                                            </a>
+                                                        <?php else: ?>
+                                                            <span class="text-danger">File tidak ditemukan</span>
+                                                        <?php endif; ?>
+                                                    </p>
+                                                <?php endif; ?>
+
+                                                <!-- Input untuk upload file baru -->
                                                 <div class="input-group">
                                                     <div class="custom-file">
-                                                        <input type="file" class="custom-file-input" id="<?= strtolower($item) ?>Certificate" name="<?= strtolower($item) ?>Certificate" accept="image/*,application/pdf">
-                                                        <label class="custom-file-label" for="<?= strtolower($item) ?>Certificate">Pilih file</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <?php endforeach; ?>
-                            </div>
-                            <br>
-
-                            <!-- B. Latihan Instruktur -->
-                            <h5 style="font-weight: bold;">B. Latihan Instruktur</h6>
-                                <div class="form-group">
-                                    <?php
-                                    $latihanInstrukturItems = ['LI I', 'LI II', 'LI III'];
-                                    foreach ($latihanInstrukturItems as $item):
-                                        $isChecked = isDiklatChecked($item, $riwayat_diklat);
-                                        $diklatFile = getDiklatFile($item, $riwayat_diklat);
-                                    ?>
-                                        <div class="row mb-3">
-                                            <div class="col-md-4">
-                                                <div class="icheck-primary d-block">
-                                                    <input type="checkbox" id="<?= strtolower(str_replace(' ', '_', $item)) ?>" name="latihanInstruktur[]" value="<?= $item ?>" <?= $isChecked ? 'checked' : '' ?>>
-                                                    <label for="<?= strtolower(str_replace(' ', '_', $item)) ?>"><?= $item ?></label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <?php if ($isChecked && $diklatFile): ?>
-                                                    <p>
-                                                        File saat ini:
-                                                        <a href="javascript:void(0);" onclick="previewImage('../file/b.instruktur/<?= $diklatFile ?>')">
-                                                            <?= $diklatFile ?>
-                                                        </a>
-                                                    </p>
-                                                <?php endif; ?>
-
-                                                <div class="form-group">
-                                                    <label>Upload Ulang Sertifikat <?= $item ?> (Opsional)</label>
-                                                    <div class="input-group">
-                                                        <div class="custom-file">
-                                                            <input type="file" class="custom-file-input" id="<?= strtolower(str_replace(' ', '_', $item)) ?>Certificate" name="<?= strtolower(str_replace(' ', '_', $item)) ?>Certificate" accept="image/*,application/pdf">
-                                                            <label class="custom-file-label" for="<?= strtolower(str_replace(' ', '_', $item)) ?>Certificate">Pilih file</label>
-                                                        </div>
+                                                        <input type="file" class="custom-file-input" id="<?= $inputId ?>Certificate" name="<?= $inputName ?>" accept="image/*,application/pdf">
+                                                        <label class="custom-file-label" for="<?= $inputId ?>Certificate">Pilih file</label>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     <?php endforeach; ?>
                                 </div>
-                                <br>
-
-                                <!-- C. Dirosah -->
-                                <h6 style="font-weight: bold;">C. Dirosah</h6>
-                                <div class="form-group">
-                                    <?php
-                                    $dirosahItems = ['Dirosah Ula', 'Dirosah Wustho', 'Dirosah Ulya'];
-                                    foreach ($dirosahItems as $item):
-                                        $isChecked = isDiklatChecked($item, $riwayat_diklat);
-                                        $diklatFile = getDiklatFile($item, $riwayat_diklat);
-                                    ?>
-                                        <div class="row mb-3">
-                                            <div class="col-md-4">
-                                                <div class="icheck-primary d-block">
-                                                    <input type="checkbox" id="<?= strtolower(str_replace(' ', '_', $item)) ?>" name="dirosah[]" value="<?= $item ?>" <?= $isChecked ? 'checked' : '' ?>>
-                                                    <label for="<?= strtolower(str_replace(' ', '_', $item)) ?>"><?= $item ?></label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <?php if ($isChecked && $diklatFile): ?>
-                                                    <p>
-                                                        File saat ini:
-                                                        <a href="javascript:void(0);" onclick="previewImage('../file/c.dirosah/<?= $diklatFile ?>')">
-                                                            <?= $diklatFile ?>
-                                                        </a>
-                                                    </p>
-                                                <?php endif; ?>
-
-                                                <div class="form-group">
-                                                    <label>Upload Ulang Sertifikat <?= $item ?> (Opsional)</label>
-                                                    <div class="input-group">
-                                                        <div class="custom-file">
-                                                            <input type="file" class="custom-file-input" id="<?= strtolower(str_replace(' ', '_', $item)) ?>Certificate" name="<?= strtolower(str_replace(' ', '_', $item)) ?>Certificate" accept="image/*,application/pdf">
-                                                            <label class="custom-file-label" for="<?= strtolower(str_replace(' ', '_', $item)) ?>Certificate">Pilih file</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <?php endforeach; ?>
-                                </div>
-                                <br>
-
-                                <!-- D. Pendidikan dan Latihan -->
-                                <h6 style="font-weight: bold;">D. Pendidikan dan Latihan</h6>
-                                <div class="form-group">
-                                    <?php
-                                    $pendidikanLatihanItems = ['Diklatsar', 'SUSBALAN', 'SUSBANPIM'];
-                                    foreach ($pendidikanLatihanItems as $item):
-                                        $isChecked = isDiklatChecked($item, $riwayat_diklat);
-                                        $diklatFile = getDiklatFile($item, $riwayat_diklat);
-                                    ?>
-                                        <div class="row mb-3">
-                                            <div class="col-md-4">
-                                                <div class="icheck-primary d-block">
-                                                    <input type="checkbox" id="<?= strtolower(str_replace(' ', '_', $item)) ?>" name="pendidikanLatihan[]" value="<?= $item ?>" <?= $isChecked ? 'checked' : '' ?>>
-                                                    <label for="<?= strtolower(str_replace(' ', '_', $item)) ?>"><?= $item ?></label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <?php if ($isChecked && $diklatFile): ?>
-                                                    <p>
-                                                        File saat ini:
-                                                        <a href="javascript:void(0);" onclick="previewImage('../file/d.pendidikan_latihan/<?= $diklatFile ?>')">
-                                                            <?= $diklatFile ?>
-                                                        </a>
-                                                    </p>
-                                                <?php endif; ?>
-
-                                                <div class="form-group">
-                                                    <label>Upload Ulang Sertifikat <?= $item ?> (Opsional)</label>
-                                                    <div class="input-group">
-                                                        <div class="custom-file">
-                                                            <input type="file" class="custom-file-input" id="<?= strtolower(str_replace(' ', '_', $item)) ?>Certificate" name="<?= strtolower(str_replace(' ', '_', $item)) ?>Certificate" accept="image/*,application/pdf">
-                                                            <label class="custom-file-label" for="<?= strtolower(str_replace(' ', '_', $item)) ?>Certificate">Pilih file</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <?php endforeach; ?>
-                                </div>
-                                <br>
-
-                                <!-- E. Kursus Kepelatihan -->
-                                <h6 style="font-weight: bold;">E. Kursus Kepelatihan</h6>
-                                <div class="form-group">
-                                    <?php
-                                    $kursusItems = ['SUSPELAT I', 'SUSPELAT II', 'SUSPELAT III'];
-                                    foreach ($kursusItems as $item):
-                                        $isChecked = isDiklatChecked($item, $riwayat_diklat);
-                                        $diklatFile = getDiklatFile($item, $riwayat_diklat);
-                                    ?>
-                                        <div class="row mb-3">
-                                            <div class="col-md-4">
-                                                <div class="icheck-primary d-block">
-                                                    <input type="checkbox" id="<?= strtolower(str_replace(' ', '_', $item)) ?>" name="kursus[]" value="<?= $item ?>" <?= $isChecked ? 'checked' : '' ?>>
-                                                    <label for="<?= strtolower(str_replace(' ', '_', $item)) ?>"><?= $item ?></label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <?php if ($isChecked && $diklatFile): ?>
-                                                    <p>
-                                                        File saat ini:
-                                                        <a href="javascript:void(0);" onclick="previewImage('../file/e.kursus/<?= $diklatFile ?>')">
-                                                            <?= $diklatFile ?>
-                                                        </a>
-                                                    </p>
-                                                <?php endif; ?>
-
-                                                <div class="form-group">
-                                                    <label>Upload Ulang Sertifikat <?= $item ?> (Opsional)</label>
-                                                    <div class="input-group">
-                                                        <div class="custom-file">
-                                                            <input type="file" class="custom-file-input" id="<?= strtolower(str_replace(' ', '_', $item)) ?>Certificate" name="<?= strtolower(str_replace(' ', '_', $item)) ?>Certificate" accept="image/*,application/pdf">
-                                                            <label class="custom-file-label" for="<?= strtolower(str_replace(' ', '_', $item)) ?>Certificate">Pilih file</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <?php endforeach; ?>
-                                </div>
-                                <br>
-
-                                <!-- F. Pendidikan dan Latihan Khusus -->
-                                <h6 style="font-weight: bold;">F. Pendidikan dan Latihan Khusus</h6>
-                                <div class="form-group">
-                                    <?php
-                                    $pendidikanKhususItems = ['DIKLATSUS BAGANA', 'DIKLATSUS PROTOKOLER', 'DIKLATSUS BALAKAR', 'DIKLATSUS BALANTAS', 'DIKLATSUS BARITIM'];
-                                    foreach ($pendidikanKhususItems as $item):
-                                        $isChecked = isDiklatChecked($item, $riwayat_diklat);
-                                        $diklatFile = getDiklatFile($item, $riwayat_diklat);
-                                    ?>
-                                        <div class="row mb-3">
-                                            <div class="col-md-4">
-                                                <div class="icheck-primary d-block">
-                                                    <input type="checkbox" id="<?= strtolower(str_replace(' ', '_', $item)) ?>" name="pendidikanKhusus[]" value="<?= $item ?>" <?= $isChecked ? 'checked' : '' ?>>
-                                                    <label for="<?= strtolower(str_replace(' ', '_', $item)) ?>"><?= $item ?></label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <?php if ($isChecked && $diklatFile): ?>
-                                                    <p>
-                                                        File saat ini:
-                                                        <a href="javascript:void(0);" onclick="previewImage('../file/f.pendidikan_latihan_khusus/<?= $diklatFile ?>')">
-                                                            <?= $diklatFile ?>
-                                                        </a>
-                                                    </p>
-                                                <?php endif; ?>
-
-                                                <div class="form-group">
-                                                    <label>Upload Ulang Sertifikat <?= $item ?> (Opsional)</label>
-                                                    <div class="input-group">
-                                                        <div class="custom-file">
-                                                            <input type="file" class="custom-file-input" id="<?= strtolower(str_replace(' ', '_', $item)) ?>Certificate" name="<?= strtolower(str_replace(' ', '_', $item)) ?>Certificate" accept="image/*,application/pdf">
-                                                            <label class="custom-file-label" for="<?= strtolower(str_replace(' ', '_', $item)) ?>Certificate">Pilih file</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <?php endforeach; ?>
-                                </div>
+                            <?php endforeach; ?>
                         </div>
-
                     </div>
+                </div>
 
+                <!-- Modal Preview Gambar -->
+                <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="previewModalLabel">Preview Gambar</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body text-center">
+                                <img id="modalPreviewImage" src="" alt="Preview Gambar" class="img-fluid rounded">
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Tombol Simpan dan Navigasi -->
@@ -1138,12 +965,5 @@ require_once '../style/header.php';
         </div>
     </div>
 </div>
-
-<script>
-    function previewImage(imagePath) {
-        document.getElementById('modalPreviewImage').src = imagePath;
-        $('#previewModal').modal('show');
-    }
-</script>
 
 <?php require_once '../style/footer.php'; ?>
