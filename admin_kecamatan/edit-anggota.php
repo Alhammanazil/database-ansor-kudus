@@ -295,7 +295,12 @@ require_once '../style/header.php';
                                 <!-- Field Upload -->
                                 <div class="input-group">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" name="fotoNPWP" id="fotoNPWP" accept="image/*" <?= empty($anggota['anggota_foto_npwp']) ? 'required' : '' ?>>
+                                        <input type="file"
+                                            class="custom-file-input"
+                                            name="fotoNPWP"
+                                            id="fotoNPWP"
+                                            accept="image/*"
+                                            data-hasfile="<?= !empty($anggota['anggota_foto_npwp']) ? 'true' : 'false' ?>">
                                         <label class="custom-file-label" for="fotoNPWP">Upload file baru jika ingin mengganti</label>
                                     </div>
                                 </div>
@@ -332,7 +337,12 @@ require_once '../style/header.php';
                                     <!-- Field Upload -->
                                     <div class="input-group">
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" name="fotoBPJS" id="fotoBPJS" accept="image/*" <?= empty($anggota['anggota_foto_bpjs']) ? 'required' : '' ?>>
+                                            <input type="file"
+                                                class="custom-file-input"
+                                                name="fotoBPJS"
+                                                id="fotoBPJS"
+                                                accept="image/*"
+                                                data-hasfile="<?= !empty($anggota['anggota_foto_bpjs']) ? 'true' : 'false' ?>">
                                             <label class="custom-file-label" for="fotoBPJS">Upload file baru jika ingin mengganti</label>
                                         </div>
                                     </div>
