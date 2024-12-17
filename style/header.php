@@ -16,9 +16,9 @@ $user_level = $_SESSION['user']['role'] ?? 'guest';
 $role_access = [
     'master' => ['dashboard.php', 'data-ansor.php', 'form.php', 'pengaturan.php', 'data-pribadi.php', 'edit-anggota.php'],
 
-    'admin desa' => ['dashboard.php', 'data-ansor.php', 'form.php', 'data-pribadi.php'],
+    'admin desa' => ['dashboard.php', 'data-ansor.php', 'form.php', 'data-pribadi.php', 'edit-anggota.php'],
 
-    'admin kecamatan' => ['dashboard.php', 'data-ansor.php', 'form.php', 'data-pribadi.php'],
+    'admin kecamatan' => ['dashboard.php', 'data-ansor.php', 'form.php', 'data-pribadi.php', 'edit-anggota.php'],
 
     'user' => ['dashboard.php', 'data-ansor.php', 'data-pribadi.php', 'edit-anggota.php']
 ];

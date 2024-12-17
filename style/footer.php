@@ -52,25 +52,6 @@
 </script>
 
 <script>
-    function confirmDelete(id) {
-        Swal.fire({
-            title: 'Apakah Anda yakin?',
-            text: "Anda tidak akan dapat mengembalikan data ini!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, hapus!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = '../config/delete_foto.php?id=' + id;
-            }
-        })
-    }
-</script>
-
-<script>
     document.addEventListener("DOMContentLoaded", function() {
         const urlParams = new URLSearchParams(window.location.search);
         const status = urlParams.get('status');
@@ -146,7 +127,6 @@
 <!-- Akhir Halaman Dashboard -->
 
 <!-- Halaman Data_Ansor -->
-
 <!-- Modal untuk preview kartu anggota -->
 <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -187,7 +167,35 @@
     }
 </script>
 
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Apakah Anda Yakin?',
+            text: "Data yang dihapus tidak dapat dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect ke file delete.php dengan ID
+                window.location.href = "../config/delete.php?id=" + id;
+            }
+        });
+    }
+</script>
 <!-- Akhir Halaman Data_Ansor -->
+
+<!-- Halaman Edit Anggota -->
+<script>
+    function previewImage(imagePath) {
+        document.getElementById('modalPreviewImage').src = imagePath;
+        $('#previewModal').modal('show');
+    }
+</script>
+<!-- Akhir Halaman Edit Anggota -->
 
 <!-- Halaman Form Pendaftaran -->
 <script>
@@ -206,35 +214,36 @@
     }
 
     // Upload NPWP & BPJS
-    document.addEventListener('DOMContentLoaded', function() {
-        // Cek status NPWP dan BPJS saat halaman dimuat
-        const npwp = document.querySelector('input[name="npwp"]:checked');
-        const bpjs = document.querySelector('input[name="bpjs"]:checked');
-
-        if (npwp && npwp.value === '1') {
-            toggleUploadSection('npwp', true);
-        }
-
-        if (bpjs && bpjs.value === '1') {
-            toggleUploadSection('bpjs', true);
-        }
-    });
-
+    // Fungsi untuk menampilkan atau menyembunyikan bagian upload
     function toggleUploadSection(field, show) {
-        const uploadSection = document.getElementById(field + 'Upload');
-        const fileInput = document.getElementById(field + 'File');
+        // Ambil elemen input file dan form-group terdekat
+        const fileInput = document.getElementById(`foto${field.toUpperCase()}`);
+        const formGroup = fileInput.closest('.form-group'); // Ambil parent form-group
 
         // Tampilkan atau sembunyikan bagian upload
-        uploadSection.style.display = show ? 'block' : 'none';
-
-        // Tambahkan atau hapus atribut required berdasarkan pilihan
         if (show) {
-            fileInput.setAttribute('required', 'required');
+            formGroup.style.display = 'block'; // Tampilkan
+            fileInput.setAttribute('required', 'required'); // Tambahkan required
         } else {
-            fileInput.removeAttribute('required');
+            formGroup.style.display = 'none'; // Sembunyikan
+            fileInput.removeAttribute('required'); // Hapus required
         }
     }
 
+    // Eksekusi awal saat halaman dimuat
+    document.addEventListener('DOMContentLoaded', function() {
+        // Cek status NPWP
+        const npwp = document.querySelector('input[name="npwp"]:checked');
+        if (npwp) {
+            toggleUploadSection('npwp', npwp.value === '1'); // Tampilkan jika "Sudah Memiliki"
+        }
+
+        // Cek status BPJS
+        const bpjs = document.querySelector('input[name="bpjs"]:checked');
+        if (bpjs) {
+            toggleUploadSection('bpjs', bpjs.value === '1'); // Tampilkan jika "Sudah Memiliki"
+        }
+    });
 
     // Field Data Anggota & Pekerjaan Istri
     document.addEventListener('DOMContentLoaded', function() {
@@ -577,7 +586,6 @@
             }
         });
     });
-
     // Akhir Halaman Form Pendaftaran
 
     // Halaman Data Pribadi
@@ -787,35 +795,6 @@
     });
 </script>
 <!-- Akhir Halaman Pengaturan -->
-
-<!-- Halaman Foto -->
-
-<script>
-    $(document).ready(function() {
-        // Inisialisasi Select2
-        $('#no_peserta').select2().on('select2:select', function(e) {
-            const noPeserta = $(this).val();
-            if (noPeserta) {
-                fetch(`get_nama_peserta.php?no_peserta=${noPeserta}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            document.getElementById('nama_lengkap').value = data.nama_lengkap;
-                        } else {
-                            alert(data.message);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching participant name:', error);
-                    });
-            } else {
-                document.getElementById('nama_lengkap').value = '';
-            }
-        });
-    });
-</script>
-
-<!-- Akhir Halaman Foto -->
 
 <!-- Logout -->
 <script>
