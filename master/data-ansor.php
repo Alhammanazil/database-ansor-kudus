@@ -29,6 +29,25 @@ $stmt->execute();
 $result = $stmt->get_result();
 ?>
 
+<?php
+// Menampilkan SweetAlert untuk konfirmasi penghapusan jika data berhasil dihapus
+if (isset($_SESSION['delete_success'])) {
+    echo "<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                title: 'Berhasil Dihapus!',
+                text: '" . $_SESSION['delete_success'] . "',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        });
+    </script>";
+
+    // Menghapus pesan setelah ditampilkan
+    unset($_SESSION['delete_success']);
+}
+?>
+
 <div class="content-wrapper">
     <section class="content-header">
         <div class="container-fluid">
@@ -87,13 +106,17 @@ $result = $stmt->get_result();
                                                 </td>
 
                                                 <td>
+                                                    <!-- Edit Button -->
                                                     <a href="edit-anggota.php?token=<?php echo urlencode($token); ?>" class="btn btn-warning btn-sm">
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>
-                                                    <a href="hapus-anggota.php?token=<?php echo urlencode($token); ?>" class="btn btn-danger btn-sm"
-                                                        onclick="return confirm('Yakin ingin menghapus data anggota?')">
+                                                    <!-- Delete Button -->
+                                                    <a href="javascript:void(0);"
+                                                        class="btn btn-danger btn-sm"
+                                                        onclick="confirmDelete(<?php echo $row['anggota_id']; ?>)">
                                                         <i class="fas fa-trash"></i> Delete
                                                     </a>
+
                                                 </td>
                                             </tr>
                                         <?php endwhile; ?>
