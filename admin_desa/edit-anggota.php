@@ -263,6 +263,7 @@ require_once '../style/header.php';
                                     <div class="invalid-feedback">Harap masukkan Jumlah Anak Perempuan.</div>
                                 </div>
                             </div>
+                            <br>
 
                             <!-- NPWP -->
                             <div class="form-group">
@@ -276,11 +277,10 @@ require_once '../style/header.php';
                                     </label>
                                 </div>
                             </div>
-                            <br>
 
                             <!-- NPWP Upload -->
                             <div class="form-group">
-                                <label class="required-label" for="fotoNPWP">Foto NPWP</label>
+                                <label for="fotoNPWP">Foto NPWP</label>
 
                                 <!-- File Saat Ini -->
                                 <?php if (!empty($anggota['anggota_foto_npwp'])): ?>
@@ -295,13 +295,8 @@ require_once '../style/header.php';
                                 <!-- Field Upload -->
                                 <div class="input-group">
                                     <div class="custom-file">
-                                        <input type="file"
-                                            class="custom-file-input"
-                                            name="fotoNPWP"
-                                            id="fotoNPWP"
-                                            accept="image/*"
-                                            data-hasfile="<?= !empty($anggota['anggota_foto_npwp']) ? 'true' : 'false' ?>">
-                                        <label class="custom-file-label" for="fotoNPWP">Upload file baru jika ingin mengganti</label>
+                                        <input type="file" class="custom-file-input" name="npwpFile" id="npwpFile" accept="image/*">
+                                        <label class="custom-file-label" for="npwpFile">Upload file baru jika ingin mengganti</label>
                                     </div>
                                 </div>
                             </div>
@@ -322,7 +317,7 @@ require_once '../style/header.php';
 
                                 <!-- BPJS Upload -->
                                 <div class="form-group">
-                                    <label class="required-label" for="fotoBPJS">Foto BPJS</label>
+                                    <label for="fotoBPJS">Foto BPJS</label>
 
                                     <!-- File Saat Ini -->
                                     <?php if (!empty($anggota['anggota_foto_bpjs'])): ?>
@@ -337,13 +332,8 @@ require_once '../style/header.php';
                                     <!-- Field Upload -->
                                     <div class="input-group">
                                         <div class="custom-file">
-                                            <input type="file"
-                                                class="custom-file-input"
-                                                name="fotoBPJS"
-                                                id="fotoBPJS"
-                                                accept="image/*"
-                                                data-hasfile="<?= !empty($anggota['anggota_foto_bpjs']) ? 'true' : 'false' ?>">
-                                            <label class="custom-file-label" for="fotoBPJS">Upload file baru jika ingin mengganti</label>
+                                            <input type="file" class="custom-file-input" name="bpjsFile" id="bpjsFile" accept="image/*">
+                                            <label class="custom-file-label" for="bpjsFile">Upload file baru jika ingin mengganti</label>
                                         </div>
                                     </div>
                                 </div>
