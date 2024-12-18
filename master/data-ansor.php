@@ -100,7 +100,7 @@ if (isset($_SESSION['delete_success'])) {
                                                 <td><?php echo htmlspecialchars($row['pekerjaan']); ?></td>
                                                 <td><?php echo htmlspecialchars($row['pendidikan']); ?></td>
                                                 <td style="text-align: center;">
-                                                    <button onclick="previewCard('<?php echo $token; ?>')" class="btn btn-primary btn-sm">
+                                                    <button onclick="previewCard('<?php echo $row['anggota_id']; ?>')" class="btn btn-primary btn-sm">
                                                         <i class="fas fa-eye"></i> Preview
                                                     </button>
                                                 </td>
