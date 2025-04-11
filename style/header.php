@@ -354,7 +354,15 @@ $sections = [
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="../assets/photo.jpg" class="img-circle elevation-2" alt="User Image">
+                        <?php
+                        $fotoFileName = $data['anggota_foto'];
+                        $fotoFilePath = "../file/foto/" . $fotoFileName;
+                        if ($fotoFileName && file_exists($fotoFilePath)) {
+                            echo '<img src="' . $fotoFilePath . '" class="img-circle elevation-2" alt="User Image">';
+                        } else {
+                            echo '<img src="../assets/photo.jpg" class="img-circle elevation-2" alt="User Image">';
+                        }
+                        ?>
                     </div>
                     <div class="info">
                         <a href="#" class="d-block">

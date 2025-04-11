@@ -51,15 +51,19 @@ if (isset($_SESSION['delete_success'])) {
 <div class="content-wrapper">
     <section class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Data Anggota Ansor</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Master</a></li>
-                        <li class="breadcrumb-item active">Data Anggota</li>
-                    </ol>
+            <div class="row pt-2 justify-content-center">
+                <div class="col-md-11">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>Data Anggota Ansor</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Master</a></li>
+                                <li class="breadcrumb-item active">Data Anggota</li>
+                            </ol>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -67,14 +71,15 @@ if (isset($_SESSION['delete_success'])) {
 
     <section class="content">
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
+            <div class="row pt-2 justify-content-center">
+                <div class="col-md-11">
+
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Tabel List Anggota Ansor</h3>
                         </div>
                         <div class="card-body">
-                            <table id="data-ansor" class="table-bordered table-striped table-hover table-responsive">
+                            <table id="data-ansor" class="table-bordered table-striped table-hover">
                                 <thead class="text-center btn-dark">
                                     <tr>
                                         <th>No</th>

@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Waktu pembuatan: 10 Nov 2024 pada 14.05
--- Versi server: 10.4.32-MariaDB
--- Versi PHP: 8.2.12
+-- Host: localhost:3306
+-- Generation Time: Mar 20, 2025 at 09:45 AM
+-- Server version: 10.5.28-MariaDB-cll-lve
+-- PHP Version: 8.3.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,18 +18,19 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `ansor_kudus`
+-- Database: `menw1732_ansor_kudus`
 --
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tb_anggota`
+-- Table structure for table `tb_anggota`
 --
 
 CREATE TABLE `tb_anggota` (
   `anggota_id` int(11) NOT NULL,
   `anggota_foto` varchar(225) NOT NULL,
+  `anggota_foto_ktp` varchar(225) NOT NULL,
   `anggota_email` varchar(64) NOT NULL,
   `anggota_nama` varchar(256) NOT NULL,
   `anggota_nik` varchar(16) NOT NULL,
@@ -89,10 +90,19 @@ CREATE TABLE `tb_anggota` (
   `anggota_keanggotaan` varchar(64) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `tb_anggota`
+--
+
+INSERT INTO `tb_anggota` (`anggota_id`, `anggota_foto`, `anggota_foto_ktp`, `anggota_email`, `anggota_nama`, `anggota_nik`, `anggota_tempat_lahir`, `anggota_tanggal_lahir`, `anggota_golongan_darah`, `anggota_tinggi_badan`, `anggota_berat_badan`, `anggota_ayah`, `anggota_ibu`, `anggota_pernikahan`, `anggota_istri`, `anggota_anak_lk`, `anggota_anak_pr`, `anggota_npwp`, `anggota_foto_npwp`, `anggota_bpjs`, `anggota_foto_bpjs`, `anggota_domisili_kec`, `anggota_domisili_des`, `anggota_rt`, `anggota_rw`, `anggota_hp`, `anggota_fb`, `anggota_ig`, `anggota_tiktok`, `anggota_yt`, `anggota_twitter`, `anggota_pekerjaan`, `anggota_sistem_kerja`, `anggota_nama_tempat_kerja`, `anggota_alamat_tempat_kerja`, `anggota_pekerjaan_istri`, `anggota_pendapatan`, `anggota_pendapatan_istri`, `anggota_pendidikan`, `anggota_jurusan_smk`, `anggota_bidang_studi`, `anggota_nama_pendidikan`, `anggota_nama_pesantren`, `anggota_nama_madin`, `anggota_ipnu`, `anggota_pmii`, `anggota_dema_bem`, `anggota_organisasi_lain`, `anggota_parpol`, `anggota_pr_kec`, `anggota_pr_des`, `anggota_pr_jabatan`, `anggota_pr_mk`, `anggota_pac_kec`, `anggota_pac_jabatan`, `anggota_pac_mk`, `anggota_pc_jabatan`, `anggota_pc_mk`, `anggota_no_registrasi`, `anggota_keanggotaan`) VALUES
+(1, 'fotodiri-1-2197.jpg', 'ktp-1-7282.png', 'nissa@gmail.com', 'Nissa Amalia', '3319030382103821', 3319, '2002-12-09', 1, 3, 3, 'Test', 'Test', 1, '', 0, 0, 1, 'npwp-1-5265.jpg', 1, 'bpjs-1-1304.jpg', 3319030, 3319030005, 1, 3, '08988335639', 0, 0, 0, 0, 0, 21, NULL, '', '', NULL, NULL, NULL, 3, NULL, NULL, 'Test', '', '', 0, 0, 0, '', 13, 3319070, 3319070006, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'X-11-02-12', 'anggota'),
+(2, 'fotodiri-1-2197.jpg', '', 'tehakomputerkudus@gmail.com', 'Irvan Maria Hussein', '3318120408850001', 3318, '1985-08-04', 4, 3, 3, 'Jazri Hussein', 'Maryati', 2, 'Afta Falasifah', 2, 2, 1, '', 1, '', 3319020, 3319020005, 3, 1, '085778888919', 1, 1, 1, 1, 1, 1, NULL, 'Teha Comp Kudus', 'Depan Kampus IAIN Kudus', 21, 3, NULL, 6, NULL, 1, 'UIN Sunan Kalijaga', 'Darul Ulum', 'Darul Ulum', 1, 1, 1, 'IMNU', 13, 3319020, 3319020005, 1, 6, 3319020, 1, 9, 4, 10, 'X-11-03-19', 'anggota'),
+(3, 'fotodiri-3-1677.png', 'ktp-3-3697.png', 'studiopi7uaim@gmail.com', 'Nama Lengkap', '3319022005980005', 3319, '2024-12-18', 1, 1, 1, 'Nama Ayah', 'Nama Ibu', 2, 'sc', 0, 0, 1, 'npwp-3-6468.png', 1, 'bpjs-3-2595.png', 3319020, 3319020007, 1, 2, '085865068194', 1, 1, 1, 1, 1, 1, NULL, 'Nama Tempat Kerja', 'Alamat Tempat Kerja', 1, 1, 1, 1, NULL, NULL, 'Nama Lembaga Pendidikan', 'Nama Pesantren', 'Nama Madin', 1, 1, 1, 'Organisasi Lainnya', 1, 3319020, 3319020007, 1, 1, 3319020, 1, 1, 1, 1, 'X-11-03-25', 'anggota');
+
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tb_berat_badan`
+-- Table structure for table `tb_berat_badan`
 --
 
 CREATE TABLE `tb_berat_badan` (
@@ -101,7 +111,7 @@ CREATE TABLE `tb_berat_badan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `tb_berat_badan`
+-- Dumping data for table `tb_berat_badan`
 --
 
 INSERT INTO `tb_berat_badan` (`berat_badan_id`, `berat_badan_name`) VALUES
@@ -113,7 +123,7 @@ INSERT INTO `tb_berat_badan` (`berat_badan_id`, `berat_badan_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tb_bidang_studi`
+-- Table structure for table `tb_bidang_studi`
 --
 
 CREATE TABLE `tb_bidang_studi` (
@@ -122,7 +132,7 @@ CREATE TABLE `tb_bidang_studi` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `tb_bidang_studi`
+-- Dumping data for table `tb_bidang_studi`
 --
 
 INSERT INTO `tb_bidang_studi` (`bidang_studi_id`, `bidang_studi_name`) VALUES
@@ -143,7 +153,7 @@ INSERT INTO `tb_bidang_studi` (`bidang_studi_id`, `bidang_studi_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tb_districts`
+-- Table structure for table `tb_districts`
 --
 
 CREATE TABLE `tb_districts` (
@@ -152,7 +162,7 @@ CREATE TABLE `tb_districts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `tb_districts`
+-- Dumping data for table `tb_districts`
 --
 
 INSERT INTO `tb_districts` (`districts_id`, `districts_name`) VALUES
@@ -169,7 +179,7 @@ INSERT INTO `tb_districts` (`districts_id`, `districts_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tb_golongan_darah`
+-- Table structure for table `tb_golongan_darah`
 --
 
 CREATE TABLE `tb_golongan_darah` (
@@ -178,7 +188,7 @@ CREATE TABLE `tb_golongan_darah` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `tb_golongan_darah`
+-- Dumping data for table `tb_golongan_darah`
 --
 
 INSERT INTO `tb_golongan_darah` (`golongan_darah_id`, `golongan_darah_name`) VALUES
@@ -191,7 +201,7 @@ INSERT INTO `tb_golongan_darah` (`golongan_darah_id`, `golongan_darah_name`) VAL
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tb_jabatan_pac`
+-- Table structure for table `tb_jabatan_pac`
 --
 
 CREATE TABLE `tb_jabatan_pac` (
@@ -200,7 +210,7 @@ CREATE TABLE `tb_jabatan_pac` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `tb_jabatan_pac`
+-- Dumping data for table `tb_jabatan_pac`
 --
 
 INSERT INTO `tb_jabatan_pac` (`jabatan_pac_id`, `jabatan_pac_name`) VALUES
@@ -217,7 +227,7 @@ INSERT INTO `tb_jabatan_pac` (`jabatan_pac_id`, `jabatan_pac_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tb_jabatan_pc`
+-- Table structure for table `tb_jabatan_pc`
 --
 
 CREATE TABLE `tb_jabatan_pc` (
@@ -226,7 +236,7 @@ CREATE TABLE `tb_jabatan_pc` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `tb_jabatan_pc`
+-- Dumping data for table `tb_jabatan_pc`
 --
 
 INSERT INTO `tb_jabatan_pc` (`jabatan_pc_id`, `jabatan_pc_name`) VALUES
@@ -244,7 +254,7 @@ INSERT INTO `tb_jabatan_pc` (`jabatan_pc_id`, `jabatan_pc_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tb_jabatan_pr`
+-- Table structure for table `tb_jabatan_pr`
 --
 
 CREATE TABLE `tb_jabatan_pr` (
@@ -253,7 +263,7 @@ CREATE TABLE `tb_jabatan_pr` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `tb_jabatan_pr`
+-- Dumping data for table `tb_jabatan_pr`
 --
 
 INSERT INTO `tb_jabatan_pr` (`jabatan_pr_id`, `jabatan_pr_name`) VALUES
@@ -270,7 +280,7 @@ INSERT INTO `tb_jabatan_pr` (`jabatan_pr_id`, `jabatan_pr_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tb_jurusan_smk`
+-- Table structure for table `tb_jurusan_smk`
 --
 
 CREATE TABLE `tb_jurusan_smk` (
@@ -279,7 +289,7 @@ CREATE TABLE `tb_jurusan_smk` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `tb_jurusan_smk`
+-- Dumping data for table `tb_jurusan_smk`
 --
 
 INSERT INTO `tb_jurusan_smk` (`jurusan_smk_id`, `jurusan_smk_name`) VALUES
@@ -300,7 +310,7 @@ INSERT INTO `tb_jurusan_smk` (`jurusan_smk_id`, `jurusan_smk_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tb_masa_khidmat`
+-- Table structure for table `tb_masa_khidmat`
 --
 
 CREATE TABLE `tb_masa_khidmat` (
@@ -309,7 +319,7 @@ CREATE TABLE `tb_masa_khidmat` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `tb_masa_khidmat`
+-- Dumping data for table `tb_masa_khidmat`
 --
 
 INSERT INTO `tb_masa_khidmat` (`masa_khidmat_id`, `masa_khidmat_name`) VALUES
@@ -328,7 +338,7 @@ INSERT INTO `tb_masa_khidmat` (`masa_khidmat_id`, `masa_khidmat_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tb_partai`
+-- Table structure for table `tb_partai`
 --
 
 CREATE TABLE `tb_partai` (
@@ -337,7 +347,7 @@ CREATE TABLE `tb_partai` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `tb_partai`
+-- Dumping data for table `tb_partai`
 --
 
 INSERT INTO `tb_partai` (`partai_id`, `partai_name`) VALUES
@@ -358,7 +368,7 @@ INSERT INTO `tb_partai` (`partai_id`, `partai_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tb_pekerjaan`
+-- Table structure for table `tb_pekerjaan`
 --
 
 CREATE TABLE `tb_pekerjaan` (
@@ -367,7 +377,7 @@ CREATE TABLE `tb_pekerjaan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `tb_pekerjaan`
+-- Dumping data for table `tb_pekerjaan`
 --
 
 INSERT INTO `tb_pekerjaan` (`pekerjaan_id`, `pekerjaan_name`) VALUES
@@ -396,7 +406,7 @@ INSERT INTO `tb_pekerjaan` (`pekerjaan_id`, `pekerjaan_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tb_pendapatan`
+-- Table structure for table `tb_pendapatan`
 --
 
 CREATE TABLE `tb_pendapatan` (
@@ -405,7 +415,7 @@ CREATE TABLE `tb_pendapatan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `tb_pendapatan`
+-- Dumping data for table `tb_pendapatan`
 --
 
 INSERT INTO `tb_pendapatan` (`pendapatan_id`, `pendapatan_name`) VALUES
@@ -418,7 +428,7 @@ INSERT INTO `tb_pendapatan` (`pendapatan_id`, `pendapatan_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tb_pendidikan`
+-- Table structure for table `tb_pendidikan`
 --
 
 CREATE TABLE `tb_pendidikan` (
@@ -427,7 +437,7 @@ CREATE TABLE `tb_pendidikan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `tb_pendidikan`
+-- Dumping data for table `tb_pendidikan`
 --
 
 INSERT INTO `tb_pendidikan` (`pendidikan_id`, `pendidikan_name`) VALUES
@@ -442,7 +452,7 @@ INSERT INTO `tb_pendidikan` (`pendidikan_id`, `pendidikan_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tb_pernikahan`
+-- Table structure for table `tb_pernikahan`
 --
 
 CREATE TABLE `tb_pernikahan` (
@@ -451,7 +461,7 @@ CREATE TABLE `tb_pernikahan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `tb_pernikahan`
+-- Dumping data for table `tb_pernikahan`
 --
 
 INSERT INTO `tb_pernikahan` (`pernikahan_id`, `pernikahan_name`) VALUES
@@ -462,7 +472,7 @@ INSERT INTO `tb_pernikahan` (`pernikahan_id`, `pernikahan_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tb_regencies`
+-- Table structure for table `tb_regencies`
 --
 
 CREATE TABLE `tb_regencies` (
@@ -471,7 +481,7 @@ CREATE TABLE `tb_regencies` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `tb_regencies`
+-- Dumping data for table `tb_regencies`
 --
 
 INSERT INTO `tb_regencies` (`regencies_id`, `regencies_name`) VALUES
@@ -993,7 +1003,7 @@ INSERT INTO `tb_regencies` (`regencies_id`, `regencies_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tb_riwayat_diklat`
+-- Table structure for table `tb_riwayat_diklat`
 --
 
 CREATE TABLE `tb_riwayat_diklat` (
@@ -1001,13 +1011,42 @@ CREATE TABLE `tb_riwayat_diklat` (
   `anggota_id` int(11) NOT NULL,
   `riwayat_diklat_item` varchar(64) NOT NULL,
   `riwayat_diklat_file` varchar(128) NOT NULL,
-  `created_at` datetime NOT NULL
+  `created_at` datetime NOT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tb_riwayat_diklat`
+--
+
+INSERT INTO `tb_riwayat_diklat` (`riwayat_diklat_id`, `anggota_id`, `riwayat_diklat_item`, `riwayat_diklat_file`, `created_at`, `updated_at`) VALUES
+(1, 1, 'PKD', 'pkd-1-3414.jpg', '2024-12-17 14:58:43', '2024-12-17 08:58:11'),
+(2, 1, 'LI I', 'li-i-1-8427.jpg', '2024-12-17 14:58:43', '2024-12-17 08:58:11'),
+(3, 1, 'Dirosah Ula', 'dirosah-ula-1-6075.jpg', '2024-12-17 14:58:43', '2024-12-17 08:58:11'),
+(4, 1, 'Diklatsar', 'diklatsar-1-2014.jpg', '2024-12-17 14:58:43', '2024-12-17 08:58:11'),
+(5, 1, 'SUSPELAT I', 'suspelat-i-1-5035.jpg', '2024-12-17 14:58:43', '2024-12-17 08:58:11'),
+(6, 1, 'DIKLATSUS PROVOST', 'diklatsus-provost-1-3172.jpg', '2024-12-17 14:58:43', '2024-12-17 08:58:11'),
+(7, 3, 'PKD', 'pkd-3-8289.png', '2024-12-18 08:46:56', NULL),
+(8, 3, 'PKL', 'pkl-3-2163.png', '2024-12-18 08:46:56', NULL),
+(9, 3, 'PKN', 'pkn-3-9713.png', '2024-12-18 08:46:56', NULL),
+(10, 3, 'LI I', 'li-i-3-6941.png', '2024-12-18 08:46:56', NULL),
+(11, 3, 'LI II', 'li-ii-3-5282.png', '2024-12-18 08:46:56', NULL),
+(12, 3, 'LI III', 'li-iii-3-1558.png', '2024-12-18 08:46:56', NULL),
+(13, 3, 'Dirosah Ula', 'dirosah-ula-3-3772.png', '2024-12-18 08:46:56', NULL),
+(14, 3, 'Dirosah Wustho', 'dirosah-wustho-3-2121.png', '2024-12-18 08:46:56', NULL),
+(15, 3, 'Dirosah Ulya', 'dirosah-ulya-3-5183.png', '2024-12-18 08:46:56', NULL),
+(16, 3, 'Diklatsar', 'diklatsar-3-1571.png', '2024-12-18 08:46:56', NULL),
+(17, 3, 'SUSBALAN', 'susbalan-3-8344.png', '2024-12-18 08:46:56', NULL),
+(18, 3, 'SUSBANPIM', 'susbanpim-3-7967.png', '2024-12-18 08:46:56', NULL),
+(19, 3, 'SUSPELAT I', 'suspelat-i-3-3181.png', '2024-12-18 08:46:56', NULL),
+(20, 3, 'SUSPELAT II', 'suspelat-ii-3-9627.png', '2024-12-18 08:46:56', NULL),
+(21, 3, 'SUSPELAT III', 'suspelat-iii-3-3338.png', '2024-12-18 08:46:56', NULL),
+(22, 3, 'DIKLATSUS BAGANA', 'diklatsus-bagana-3-8276.png', '2024-12-18 08:46:56', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tb_rt`
+-- Table structure for table `tb_rt`
 --
 
 CREATE TABLE `tb_rt` (
@@ -1016,7 +1055,7 @@ CREATE TABLE `tb_rt` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `tb_rt`
+-- Dumping data for table `tb_rt`
 --
 
 INSERT INTO `tb_rt` (`rt_id`, `rt_name`) VALUES
@@ -1054,7 +1093,7 @@ INSERT INTO `tb_rt` (`rt_id`, `rt_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tb_rw`
+-- Table structure for table `tb_rw`
 --
 
 CREATE TABLE `tb_rw` (
@@ -1063,7 +1102,7 @@ CREATE TABLE `tb_rw` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `tb_rw`
+-- Dumping data for table `tb_rw`
 --
 
 INSERT INTO `tb_rw` (`rw_id`, `rw_name`) VALUES
@@ -1101,7 +1140,7 @@ INSERT INTO `tb_rw` (`rw_id`, `rw_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tb_tinggi_badan`
+-- Table structure for table `tb_tinggi_badan`
 --
 
 CREATE TABLE `tb_tinggi_badan` (
@@ -1110,7 +1149,7 @@ CREATE TABLE `tb_tinggi_badan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `tb_tinggi_badan`
+-- Dumping data for table `tb_tinggi_badan`
 --
 
 INSERT INTO `tb_tinggi_badan` (`tinggi_badan_id`, `tinggi_badan_name`) VALUES
@@ -1122,7 +1161,7 @@ INSERT INTO `tb_tinggi_badan` (`tinggi_badan_id`, `tinggi_badan_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tb_users`
+-- Table structure for table `tb_users`
 --
 
 CREATE TABLE `tb_users` (
@@ -1137,10 +1176,19 @@ CREATE TABLE `tb_users` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `tb_users`
+--
+
+INSERT INTO `tb_users` (`id`, `anggota_id`, `nama_lengkap`, `username`, `password`, `akses`, `role`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Nissa Amalia', '08988335639', '$2y$10$XKbAjkOsNJWqS28qHUtFFOPcWK7ejQwfewE7Qp6phSw0a2IhSTh66', 1, 'master', '2024-11-12 03:24:48', '2024-12-15 10:06:02'),
+(2, 2, 'Irvan Maria Hussein', '085778888919', '$2y$10$UiQwI7MS/jayOHQ84JBv4uJjgzSCODa9RhEHVSCmCLFfXslk2KTcC', 1, 'admin kecamatan', '2024-12-12 11:18:40', '2024-12-17 07:57:35'),
+(3, 3, 'Nama Lengkap', '085865068194', '$2y$10$SCQbmbmSkLAoKmwgyRCJyu1bHkqz5FDQfVdsFqm3hEbXWjhjevTfm', 1, 'user', '2024-12-18 01:46:56', '2024-12-18 01:46:56');
+
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tb_villages`
+-- Table structure for table `tb_villages`
 --
 
 CREATE TABLE `tb_villages` (
@@ -1152,7 +1200,7 @@ CREATE TABLE `tb_villages` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `tb_villages`
+-- Dumping data for table `tb_villages`
 --
 
 INSERT INTO `tb_villages` (`villages_id`, `districts_id`, `districts_name`, `villages_name`, `villages_code`) VALUES
@@ -1297,7 +1345,7 @@ INSERT INTO `tb_villages` (`villages_id`, `districts_id`, `districts_name`, `vil
 --
 
 --
--- Indeks untuk tabel `tb_anggota`
+-- Indexes for table `tb_anggota`
 --
 ALTER TABLE `tb_anggota`
   ADD PRIMARY KEY (`anggota_id`),
@@ -1329,251 +1377,251 @@ ALTER TABLE `tb_anggota`
   ADD KEY `anggota_pc_mk` (`anggota_pc_mk`);
 
 --
--- Indeks untuk tabel `tb_berat_badan`
+-- Indexes for table `tb_berat_badan`
 --
 ALTER TABLE `tb_berat_badan`
   ADD PRIMARY KEY (`berat_badan_id`);
 
 --
--- Indeks untuk tabel `tb_bidang_studi`
+-- Indexes for table `tb_bidang_studi`
 --
 ALTER TABLE `tb_bidang_studi`
   ADD PRIMARY KEY (`bidang_studi_id`);
 
 --
--- Indeks untuk tabel `tb_districts`
+-- Indexes for table `tb_districts`
 --
 ALTER TABLE `tb_districts`
   ADD PRIMARY KEY (`districts_id`);
 
 --
--- Indeks untuk tabel `tb_golongan_darah`
+-- Indexes for table `tb_golongan_darah`
 --
 ALTER TABLE `tb_golongan_darah`
   ADD PRIMARY KEY (`golongan_darah_id`);
 
 --
--- Indeks untuk tabel `tb_jabatan_pac`
+-- Indexes for table `tb_jabatan_pac`
 --
 ALTER TABLE `tb_jabatan_pac`
   ADD PRIMARY KEY (`jabatan_pac_id`);
 
 --
--- Indeks untuk tabel `tb_jabatan_pc`
+-- Indexes for table `tb_jabatan_pc`
 --
 ALTER TABLE `tb_jabatan_pc`
   ADD PRIMARY KEY (`jabatan_pc_id`);
 
 --
--- Indeks untuk tabel `tb_jabatan_pr`
+-- Indexes for table `tb_jabatan_pr`
 --
 ALTER TABLE `tb_jabatan_pr`
   ADD PRIMARY KEY (`jabatan_pr_id`);
 
 --
--- Indeks untuk tabel `tb_jurusan_smk`
+-- Indexes for table `tb_jurusan_smk`
 --
 ALTER TABLE `tb_jurusan_smk`
   ADD PRIMARY KEY (`jurusan_smk_id`);
 
 --
--- Indeks untuk tabel `tb_masa_khidmat`
+-- Indexes for table `tb_masa_khidmat`
 --
 ALTER TABLE `tb_masa_khidmat`
   ADD PRIMARY KEY (`masa_khidmat_id`);
 
 --
--- Indeks untuk tabel `tb_partai`
+-- Indexes for table `tb_partai`
 --
 ALTER TABLE `tb_partai`
   ADD PRIMARY KEY (`partai_id`);
 
 --
--- Indeks untuk tabel `tb_pekerjaan`
+-- Indexes for table `tb_pekerjaan`
 --
 ALTER TABLE `tb_pekerjaan`
   ADD PRIMARY KEY (`pekerjaan_id`);
 
 --
--- Indeks untuk tabel `tb_pendapatan`
+-- Indexes for table `tb_pendapatan`
 --
 ALTER TABLE `tb_pendapatan`
   ADD PRIMARY KEY (`pendapatan_id`);
 
 --
--- Indeks untuk tabel `tb_pendidikan`
+-- Indexes for table `tb_pendidikan`
 --
 ALTER TABLE `tb_pendidikan`
   ADD PRIMARY KEY (`pendidikan_id`);
 
 --
--- Indeks untuk tabel `tb_pernikahan`
+-- Indexes for table `tb_pernikahan`
 --
 ALTER TABLE `tb_pernikahan`
   ADD PRIMARY KEY (`pernikahan_id`);
 
 --
--- Indeks untuk tabel `tb_regencies`
+-- Indexes for table `tb_regencies`
 --
 ALTER TABLE `tb_regencies`
   ADD PRIMARY KEY (`regencies_id`);
 
 --
--- Indeks untuk tabel `tb_riwayat_diklat`
+-- Indexes for table `tb_riwayat_diklat`
 --
 ALTER TABLE `tb_riwayat_diklat`
   ADD PRIMARY KEY (`riwayat_diklat_id`),
   ADD KEY `anggota_id` (`anggota_id`);
 
 --
--- Indeks untuk tabel `tb_rt`
+-- Indexes for table `tb_rt`
 --
 ALTER TABLE `tb_rt`
   ADD PRIMARY KEY (`rt_id`);
 
 --
--- Indeks untuk tabel `tb_rw`
+-- Indexes for table `tb_rw`
 --
 ALTER TABLE `tb_rw`
   ADD PRIMARY KEY (`rw_id`);
 
 --
--- Indeks untuk tabel `tb_tinggi_badan`
+-- Indexes for table `tb_tinggi_badan`
 --
 ALTER TABLE `tb_tinggi_badan`
   ADD PRIMARY KEY (`tinggi_badan_id`);
 
 --
--- Indeks untuk tabel `tb_users`
+-- Indexes for table `tb_users`
 --
 ALTER TABLE `tb_users`
   ADD PRIMARY KEY (`id`),
   ADD KEY `anggota_id` (`anggota_id`);
 
 --
--- Indeks untuk tabel `tb_villages`
+-- Indexes for table `tb_villages`
 --
 ALTER TABLE `tb_villages`
   ADD PRIMARY KEY (`villages_id`);
 
 --
--- AUTO_INCREMENT untuk tabel yang dibuang
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT untuk tabel `tb_anggota`
+-- AUTO_INCREMENT for table `tb_anggota`
 --
 ALTER TABLE `tb_anggota`
-  MODIFY `anggota_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `anggota_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT untuk tabel `tb_berat_badan`
+-- AUTO_INCREMENT for table `tb_berat_badan`
 --
 ALTER TABLE `tb_berat_badan`
   MODIFY `berat_badan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT untuk tabel `tb_bidang_studi`
+-- AUTO_INCREMENT for table `tb_bidang_studi`
 --
 ALTER TABLE `tb_bidang_studi`
   MODIFY `bidang_studi_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
--- AUTO_INCREMENT untuk tabel `tb_golongan_darah`
+-- AUTO_INCREMENT for table `tb_golongan_darah`
 --
 ALTER TABLE `tb_golongan_darah`
   MODIFY `golongan_darah_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT untuk tabel `tb_jabatan_pac`
+-- AUTO_INCREMENT for table `tb_jabatan_pac`
 --
 ALTER TABLE `tb_jabatan_pac`
   MODIFY `jabatan_pac_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- AUTO_INCREMENT untuk tabel `tb_jabatan_pc`
+-- AUTO_INCREMENT for table `tb_jabatan_pc`
 --
 ALTER TABLE `tb_jabatan_pc`
   MODIFY `jabatan_pc_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT untuk tabel `tb_jabatan_pr`
+-- AUTO_INCREMENT for table `tb_jabatan_pr`
 --
 ALTER TABLE `tb_jabatan_pr`
   MODIFY `jabatan_pr_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- AUTO_INCREMENT untuk tabel `tb_jurusan_smk`
+-- AUTO_INCREMENT for table `tb_jurusan_smk`
 --
 ALTER TABLE `tb_jurusan_smk`
   MODIFY `jurusan_smk_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
--- AUTO_INCREMENT untuk tabel `tb_masa_khidmat`
+-- AUTO_INCREMENT for table `tb_masa_khidmat`
 --
 ALTER TABLE `tb_masa_khidmat`
   MODIFY `masa_khidmat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- AUTO_INCREMENT untuk tabel `tb_partai`
+-- AUTO_INCREMENT for table `tb_partai`
 --
 ALTER TABLE `tb_partai`
   MODIFY `partai_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
--- AUTO_INCREMENT untuk tabel `tb_pendapatan`
+-- AUTO_INCREMENT for table `tb_pendapatan`
 --
 ALTER TABLE `tb_pendapatan`
   MODIFY `pendapatan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT untuk tabel `tb_pendidikan`
+-- AUTO_INCREMENT for table `tb_pendidikan`
 --
 ALTER TABLE `tb_pendidikan`
   MODIFY `pendidikan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT untuk tabel `tb_pernikahan`
+-- AUTO_INCREMENT for table `tb_pernikahan`
 --
 ALTER TABLE `tb_pernikahan`
   MODIFY `pernikahan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT untuk tabel `tb_riwayat_diklat`
+-- AUTO_INCREMENT for table `tb_riwayat_diklat`
 --
 ALTER TABLE `tb_riwayat_diklat`
-  MODIFY `riwayat_diklat_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `riwayat_diklat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
--- AUTO_INCREMENT untuk tabel `tb_rt`
+-- AUTO_INCREMENT for table `tb_rt`
 --
 ALTER TABLE `tb_rt`
   MODIFY `rt_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
--- AUTO_INCREMENT untuk tabel `tb_rw`
+-- AUTO_INCREMENT for table `tb_rw`
 --
 ALTER TABLE `tb_rw`
   MODIFY `rw_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
--- AUTO_INCREMENT untuk tabel `tb_tinggi_badan`
+-- AUTO_INCREMENT for table `tb_tinggi_badan`
 --
 ALTER TABLE `tb_tinggi_badan`
   MODIFY `tinggi_badan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT untuk tabel `tb_users`
+-- AUTO_INCREMENT for table `tb_users`
 --
 ALTER TABLE `tb_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
+-- Constraints for dumped tables
 --
 
 --
--- Ketidakleluasaan untuk tabel `tb_anggota`
+-- Constraints for table `tb_anggota`
 --
 ALTER TABLE `tb_anggota`
   ADD CONSTRAINT `tb_anggota_ibfk_1` FOREIGN KEY (`anggota_tempat_lahir`) REFERENCES `tb_regencies` (`regencies_id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -1603,13 +1651,13 @@ ALTER TABLE `tb_anggota`
   ADD CONSTRAINT `tb_anggota_ibfk_9` FOREIGN KEY (`anggota_domisili_des`) REFERENCES `tb_villages` (`villages_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `tb_riwayat_diklat`
+-- Constraints for table `tb_riwayat_diklat`
 --
 ALTER TABLE `tb_riwayat_diklat`
   ADD CONSTRAINT `tb_riwayat_diklat_ibfk_1` FOREIGN KEY (`anggota_id`) REFERENCES `tb_anggota` (`anggota_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `tb_users`
+-- Constraints for table `tb_users`
 --
 ALTER TABLE `tb_users`
   ADD CONSTRAINT `tb_users_ibfk_1` FOREIGN KEY (`anggota_id`) REFERENCES `tb_anggota` (`anggota_id`) ON DELETE CASCADE ON UPDATE CASCADE;
