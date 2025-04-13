@@ -13,7 +13,7 @@ function sendUserCredentials($no_hp, $nama, $username, $plain_password)
     $message = "✅ Pendaftaran Berhasil\n\n"
         . "Halo $nama,\nAkun Anda telah berhasil dibuat. Berikut adalah kredensial login Anda:\n\n"
         . "Username: $username\nPassword: $plain_password\n\n"
-        . "Login pada website https://dev.menarakudus.id/login.php";
+        . "Login pada website https://admin.ansorkudus.or.id/login.php";
 
     $data = [
         'target' => $no_hp,
